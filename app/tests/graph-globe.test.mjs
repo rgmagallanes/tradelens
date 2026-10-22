@@ -1,0 +1,2 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {globePoint} from '../src/graphGlobe.ts';
+test('globe points orbit through depth with perspective and complete a full cycle',()=>{const a=globePoint(5,30,0),b=globePoint(5,30,90),c=globePoint(5,30,360);assert.notEqual(a.depth,b.depth);assert.notEqual(a.x,b.x);assert.ok(Math.abs(a.x-c.x)<1e-8);assert.ok(Math.abs(a.y-c.y)<1e-8);for(let i=0;i<120;i++){const p=globePoint(i,120,70);assert.ok(Number.isFinite(p.x)&&Number.isFinite(p.y)&&p.scale>0&&p.opacity>=.42&&p.opacity<=1)}});

@@ -75,3 +75,5 @@ Farm loss reaction: default to latest closed-day checkpoint. When selected check
 Ambient visual direction: charcoal foundation with static soft violet/magenta blooms behind top-right header and lower-left workspace, lightly translucent dark panels and muted violet borders. Preserve gold branding, red/green financial semantics, quiet chart/farm rendering, all layout and interaction behavior. Use ambient.css loaded after base styles; no animated background or broad blur filters.
 
 Main navigation order: Overview, Journal, Strategy, Replay. Journal occupies the second position on desktop and mobile.
+
+Hosted deployment is a separate server/ Node.js+MySQL journal release, not a port of all Python features. server build sets VITE_HOSTED=true and serves the compiled frontend from the same origin, gated by private invited login. Local Vite/Python remains unchanged by default. Tenant IDs come only from server sessions; imported trades use revocable device tokens and account pinning. Do not claim cloud chart/research/AI parity or automatic sync. Never put DB credentials, invitations or device tokens in Vite variables or Git.

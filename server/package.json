@@ -1,0 +1,22 @@
+{
+  "name": "tradelens-hosted-journal",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node src/start.mjs",
+    "build": "node scripts/build.mjs",
+    "migrate": "node scripts/migrate.mjs",
+    "test": "node --test test/*.test.mjs"
+  },
+  "dependencies": {
+    "decimal.js": "^10.6.0",
+    "express": "^5.1.0",
+    "helmet": "^8.1.0",
+    "mysql2": "^3.15.0",
+    "zod": "^4.1.0"
+  }
+}

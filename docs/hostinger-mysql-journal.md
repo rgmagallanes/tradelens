@@ -29,3 +29,13 @@ Each user is pinned to the first imported demo account. A different account is r
 ## Security / operations limits
 
 HTTPS required in production, HTTP-only Secure SameSiteStrict cookies; same-origin JSON mutations; no cross-origin CORS. Credentials hashed with scrypt; tokens hashed; auth/device rate counters stored in MySQL. SQL parameterized; user ID comes from session, never payload. Production logs omit request payloads, passwords, tokens and DB error details. DB credentials must have access only to this app's database. Hostinger must forward the intended origin/HTTPS correctly. Sessions last7days; sign out revokes the session. Set up scheduled cleanup of expired sessions/rate windows and regular provider database backups before long-term use. No automatic account recovery, MFA, or broad production security audit is claimed.
+
+## Hosted chart uploads
+The existing per-user snapshot now includes validated Bitcoin/Gold candles and quotes. No schema migration is required. Redeploy the server from the updated branch, then run the updated uploader:
+
+```sh
+export TRADELENS_UPLOAD_URL="https://tradelens.chardee.dev"
+python3 server/scripts/upload-mt5.py --send --prompt-token --watch
+```
+
+Keep the local journal importer, BTCStudioQuotes and GoldStudioQuotes running on the same demo terminal. The standalone Mac kit instead uses `python3 run.py --send --watch` and imports its own journal export each cycle. Only allowlisted chart fields are transmitted. The token is prompted once and remains in process memory. Ctrl+C stops syncing. Updates run every 10 seconds; network failures retry on the next interval, authentication/validation errors stop. Missing symbols stay unavailable, stale quotes/candles remain explicitly stale. Research, paper execution and historical trade chart review remain local. No orders are sent.

@@ -1,3 +1,4 @@
+import {fixture} from './fixtures/market.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {database,migrate} from '../src/db.mjs';
@@ -29,8 +30,14 @@ test('real MySQL tenant isolation, auth, replay protection and device revocation
  const device=await call('devices',{method:'POST',cookie:alice.cookie,body:{label:'Test Mac'}});assert.equal(device.status,201);
  assert.equal((await call('devices',{cookie:bob.cookie})).body.devices.length,0);assert.equal((await call('devices/'+device.body.id,{method:'DELETE',cookie:bob.cookie,body:{}})).status,404);
  const now=Math.floor(Date.now()/1000),trade={id:'mt5-one',symbol:'BTCUSDm',side:'buy',lots:.1,entry:100,exit:99,opened_at:now-500,closed_at:now-300,status:'closed',pnl:-.5,strategy:'',note:''};
- const up={version:1,account_hash:'a'.repeat(64),timestamp:now-10,currency:'USD',demo:true,account_balance:500,trades:[trade],open_positions:[]};
+ const up={version:1,account_hash:'a'.repeat(64),timestamp:now-10,currency:'USD',demo:true,account_balance:500,trades:[trade],open_positions:[],markets:[fixture('BTCUSDm'),fixture('XAUUSDm')]};
  assert.equal((await call('device/upload',{method:'POST',bearer:device.body.token,body:up})).status,200);
+ for(const symbol of ['BTCUSDm','XAUUSDm'])for(const tf of ['M5','M15','H1','H4']){
+ const own=await call('market?source=exness&symbol='+symbol+'&tf='+tf,{cookie:alice.cookie});assert.equal(own.status,200);assert.equal(own.body.candles.length,2);assert.equal(own.body.candles[0].tick_volume,20);
+ const other=await call('market?source=exness&symbol='+symbol+'&tf='+tf,{cookie:bob.cookie});assert.equal(other.body.candles.length,0);
+ }
+ assert.equal((await call('bridge?symbol=XAUUSDm',{cookie:alice.cookie})).body.connected,true);
+ assert.equal((await call('bridge?symbol=XAUUSDm',{cookie:bob.cookie})).body.snapshot,undefined);
  assert.equal((await call('device/upload',{method:'POST',bearer:device.body.token,body:up})).status,409);
  assert.equal((await call('device/upload',{method:'POST',bearer:device.body.token,body:{...up,timestamp:now-9,account_hash:'b'.repeat(64)}})).status,409);
  assert.equal((await call('trading-journal/mt5-status',{cookie:bob.cookie})).body.timestamp,undefined);

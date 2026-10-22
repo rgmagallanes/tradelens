@@ -10,7 +10,7 @@ import {ChevronLeft,ChevronRight,Download,Plus,X,BookOpen,Check,CalendarDays,Pen
 import type {Trade,JournalData} from './journalTypes';
 import {DEMO_DATASETS,DEMO_MONTH,DEMO_DAY,demoJournal,type DemoDataset} from './journalDemo';
 
-const JournalGraph=lazy(()=>import('./JournalGraph'));
+const JournalGraph=lazy(()=>import('./JournalConnectionsView'));
 const EquityFlight=lazy(()=>import('./EquityFlight'));
 const TradeIdeas=lazy(()=>import('./TradeIdeas'));
 const TradePostmortem=lazy(()=>import('./TradePostmortem'));

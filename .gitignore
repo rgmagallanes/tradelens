@@ -11,3 +11,5 @@ mt5/*.ex5
 .env.*
 
 !server/.env.example
+
+server/public/

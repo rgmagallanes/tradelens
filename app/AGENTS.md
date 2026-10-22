@@ -77,3 +77,5 @@ Ambient visual direction: charcoal foundation with static soft violet/magenta bl
 Main navigation order: Overview, Journal, Strategy, Replay. Journal occupies the second position on desktop and mobile.
 
 Hosted deployment is a separate server/ Node.js+MySQL journal release, not a port of all Python features. server build sets VITE_HOSTED=true and serves the compiled frontend from the same origin, gated by private invited login. Local Vite/Python remains unchanged by default. Tenant IDs come only from server sessions; imported trades use revocable device tokens and account pinning. Do not claim cloud chart/research/AI parity or automatic sync. Never put DB credentials, invitations or device tokens in Vite variables or Git.
+
+Hosted account toolbar and device settings are siblings above the .app stacking context. Keep them positioned with z-index above .app so the fixed ambient background cannot cover My devices, email or Sign out.

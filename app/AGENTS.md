@@ -89,3 +89,5 @@ Journal connections: interactive SVG graph within Journal, lazy loaded and keyed
 Journal graph motion: subtle one-degree-per-second orbit with counter-rotated upright labels. Pause all orbit while hovered/focused, paused, offscreen or document hidden. Preserve angle when paused; use graph-space pointer coordinates for dragging under rotation. Honor reduced-motion by default and changes; motion toggle is explicit.
 
 Journal orbit now projects a tilted 3D Fibonacci sphere with perspective size/depth fading and four-degree-per-second yaw, instead of rotating a flat diagram. Labels stay upright. Node dragging adds graph-space offsets; reset removes offsets. Existing motion pause and accessibility behavior remains.
+
+Globe interaction update: drag anywhere (including a node) rotates yaw/tilt rather than relocating nodes; click selects details, arrow keys rotate, Reset restores orientation. Closed trade circles use positive net P/L green, negative red, zero neutral; unknown/open remain distinct.

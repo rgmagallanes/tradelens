@@ -1,0 +1,100 @@
+{
+  "status": "HYPOTHETICAL / NOT A BACKTEST OR PROFIT FORECAST",
+  "assumptions": {
+    "initial_virtual_balance": 1000,
+    "hypothetical_btc_bid": 100000,
+    "btc_per_lot": 1,
+    "lots": 0.02,
+    "bid_stop": 99800,
+    "bid_target": 100400,
+    "illustrative_notional": 2000,
+    "illustrative_margin_at_500": 4,
+    "slippage_per_btc_per_fill": 5,
+    "commission": 0,
+    "gap_free_fixed_stop_target_outcomes": true
+  },
+  "cases": [
+    {
+      "spread": 6.4,
+      "cost": 0.32799999999999996,
+      "net_target_win": 7.672,
+      "net_stop_loss": 4.328,
+      "break_even_win_rate": 0.3606666666666667,
+      "scenarios": [
+        {
+          "win_rate": 0.3,
+          "expected_per_trade": -0.728,
+          "conditional_100_trade_total": -72.8
+        },
+        {
+          "win_rate": 0.35,
+          "expected_per_trade": -0.128,
+          "conditional_100_trade_total": -12.8
+        },
+        {
+          "win_rate": 0.4,
+          "expected_per_trade": 0.472,
+          "conditional_100_trade_total": 47.2
+        },
+        {
+          "win_rate": 0.45,
+          "expected_per_trade": 1.072,
+          "conditional_100_trade_total": 107.2
+        },
+        {
+          "win_rate": 0.5,
+          "expected_per_trade": 1.672,
+          "conditional_100_trade_total": 167.2
+        }
+      ]
+    },
+    {
+      "spread": 12.8,
+      "cost": 0.456,
+      "net_target_win": 7.544,
+      "net_stop_loss": 4.456,
+      "break_even_win_rate": 0.37133333333333335,
+      "scenarios": [
+        {
+          "win_rate": 0.3,
+          "expected_per_trade": -0.856,
+          "conditional_100_trade_total": -85.6
+        },
+        {
+          "win_rate": 0.35,
+          "expected_per_trade": -0.256,
+          "conditional_100_trade_total": -25.6
+        },
+        {
+          "win_rate": 0.4,
+          "expected_per_trade": 0.344,
+          "conditional_100_trade_total": 34.4
+        },
+        {
+          "win_rate": 0.45,
+          "expected_per_trade": 0.944,
+          "conditional_100_trade_total": 94.4
+        },
+        {
+          "win_rate": 0.5,
+          "expected_per_trade": 1.544,
+          "conditional_100_trade_total": 154.4
+        }
+      ]
+    }
+  ],
+  "selected_trade_audit": {
+    "trades": 68,
+    "net": -49.979199999994144,
+    "modeled_costs": 61.500000000000014,
+    "cost_addback": 11.52080000000587,
+    "required_cost_reduction_to_accounting_break_even": 0.8126699186990916
+  },
+  "limitations": [
+    "No future win rate or fixed-payoff distribution established.",
+    "Not a prediction of100 trades within any time period or before loss pauses.",
+    "Costs, time exits, gaps and margin availability remain unverified.",
+    "Cost addback uses already selected trades; not a zero-cost execution rerun.",
+    "No live settings or trading records changed."
+  ]
+}

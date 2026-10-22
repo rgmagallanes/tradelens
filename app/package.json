@@ -1,0 +1,35 @@
+{
+  "name": "app",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && node scripts/prepare-sites-build.mjs",
+    "preview": "vite preview",
+    "test:sites": "node --test tests/sites-worker.test.mjs",
+    "typecheck": "tsc --noEmit",
+    "test:technicals": "node --test tests/technical-indicators.test.mjs",
+    "test:pivots": "node --test tests/pivots.test.mjs",
+    "test:calendar": "node --test tests/calendar-positions.test.mjs",
+    "test:performance": "node --test tests/performance-profile.test.mjs"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "@vitejs/plugin-react": "5.0.4",
+    "echarts": "^6.1.0",
+    "lightweight-charts": "^5.2.1",
+    "lucide-react": "^1.59.0",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "tailwindcss": "^4.3.3",
+    "three": "^0.186.1",
+    "vite": "6.4.2"
+  },
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@types/three": "^0.186.0",
+    "typescript": "^7.0.2"
+  }
+}

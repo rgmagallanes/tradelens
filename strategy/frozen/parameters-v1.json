@@ -1,0 +1,22 @@
+{
+  "version": "breakout-retest-v1",
+  "symbol": "BTCUSDm",
+  "tolerance_fraction": 0.0005,
+  "stop_buffer_fraction": 0.00025,
+  "retest_bars": 6,
+  "level_lifetime_seconds": 86400,
+  "entry_detection_seconds": 10,
+  "entry_close_seconds": 15,
+  "freshness_seconds": 15,
+  "max_hold_seconds": 1800,
+  "min_net_rr": 2.0,
+  "slippage_usd_per_btc_per_fill": 5.0,
+  "initial_equity": 1000.0,
+  "max_risk_usd": 5.0,
+  "risk_fraction": 0.005,
+  "daily_negative_loss_limit": 20.0,
+  "consecutive_loss_limit": 3,
+  "recovery_bars": 2,
+  "m1_role": "research-only",
+  "volume_filter": false
+}

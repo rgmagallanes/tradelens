@@ -1,0 +1,27 @@
+/* Static ambient light belongs behind the workspace; data surfaces stay quiet. */
+:root{--ambient-canvas:#0c0d13;--ambient-surface:rgba(16,17,25,.9);--ambient-line:rgba(178,160,205,.17);background:var(--ambient-canvas)}
+body{background:var(--ambient-canvas)}
+.app{position:relative;isolation:isolate;background:transparent;min-height:100vh}
+.app::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse 65% 48% at 86% 0%,rgba(119,62,177,.3),transparent 76%),radial-gradient(ellipse 47% 47% at 3% 90%,rgba(91,55,165,.22),transparent 78%),radial-gradient(ellipse 34% 33% at 45% 100%,rgba(137,68,105,.13),transparent 80%),#0c0d13}
+.app .tl-header{background:radial-gradient(ellipse at 87% 0%,rgba(164,83,152,.18),transparent 69%),rgba(14,14,21,.65);border-bottom-color:var(--ambient-line)}
+.app .tl-header-main{background:transparent}
+.app .tl-header-meta{background:rgba(13,13,20,.24);border-color:var(--ambient-line)}
+.app .shell{background:transparent}
+.app .shell>nav{background:rgba(12,13,19,.6);border-color:var(--ambient-line)}
+.app .shell>nav .active{background:rgba(105,76,139,.24)}
+.app main{background:transparent}
+.app .panel,.app .j-card,.app .j-sourcebar,.app .j-report,.app .farm-dashboard{background:var(--ambient-surface);border-color:var(--ambient-line)}
+.app .j-sourcebar{background:rgba(31,27,43,.78)}
+.app .j-demo-notice{background:rgba(55,39,71,.76);border-color:rgba(171,130,196,.3)}
+.app .j-report,.app .j-calendar{box-shadow:0 12px 30px rgba(0,0,0,.1)}
+.app .trading-journal{--j-bg:#11131c;--j-line:rgba(178,160,205,.18)}
+.app .j-day.no-trades{background:rgba(24,23,34,.8)}
+.app .j-week-total{background:rgba(36,30,48,.8);border-color:rgba(166,146,188,.23)}
+.app .j-month-total{background:rgba(57,42,72,.85);border-top-color:#ad91be}
+.app input,.app select,.app textarea{background:#11121b;border-color:#474153;color:#e4ebf5}
+.app button:not(.primary):not(.active):not([aria-pressed=true]):not(.menu-toggle):not(.j-day):not(.j-history-day){border-color:rgba(163,150,182,.25)}
+.app .tl-settings{background:rgba(52,40,66,.45)}
+.app .tl-market,.app .tl-header-pnl,.app .tl-brand{border-color:var(--ambient-line)}
+.app footer{background:rgba(12,13,19,.7);border-color:var(--ambient-line)}
+/* Expanded charts, plot canvases and farm lighting retain their original backgrounds. */
+@media(max-width:560px){.app::before{background:radial-gradient(ellipse 110% 35% at 100% 0%,rgba(119,62,177,.24),transparent 80%),radial-gradient(ellipse 100% 40% at 0% 100%,rgba(91,55,165,.17),transparent 80%),#0c0d13}.app .tl-header{background:rgba(29,21,41,.8)}}

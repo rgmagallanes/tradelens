@@ -1,0 +1,19 @@
+# Automatic-level lower-timeframe research v2
+
+Status: UNPROVEN research candidate. No broker execution. The approved v1 files and live paper settings are unchanged.
+
+Frozen before the first run on 2026-10-19. Compare two variants without choosing a winner on the same sample:
+- Reference candidate: M15 automatic levels, M5 breakout/retest, H1 context.
+- Lower-timeframe candidate: M5 automatic levels, M1 breakout/retest, M15 context.
+
+Both are new candidates, not replications of the manually mapped v1 baseline. Context uses EMA(20): latest completed context close above EMA and EMA rising for longs; below EMA and falling for shorts. At least 40 contiguous completed context bars are required. Check at breakout and confirmation.
+
+Automatic levels: strict two-bars-left/two-bars-right pivots on completed level candles. A pivot is known only after both right bars close. Two same-side pivots within 0.05% of the first pivot, separated by at least three level-bar openings, create a fixed level at the first pivot price. All pivots must be within the last 96 completed level bars. Require actual reaction of at least twice the tolerance within the next three completed level bars for each pivot. Register when both reactions are known. Expire after 24 hours; one breakout attempt per registration. Rearming requires a newer second reaction pivot after the prior registration, preventing repeated reuse of the same evidence. Map support and resistance concurrently, including targets.
+
+Only closed bars are revealed; register after processing that observation's entry-timeframe bar. A completed crossing beyond the 0.05% tolerance triggers a setup. Freeze the nearest same-side higher resistance/lower support existing at breakout as its target; no target means skip. Next six entry bars allow retest and directional-body confirmation beyond the tolerance. Post-breakout deeper wick or wrong-side close invalidates. Stop is post-breakout extreme plus 0.025% level buffer. A confirmation needs a subsequent contiguous bar open to simulate entry. No close-price entry.
+
+Candle fill assumptions: bid OHLC; constant modeled spread scenarios $6.40 and $12.80 per BTC, NOT historical observed spread. USD5 adverse slippage per BTC per fill; Standard commission assumption USD0 per lot per side from saved configuration, not historical account verification. Long entry next bid open + spread + slippage; short entry next bid open - slippage. Long exits bid; short exits modeled ask. Gap stops use adverse opening price; targets cap fill. Stop-first if both occur in a bar. Stop rounded outward and target inward to USD0.01. Require 2 net R after fees and slippage. Contract 1 BTC/lot, min/step0.01, max200; initial equity1000; risk min(5,0.5%equity). These are research assumptions; historical margin availability is NOT verified, so report modeled fills as margin-unverified.
+
+One position; 30-minute maximum hold, exit at the next contiguous bar open. Missing entry candles cancel pending setups; an open position crossing a gap is marked uncertain and its result excluded from performance; stop the run at that gap rather than fabricate an exit. Open/end-of-data positions are excluded from realized results. Pause rest of run at USD20 cumulative negative realized P/L or three consecutive losses (no automatic risk resume). News review assumed clear, unavailable historically. No live timing/latency claim.
+
+Seven-day evaluation window with earlier warmup. First five days exploratory, last two days designated validation before running, but this is recently viewed data and not a pristine out-of-sample test. Report the two segments independently; no automatic optimization. Report coverage/gaps, registrations, attempts, skips, closed/open trades, modeled net P/L/costs, realized drawdown, win rate only when trades exist, ambiguity and uncertainty. Reject an incomplete requested window instead of silently calling it a weekly test.

@@ -1,0 +1,72 @@
+{
+  "status": "EXPLORATORY / UNPROVEN / NO FILL SIMULATION",
+  "clock": "MT5 broker-server",
+  "period": {
+    "first_m5": "2026-10-18 02:15",
+    "last_m5": "2026-10-19 11:30",
+    "closed_m5_bars": 399,
+    "m5_gaps": 1
+  },
+  "method": "One attempt per fixed level; register only after two fully known M15 reactions; closed H1/M15 data revealed by close time; M5 only thereafter; no automatic rearming.",
+  "limitations": [
+    "Levels selected after viewing this history: selection bias remains despite chronological evidence checks.",
+    "Historical manual news/context review is unavailable and assumed clear for this diagnostic.",
+    "No historical executable bid/ask quotes, receipt latency or margin history: entries, costs, P/L, drawdown and win rate are NOT computed.",
+    "This is a setup diagnostic, not a complete frozen-v1 execution backtest."
+  ],
+  "counts": {
+    "CONTEXT_FAILED": 4
+  },
+  "levels": [
+    {
+      "price": 82850,
+      "side": "resistance",
+      "registered": "2026-10-19 08:00",
+      "registered_time": 1792396800,
+      "evidence": [
+        "2026-10-19 06:30",
+        "2026-10-19 07:15"
+      ],
+      "breakout": "2026-10-19 09:25",
+      "outcome": "CONTEXT_FAILED"
+    },
+    {
+      "price": 82600,
+      "side": "support",
+      "registered": "2026-10-19 08:30",
+      "registered_time": 1792398600,
+      "evidence": [
+        "2026-10-19 05:45",
+        "2026-10-19 07:45"
+      ],
+      "breakout": "2026-10-19 10:15",
+      "outcome": "CONTEXT_FAILED"
+    },
+    {
+      "price": 82400,
+      "side": "support",
+      "registered": "2026-10-19 03:15",
+      "registered_time": 1792379700,
+      "evidence": [
+        "2026-10-19 02:00",
+        "2026-10-19 02:45"
+      ],
+      "breakout": "2026-10-19 10:25",
+      "outcome": "CONTEXT_FAILED"
+    },
+    {
+      "price": 82250,
+      "side": "support",
+      "registered": "2026-10-19 02:45",
+      "registered_time": 1792377900,
+      "evidence": [
+        "2026-10-19 00:30",
+        "2026-10-19 02:15"
+      ],
+      "breakout": "2026-10-19 10:30",
+      "outcome": "CONTEXT_FAILED"
+    }
+  ],
+  "source_sha256": "2ffc6bbc95ad2cb1ecf34ca5a49911edb4437fdf2a2d91c5044efcea67c5aca0",
+  "snapshot_age_seconds": 1.2
+}

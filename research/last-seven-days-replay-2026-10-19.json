@@ -1,0 +1,97 @@
+{
+  "status": "EXPLORATORY / UNPROVEN / NO FILL SIMULATION",
+  "clock": "MT5 broker-server",
+  "period": {
+    "first_m5": "2026-10-12 11:40",
+    "last_m5": "2026-10-19 11:35",
+    "closed_m5_bars": 2015,
+    "m5_gaps": 1
+  },
+  "method": "One attempt per fixed level; register only after two fully known M15 reactions; closed H1/M15 data revealed by close time; M5 only thereafter; no automatic rearming.",
+  "limitations": [
+    "Levels selected after viewing this history: selection bias remains despite chronological evidence checks.",
+    "Historical manual news/context review is unavailable and assumed clear for this diagnostic.",
+    "No historical executable bid/ask quotes, receipt latency or margin history: entries, costs, P/L, drawdown and win rate are NOT computed.",
+    "This is a setup diagnostic, not a complete frozen-v1 execution backtest."
+  ],
+  "counts": {
+    "CONFIRMED_SETUP_ONLY": 1,
+    "CONTEXT_FAILED": 1,
+    "INVALIDATED": 1,
+    "EXPIRED": 1
+  },
+  "levels": [
+    {
+      "price": 82850,
+      "side": "resistance",
+      "registered": "2026-10-12 14:45",
+      "registered_time": 1791816300,
+      "evidence": [
+        "2026-10-12 12:30",
+        "2026-10-12 14:00"
+      ],
+      "breakout": "2026-10-12 20:05",
+      "h1_context": [
+        "2026-10-12 18:00",
+        "2026-10-12 19:00"
+      ],
+      "confirmation": "2026-10-12 20:15",
+      "outcome": "CONFIRMED_SETUP_ONLY"
+    },
+    {
+      "price": 82600,
+      "side": "support",
+      "registered": "2026-10-12 16:15",
+      "registered_time": 1791821700,
+      "evidence": [
+        "2026-10-12 13:30",
+        "2026-10-12 15:30"
+      ],
+      "breakout": "2026-10-12 16:50",
+      "outcome": "CONTEXT_FAILED"
+    },
+    {
+      "price": 82400,
+      "side": "support",
+      "registered": "2026-10-12 15:00",
+      "registered_time": 1791817200,
+      "evidence": [
+        "2026-10-12 13:15",
+        "2026-10-12 14:30"
+      ],
+      "breakout": "2026-10-12 17:25",
+      "h1_context": [
+        "2026-10-12 15:00",
+        "2026-10-12 16:00"
+      ],
+      "outcome": "INVALIDATED"
+    },
+    {
+      "price": 82250,
+      "side": "support",
+      "registered": "2026-10-12 19:30",
+      "registered_time": 1791833400,
+      "evidence": [
+        "2026-10-12 17:30",
+        "2026-10-12 18:45"
+      ],
+      "breakout": "2026-10-12 22:55",
+      "h1_context": [
+        "2026-10-12 21:00",
+        "2026-10-12 22:00"
+      ],
+      "outcome": "EXPIRED"
+    }
+  ],
+  "requested_days": 7,
+  "source_sha256": "d064dfe706382c497fc6b8c62f391cc139d15af58e5feb98a2d8d14e4f0a2f74",
+  "data_gaps": [
+    {
+      "after": "2026-10-18 07:30",
+      "before": "2026-10-18 07:40",
+      "missing_m5_bars": 1
+    }
+  ],
+  "scope": "Four fixed levels selected today, one registration and one attempt per level across this window; not an exhaustive weekly strategy backtest.",
+  "execution_note": "The single confirmed bullish pattern has no higher resistance target in this four-level map; no qualified trade or P/L is claimed."
+}

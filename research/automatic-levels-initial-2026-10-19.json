@@ -1,0 +1,3580 @@
+{
+  "status": "UNPROVEN",
+  "source_sha256": "d064dfe706382c497fc6b8c62f391cc139d15af58e5feb98a2d8d14e4f0a2f74",
+  "spec_sha256": "5b2002ebfb584d14697d66fd18f18d85a6b885b3bc091183cdc2274f05293503",
+  "clock": "MT5 broker-server",
+  "limitations": [
+    "Bid OHLC; constant spread/slippage scenarios, not historical executable quotes.",
+    "Historical margin, receipt latency and news review unavailable.",
+    "Recently viewed data; validation split is not pristine out-of-sample.",
+    "Automatic level rules and EMA context differ from approved v1; no live settings changed."
+  ],
+  "runs": [
+    {
+      "status": "UNPROVEN / MODELED / MARGIN UNVERIFIED",
+      "variant": "reference",
+      "timeframes": {
+        "levels": "M15",
+        "entry": "M5",
+        "context": "H1"
+      },
+      "period": {
+        "start": 1791805200,
+        "end": 1792410000,
+        "validation_start": 1792237200,
+        "bars": 2015
+      },
+      "spread_assumption": 6.4,
+      "registered_levels": 80,
+      "skips": {
+        "COST_FAILED": 10,
+        "NO_TARGET": 29,
+        "RETEST_EXPIRED": 5,
+        "CONTEXT_FAILED": 17,
+        "INVALIDATED": 9,
+        "LEVEL_EXPIRED": 6,
+        "DATA_GAP": 2
+      },
+      "closed_trades": 0,
+      "net_pnl": 0.0,
+      "modeled_costs": 0,
+      "realized_drawdown": 0.0,
+      "ambiguous": 0,
+      "segments": {
+        "exploratory": {
+          "closed_trades": 0,
+          "net_pnl": 0,
+          "win_rate": null
+        },
+        "validation": {
+          "closed_trades": 0,
+          "net_pnl": 0,
+          "win_rate": null
+        }
+      },
+      "risk_paused": false,
+      "gaps": [
+        {
+          "after": 1792308600,
+          "before": 1792309200
+        }
+      ],
+      "uncertain_position": null,
+      "open_position": null,
+      "trades": [],
+      "levels": [
+        {
+          "id": 0,
+          "side": "resistance",
+          "price": 83908.19,
+          "evidence": [
+            1791733500,
+            1791766800
+          ],
+          "created": 1791805500,
+          "expires": 1791891900,
+          "state": "INVALIDATED",
+          "target": 83962.88,
+          "post": [
+            {
+              "time": 1791879300,
+              "open": 84063.51,
+              "high": 84068.8,
+              "low": 83851.39,
+              "close": 83883.15,
+              "closed": true
+            }
+          ],
+          "breakout": 1791879000
+        },
+        {
+          "id": 1,
+          "side": "resistance",
+          "price": 83962.88,
+          "evidence": [
+            1791736200,
+            1791766800
+          ],
+          "created": 1791805500,
+          "expires": 1791891900,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 2,
+          "side": "support",
+          "price": 83669.74,
+          "evidence": [
+            1791738000,
+            1791783000
+          ],
+          "created": 1791805500,
+          "expires": 1791891900,
+          "state": "CONTEXT_FAILED"
+        },
+        {
+          "id": 3,
+          "side": "resistance",
+          "price": 83666.7,
+          "evidence": [
+            1791747900,
+            1791751500
+          ],
+          "created": 1791805500,
+          "expires": 1791891900,
+          "state": "EXPIRED",
+          "target": 83908.19,
+          "post": [
+            {
+              "time": 1791876900,
+              "open": 83749.57,
+              "high": 83959.12,
+              "low": 83749.57,
+              "close": 83912.88,
+              "closed": true
+            },
+            {
+              "time": 1791877200,
+              "open": 83911.74,
+              "high": 83924.43,
+              "low": 83726.67,
+              "close": 83751.55,
+              "closed": true
+            },
+            {
+              "time": 1791877500,
+              "open": 83751.56,
+              "high": 83926.95,
+              "low": 83747.82,
+              "close": 83837.59,
+              "closed": true
+            },
+            {
+              "time": 1791877800,
+              "open": 83837.8,
+              "high": 83899.76,
+              "low": 83817.35,
+              "close": 83891.17,
+              "closed": true
+            },
+            {
+              "time": 1791878100,
+              "open": 83891.11,
+              "high": 83891.11,
+              "low": 83750.83,
+              "close": 83758.51,
+              "closed": true
+            },
+            {
+              "time": 1791878400,
+              "open": 83759.1,
+              "high": 83872.83,
+              "low": 83755.64,
+              "close": 83842.41,
+              "closed": true
+            },
+            {
+              "time": 1791878700,
+              "open": 83844.06,
+              "high": 83968.47,
+              "low": 83842.2,
+              "close": 83933.7,
+              "closed": true
+            }
+          ],
+          "breakout": 1791876600
+        },
+        {
+          "id": 4,
+          "side": "support",
+          "price": 83187.77,
+          "evidence": [
+            1791753300,
+            1791798300
+          ],
+          "created": 1791805500,
+          "expires": 1791891900,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 5,
+          "side": "support",
+          "price": 83355.16,
+          "evidence": [
+            1791769500,
+            1791778500
+          ],
+          "created": 1791805500,
+          "expires": 1791891900,
+          "state": "CONSUMED",
+          "target": 83187.77,
+          "post": [
+            {
+              "time": 1791806400,
+              "open": 83304.27,
+              "high": 83318.16,
+              "low": 83233.48,
+              "close": 83255.55,
+              "closed": true
+            }
+          ],
+          "breakout": 1791806100,
+          "confirmation": 1791806400,
+          "extreme": 83318.16
+        },
+        {
+          "id": 6,
+          "side": "support",
+          "price": 83187.77,
+          "evidence": [
+            1791753300,
+            1791804600
+          ],
+          "created": 1791808200,
+          "expires": 1791894600,
+          "state": "CONTEXT_FAILED"
+        },
+        {
+          "id": 7,
+          "side": "resistance",
+          "price": 83032.03,
+          "evidence": [
+            1791813600,
+            1791837900
+          ],
+          "created": 1791840600,
+          "expires": 1791927000,
+          "state": "EXPIRED",
+          "target": 83666.7,
+          "post": [
+            {
+              "time": 1791862500,
+              "open": 83323.96,
+              "high": 83503.64,
+              "low": 83140.93,
+              "close": 83152.18,
+              "closed": true
+            },
+            {
+              "time": 1791862800,
+              "open": 83152.38,
+              "high": 83204.95,
+              "low": 83095.18,
+              "close": 83117.96,
+              "closed": true
+            },
+            {
+              "time": 1791863100,
+              "open": 83119.75,
+              "high": 83276.25,
+              "low": 83083.64,
+              "close": 83262.57,
+              "closed": true
+            },
+            {
+              "time": 1791863400,
+              "open": 83259.1,
+              "high": 83290.77,
+              "low": 83181.34,
+              "close": 83240.4,
+              "closed": true
+            },
+            {
+              "time": 1791863700,
+              "open": 83243.04,
+              "high": 83243.48,
+              "low": 83173.49,
+              "close": 83233.97,
+              "closed": true
+            },
+            {
+              "time": 1791864000,
+              "open": 83224.33,
+              "high": 83313.93,
+              "low": 83202.44,
+              "close": 83309.16,
+              "closed": true
+            },
+            {
+              "time": 1791864300,
+              "open": 83309.14,
+              "high": 83311.7,
+              "low": 83209.09,
+              "close": 83220.29,
+              "closed": true
+            }
+          ],
+          "breakout": 1791862200
+        },
+        {
+          "id": 8,
+          "side": "support",
+          "price": 82378.26,
+          "evidence": [
+            1791810900,
+            1791841500
+          ],
+          "created": 1791844200,
+          "expires": 1791930600,
+          "state": "EXPIRED",
+          "target": 82306.92,
+          "post": [
+            {
+              "time": 1791846000,
+              "open": 82044.48,
+              "high": 82156.38,
+              "low": 81880.3,
+              "close": 81932.73,
+              "closed": true
+            },
+            {
+              "time": 1791846300,
+              "open": 81929.14,
+              "high": 82083.16,
+              "low": 81678.15,
+              "close": 82058.14,
+              "closed": true
+            },
+            {
+              "time": 1791846600,
+              "open": 82058.19,
+              "high": 82061.89,
+              "low": 81832.53,
+              "close": 81949.48,
+              "closed": true
+            },
+            {
+              "time": 1791846900,
+              "open": 81949.56,
+              "high": 82036.62,
+              "low": 81883.96,
+              "close": 82036.17,
+              "closed": true
+            },
+            {
+              "time": 1791847200,
+              "open": 82034.86,
+              "high": 82058.5,
+              "low": 81966.01,
+              "close": 82033.35,
+              "closed": true
+            },
+            {
+              "time": 1791847500,
+              "open": 82033.34,
+              "high": 82033.34,
+              "low": 81872.06,
+              "close": 81942.65,
+              "closed": true
+            },
+            {
+              "time": 1791847800,
+              "open": 81943.15,
+              "high": 81966.52,
+              "low": 81706.2,
+              "close": 81818.99,
+              "closed": true
+            }
+          ],
+          "breakout": 1791845700
+        },
+        {
+          "id": 9,
+          "side": "support",
+          "price": 82306.92,
+          "evidence": [
+            1791816300,
+            1791841500
+          ],
+          "created": 1791844200,
+          "expires": 1791930600,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 10,
+          "side": "resistance",
+          "price": 83032.03,
+          "evidence": [
+            1791813600,
+            1791859500
+          ],
+          "created": 1791863100,
+          "expires": 1791949500,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 11,
+          "side": "resistance",
+          "price": 83531.24,
+          "evidence": [
+            1791801900,
+            1791862200
+          ],
+          "created": 1791864900,
+          "expires": 1791951300,
+          "state": "CONSUMED",
+          "target": 83666.7,
+          "post": [
+            {
+              "time": 1791868500,
+              "open": 83615.71,
+              "high": 83616.75,
+              "low": 83502.14,
+              "close": 83589.76,
+              "closed": true
+            },
+            {
+              "time": 1791868800,
+              "open": 83589.44,
+              "high": 83820.19,
+              "low": 83556.44,
+              "close": 83651.98,
+              "closed": true
+            }
+          ],
+          "breakout": 1791868200,
+          "confirmation": 1791868800,
+          "extreme": 83502.14
+        },
+        {
+          "id": 12,
+          "side": "resistance",
+          "price": 83624.36,
+          "evidence": [
+            1791883800,
+            1791890100
+          ],
+          "created": 1791892800,
+          "expires": 1791979200,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 13,
+          "side": "support",
+          "price": 83032.34,
+          "evidence": [
+            1791890100,
+            1791896400
+          ],
+          "created": 1791899100,
+          "expires": 1791985500,
+          "state": "CONTEXT_FAILED"
+        },
+        {
+          "id": 14,
+          "side": "resistance",
+          "price": 83503.64,
+          "evidence": [
+            1791862200,
+            1791908100
+          ],
+          "created": 1791910800,
+          "expires": 1791997200,
+          "state": "CONTEXT_FAILED"
+        },
+        {
+          "id": 15,
+          "side": "support",
+          "price": 83032.34,
+          "evidence": [
+            1791890100,
+            1791910800
+          ],
+          "created": 1791914400,
+          "expires": 1792000800,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 16,
+          "side": "support",
+          "price": 82858.01,
+          "evidence": [
+            1791913500,
+            1791916200
+          ],
+          "created": 1791918900,
+          "expires": 1792005300,
+          "state": "CONTEXT_FAILED"
+        },
+        {
+          "id": 17,
+          "side": "support",
+          "price": 83032.34,
+          "evidence": [
+            1791890100,
+            1791920700
+          ],
+          "created": 1791923400,
+          "expires": 1792009800,
+          "state": "CONTEXT_FAILED"
+        },
+        {
+          "id": 18,
+          "side": "support",
+          "price": 83119.3,
+          "evidence": [
+            1791906300,
+            1791923400
+          ],
+          "created": 1791926100,
+          "expires": 1792012500,
+          "state": "CONTEXT_FAILED"
+        },
+        {
+          "id": 19,
+          "side": "resistance",
+          "price": 83383.54,
+          "evidence": [
+            1791894600,
+            1791924300
+          ],
+          "created": 1791927000,
+          "expires": 1792013400,
+          "state": "CONSUMED",
+          "target": 83503.64,
+          "post": [
+            {
+              "time": 1791928200,
+              "open": 83426.31,
+              "high": 83446.28,
+              "low": 83398.62,
+              "close": 83429.89,
+              "closed": true
+            }
+          ],
+          "breakout": 1791927900,
+          "confirmation": 1791928200,
+          "extreme": 83398.62
+        },
+        {
+          "id": 20,
+          "side": "support",
+          "price": 83262.73,
+          "evidence": [
+            1791882000,
+            1791926100
+          ],
+          "created": 1791928800,
+          "expires": 1792015200,
+          "state": "CONTEXT_FAILED"
+        },
+        {
+          "id": 21,
+          "side": "resistance",
+          "price": 83461.7,
+          "evidence": [
+            1791927900,
+            1791931500
+          ],
+          "created": 1791934200,
+          "expires": 1792020600,
+          "state": "CONTEXT_FAILED"
+        },
+        {
+          "id": 22,
+          "side": "support",
+          "price": 83078.81,
+          "evidence": [
+            1791923400,
+            1791935100
+          ],
+          "created": 1791937800,
+          "expires": 1792024200,
+          "state": "CONTEXT_FAILED"
+        },
+        {
+          "id": 23,
+          "side": "resistance",
+          "price": 83503.64,
+          "evidence": [
+            1791862200,
+            1791931500
+          ],
+          "created": 1791938700,
+          "expires": 1792025100,
+          "state": "CONSUMED",
+          "target": 83624.36,
+          "post": [
+            {
+              "time": 1791946500,
+              "open": 83561.52,
+              "high": 83629.28,
+              "low": 83520.02,
+              "close": 83568.1,
+              "closed": true
+            }
+          ],
+          "breakout": 1791946200,
+          "confirmation": 1791946500,
+          "extreme": 83520.02
+        },
+        {
+          "id": 24,
+          "side": "resistance",
+          "price": 83383.54,
+          "evidence": [
+            1791894600,
+            1791942300
+          ],
+          "created": 1791945000,
+          "expires": 1792031400,
+          "state": "CONSUMED",
+          "target": 83503.64,
+          "post": [
+            {
+              "time": 1791946200,
+              "open": 83431.82,
+              "high": 83568.99,
+              "low": 83396.64,
+              "close": 83561.94,
+              "closed": true
+            }
+          ],
+          "breakout": 1791945900,
+          "confirmation": 1791946200,
+          "extreme": 83396.64
+        },
+        {
+          "id": 25,
+          "side": "resistance",
+          "price": 83624.36,
+          "evidence": [
+            1791883800,
+            1791937800
+          ],
+          "created": 1791948600,
+          "expires": 1792035000,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 26,
+          "side": "support",
+          "price": 83542.31,
+          "evidence": [
+            1791874800,
+            1791950400
+          ],
+          "created": 1791953100,
+          "expires": 1792039500,
+          "state": "CONTEXT_FAILED"
+        },
+        {
+          "id": 27,
+          "side": "support",
+          "price": 83314.88,
+          "evidence": [
+            1791929700,
+            1791954000
+          ],
+          "created": 1791956700,
+          "expires": 1792043100,
+          "state": "EXPIRED",
+          "target": 83262.73,
+          "post": [
+            {
+              "time": 1791969900,
+              "open": 83204.95,
+              "high": 83256.1,
+              "low": 83168.18,
+              "close": 83170.99,
+              "closed": true
+            },
+            {
+              "time": 1791970200,
+              "open": 83173.36,
+              "high": 83239.06,
+              "low": 83160.47,
+              "close": 83199.83,
+              "closed": true
+            },
+            {
+              "time": 1791970500,
+              "open": 83198.57,
+              "high": 83260.08,
+              "low": 83149.43,
+              "close": 83213.55,
+              "closed": true
+            },
+            {
+              "time": 1791970800,
+              "open": 83211.14,
+              "high": 83225.33,
+              "low": 83102.56,
+              "close": 83213.8,
+              "closed": true
+            },
+            {
+              "time": 1791971100,
+              "open": 83213.1,
+              "high": 83213.95,
+              "low": 83094.89,
+              "close": 83164.99,
+              "closed": true
+            },
+            {
+              "time": 1791971400,
+              "open": 83164.97,
+              "high": 83233.85,
+              "low": 83152.33,
+              "close": 83186.38,
+              "closed": true
+            },
+            {
+              "time": 1791971700,
+              "open": 83186.37,
+              "high": 83205.3,
+              "low": 83154.44,
+              "close": 83159.65,
+              "closed": true
+            }
+          ],
+          "breakout": 1791969600
+        },
+        {
+          "id": 28,
+          "side": "support",
+          "price": 83262.73,
+          "evidence": [
+            1791882000,
+            1791957600
+          ],
+          "created": 1791960300,
+          "expires": 1792046700,
+          "state": "CONSUMED",
+          "target": 83078.81,
+          "post": [
+            {
+              "time": 1791969900,
+              "open": 83204.95,
+              "high": 83256.1,
+              "low": 83168.18,
+              "close": 83170.99,
+              "closed": true
+            }
+          ],
+          "breakout": 1791969600,
+          "confirmation": 1791969900,
+          "extreme": 83256.1
+        },
+        {
+          "id": 29,
+          "side": "resistance",
+          "price": 83528.95,
+          "evidence": [
+            1791908100,
+            1791958500
+          ],
+          "created": 1791961200,
+          "expires": 1792047600,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 30,
+          "side": "resistance",
+          "price": 83528.95,
+          "evidence": [
+            1791908100,
+            1791961200
+          ],
+          "created": 1791965700,
+          "expires": 1792052100,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 31,
+          "side": "support",
+          "price": 83226.73,
+          "evidence": [
+            1791926100,
+            1791961200
+          ],
+          "created": 1791970200,
+          "expires": 1792056600,
+          "state": "CONSUMED",
+          "target": 83078.81,
+          "post": [
+            {
+              "time": 1791971400,
+              "open": 83164.97,
+              "high": 83233.85,
+              "low": 83152.33,
+              "close": 83186.38,
+              "closed": true
+            },
+            {
+              "time": 1791971700,
+              "open": 83186.37,
+              "high": 83205.3,
+              "low": 83154.44,
+              "close": 83159.65,
+              "closed": true
+            }
+          ],
+          "breakout": 1791971100,
+          "confirmation": 1791971700,
+          "extreme": 83233.85
+        },
+        {
+          "id": 32,
+          "side": "support",
+          "price": 83226.73,
+          "evidence": [
+            1791926100,
+            1791975600
+          ],
+          "created": 1791978300,
+          "expires": 1792064700,
+          "state": "CONTEXT_FAILED"
+        },
+        {
+          "id": 33,
+          "side": "support",
+          "price": 83119.3,
+          "evidence": [
+            1791906300,
+            1791941400
+          ],
+          "created": 1791981900,
+          "expires": 1792068300,
+          "state": "EXPIRED"
+        },
+        {
+          "id": 34,
+          "side": "support",
+          "price": 83054.21,
+          "evidence": [
+            1791920700,
+            1791941400
+          ],
+          "created": 1791981900,
+          "expires": 1792068300,
+          "state": "EXPIRED"
+        },
+        {
+          "id": 35,
+          "side": "resistance",
+          "price": 83882.99,
+          "evidence": [
+            1791948600,
+            1791981000
+          ],
+          "created": 1791983700,
+          "expires": 1792070100,
+          "state": "EXPIRED"
+        },
+        {
+          "id": 36,
+          "side": "resistance",
+          "price": 81997.29,
+          "evidence": [
+            1791990900,
+            1791997200
+          ],
+          "created": 1791999900,
+          "expires": 1792086300,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 37,
+          "side": "support",
+          "price": 81404.89,
+          "evidence": [
+            1791999900,
+            1792004400
+          ],
+          "created": 1792007100,
+          "expires": 1792093500,
+          "state": "INVALIDATED",
+          "target": 81326.5,
+          "post": [
+            {
+              "time": 1792030500,
+              "open": 81343.8,
+              "high": 81703.61,
+              "low": 81336.31,
+              "close": 81690.9,
+              "closed": true
+            }
+          ],
+          "breakout": 1792030200
+        },
+        {
+          "id": 38,
+          "side": "resistance",
+          "price": 81884.06,
+          "evidence": [
+            1792008900,
+            1792013400
+          ],
+          "created": 1792016100,
+          "expires": 1792102500,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 39,
+          "side": "support",
+          "price": 81326.5,
+          "evidence": [
+            1792017900,
+            1792020600
+          ],
+          "created": 1792023300,
+          "expires": 1792109700,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 40,
+          "side": "resistance",
+          "price": 81785.83,
+          "evidence": [
+            1792005300,
+            1792026000
+          ],
+          "created": 1792028700,
+          "expires": 1792115100,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 41,
+          "side": "support",
+          "price": 80612.51,
+          "evidence": [
+            1792035900,
+            1792046700
+          ],
+          "created": 1792049400,
+          "expires": 1792135800,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 42,
+          "side": "resistance",
+          "price": 81090.74,
+          "evidence": [
+            1792063800,
+            1792066500
+          ],
+          "created": 1792069200,
+          "expires": 1792155600,
+          "state": "CONTEXT_FAILED"
+        },
+        {
+          "id": 43,
+          "side": "resistance",
+          "price": 81857.63,
+          "evidence": [
+            1792013400,
+            1792026000
+          ],
+          "created": 1792077300,
+          "expires": 1792163700,
+          "state": "INVALIDATED",
+          "target": 82360.45,
+          "post": [
+            {
+              "time": 1792122600,
+              "open": 82014.95,
+              "high": 82096.58,
+              "low": 81984.5,
+              "close": 82034.65,
+              "closed": true
+            },
+            {
+              "time": 1792122900,
+              "open": 82036.14,
+              "high": 82092.33,
+              "low": 82000.75,
+              "close": 82007.21,
+              "closed": true
+            },
+            {
+              "time": 1792123200,
+              "open": 82007.19,
+              "high": 82013.01,
+              "low": 81900.62,
+              "close": 81909.11,
+              "closed": true
+            },
+            {
+              "time": 1792123500,
+              "open": 81908.44,
+              "high": 81996.28,
+              "low": 81821.79,
+              "close": 81821.79,
+              "closed": true
+            }
+          ],
+          "breakout": 1792122300
+        },
+        {
+          "id": 44,
+          "side": "resistance",
+          "price": 82548.5,
+          "evidence": [
+            1792078200,
+            1792084500
+          ],
+          "created": 1792087200,
+          "expires": 1792173600,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 45,
+          "side": "support",
+          "price": 81856.99,
+          "evidence": [
+            1792081800,
+            1792097100
+          ],
+          "created": 1792099800,
+          "expires": 1792186200,
+          "state": "CONTEXT_FAILED"
+        },
+        {
+          "id": 46,
+          "side": "resistance",
+          "price": 82360.45,
+          "evidence": [
+            1792096200,
+            1792110600
+          ],
+          "created": 1792113300,
+          "expires": 1792199700,
+          "state": "EXPIRED",
+          "target": 82548.5,
+          "post": [
+            {
+              "time": 1792149300,
+              "open": 82560.17,
+              "high": 82616.13,
+              "low": 82425.39,
+              "close": 82611.41,
+              "closed": true
+            },
+            {
+              "time": 1792149600,
+              "open": 82613.86,
+              "high": 82796.49,
+              "low": 82570.44,
+              "close": 82701.58,
+              "closed": true
+            },
+            {
+              "time": 1792149900,
+              "open": 82738.88,
+              "high": 82839.88,
+              "low": 82698.07,
+              "close": 82715.26,
+              "closed": true
+            },
+            {
+              "time": 1792150200,
+              "open": 82722.98,
+              "high": 82774.42,
+              "low": 82616.53,
+              "close": 82659.23,
+              "closed": true
+            },
+            {
+              "time": 1792150500,
+              "open": 82658.7,
+              "high": 82671.39,
+              "low": 82586.02,
+              "close": 82589.43,
+              "closed": true
+            },
+            {
+              "time": 1792150800,
+              "open": 82589.42,
+              "high": 82672.1,
+              "low": 82574.43,
+              "close": 82591.44,
+              "closed": true
+            },
+            {
+              "time": 1792151100,
+              "open": 82591.05,
+              "high": 82642.69,
+              "low": 82538.12,
+              "close": 82565.06,
+              "closed": true
+            }
+          ],
+          "breakout": 1792149000
+        },
+        {
+          "id": 47,
+          "side": "support",
+          "price": 81856.99,
+          "evidence": [
+            1792081800,
+            1792118700
+          ],
+          "created": 1792122300,
+          "expires": 1792208700,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 48,
+          "side": "resistance",
+          "price": 82136.91,
+          "evidence": [
+            1792117800,
+            1792120500
+          ],
+          "created": 1792123200,
+          "expires": 1792209600,
+          "state": "INVALIDATED",
+          "target": 82360.45,
+          "post": [
+            {
+              "time": 1792127100,
+              "open": 82283.28,
+              "high": 82323.94,
+              "low": 82172.94,
+              "close": 82226.39,
+              "closed": true
+            },
+            {
+              "time": 1792127400,
+              "open": 82226.02,
+              "high": 82226.02,
+              "low": 82156.44,
+              "close": 82194.02,
+              "closed": true
+            },
+            {
+              "time": 1792127700,
+              "open": 82196.28,
+              "high": 82209.35,
+              "low": 82122.2,
+              "close": 82149.85,
+              "closed": true
+            },
+            {
+              "time": 1792128000,
+              "open": 82149.85,
+              "high": 82161.43,
+              "low": 82109.53,
+              "close": 82150.14,
+              "closed": true
+            },
+            {
+              "time": 1792128300,
+              "open": 82150.1,
+              "high": 82150.87,
+              "low": 82084.9,
+              "close": 82096.02,
+              "closed": true
+            }
+          ],
+          "breakout": 1792126800
+        },
+        {
+          "id": 49,
+          "side": "support",
+          "price": 81983.67,
+          "evidence": [
+            1792088100,
+            1792135800
+          ],
+          "created": 1792138500,
+          "expires": 1792224900,
+          "state": "INVALIDATED",
+          "target": 81856.99,
+          "post": [
+            {
+              "time": 1792144800,
+              "open": 81932.85,
+              "high": 81932.85,
+              "low": 81751.24,
+              "close": 81796.4,
+              "closed": true
+            },
+            {
+              "time": 1792145100,
+              "open": 81796.38,
+              "high": 81824.3,
+              "low": 81738.79,
+              "close": 81772.14,
+              "closed": true
+            },
+            {
+              "time": 1792145400,
+              "open": 81772.11,
+              "high": 81874.23,
+              "low": 81758.73,
+              "close": 81816.13,
+              "closed": true
+            },
+            {
+              "time": 1792145700,
+              "open": 81816.16,
+              "high": 81957.96,
+              "low": 81793.14,
+              "close": 81914.18,
+              "closed": true
+            },
+            {
+              "time": 1792146000,
+              "open": 81914.81,
+              "high": 81988.6,
+              "low": 81908.99,
+              "close": 81931.43,
+              "closed": true
+            },
+            {
+              "time": 1792146300,
+              "open": 81931.79,
+              "high": 81968.28,
+              "low": 81900.2,
+              "close": 81932.38,
+              "closed": true
+            },
+            {
+              "time": 1792146600,
+              "open": 81934.79,
+              "high": 82067.8,
+              "low": 81927.05,
+              "close": 82067.8,
+              "closed": true
+            }
+          ],
+          "breakout": 1792144500
+        },
+        {
+          "id": 50,
+          "side": "support",
+          "price": 82041.53,
+          "evidence": [
+            1792106100,
+            1792138500
+          ],
+          "created": 1792141200,
+          "expires": 1792227600,
+          "state": "CONTEXT_FAILED"
+        },
+        {
+          "id": 51,
+          "side": "support",
+          "price": 81880.47,
+          "evidence": [
+            1792118700,
+            1792131300
+          ],
+          "created": 1792145700,
+          "expires": 1792232100,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 52,
+          "side": "resistance",
+          "price": 82360.45,
+          "evidence": [
+            1792096200,
+            1792126800
+          ],
+          "created": 1792149300,
+          "expires": 1792235700,
+          "state": "EXPIRED"
+        },
+        {
+          "id": 53,
+          "side": "resistance",
+          "price": 82548.5,
+          "evidence": [
+            1792078200,
+            1792091700
+          ],
+          "created": 1792150200,
+          "expires": 1792236600,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 54,
+          "side": "resistance",
+          "price": 82523.05,
+          "evidence": [
+            1792091700,
+            1792102500
+          ],
+          "created": 1792151100,
+          "expires": 1792237500,
+          "state": "EXPIRED"
+        },
+        {
+          "id": 55,
+          "side": "support",
+          "price": 81567.91,
+          "evidence": [
+            1792121400,
+            1792158300
+          ],
+          "created": 1792161000,
+          "expires": 1792247400,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 56,
+          "side": "support",
+          "price": 81567.91,
+          "evidence": [
+            1792121400,
+            1792188000
+          ],
+          "created": 1792190700,
+          "expires": 1792277100,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 57,
+          "side": "resistance",
+          "price": 81693.34,
+          "evidence": [
+            1792185300,
+            1792189800
+          ],
+          "created": 1792193400,
+          "expires": 1792279800,
+          "state": "EXPIRED"
+        },
+        {
+          "id": 58,
+          "side": "support",
+          "price": 81352.18,
+          "evidence": [
+            1792197900,
+            1792200600
+          ],
+          "created": 1792203300,
+          "expires": 1792289700,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 59,
+          "side": "resistance",
+          "price": 81564.35,
+          "evidence": [
+            1792197000,
+            1792202400
+          ],
+          "created": 1792205100,
+          "expires": 1792291500,
+          "state": "CONSUMED",
+          "target": 81693.34,
+          "post": [
+            {
+              "time": 1792224000,
+              "open": 81618.3,
+              "high": 81652.18,
+              "low": 81589.15,
+              "close": 81619.02,
+              "closed": true
+            }
+          ],
+          "breakout": 1792223700,
+          "confirmation": 1792224000,
+          "extreme": 81589.15
+        },
+        {
+          "id": 60,
+          "side": "support",
+          "price": 81352.18,
+          "evidence": [
+            1792197900,
+            1792211400
+          ],
+          "created": 1792214100,
+          "expires": 1792300500,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 61,
+          "side": "support",
+          "price": 81449.12,
+          "evidence": [
+            1792184400,
+            1792221300
+          ],
+          "created": 1792224000,
+          "expires": 1792310400,
+          "state": "CONSUMED",
+          "target": 81352.18,
+          "post": [
+            {
+              "time": 1792240800,
+              "open": 81398.09,
+              "high": 81423.06,
+              "low": 81387.94,
+              "close": 81417.24,
+              "closed": true
+            },
+            {
+              "time": 1792241100,
+              "open": 81416.7,
+              "high": 81423.37,
+              "low": 81369.25,
+              "close": 81386.91,
+              "closed": true
+            }
+          ],
+          "breakout": 1792240500,
+          "confirmation": 1792241100,
+          "extreme": 81423.37
+        },
+        {
+          "id": 62,
+          "side": "resistance",
+          "price": 81564.35,
+          "evidence": [
+            1792197000,
+            1792207800
+          ],
+          "created": 1792224000,
+          "expires": 1792310400,
+          "state": "INVALIDATED",
+          "target": 81693.34,
+          "post": [
+            {
+              "time": 1792224900,
+              "open": 81614.98,
+              "high": 81636.99,
+              "low": 81611.39,
+              "close": 81622.39,
+              "closed": true
+            },
+            {
+              "time": 1792225200,
+              "open": 81623.02,
+              "high": 81628.94,
+              "low": 81603.78,
+              "close": 81611.37,
+              "closed": true
+            },
+            {
+              "time": 1792225500,
+              "open": 81610.57,
+              "high": 81632.77,
+              "low": 81598.0,
+              "close": 81603.97,
+              "closed": true
+            },
+            {
+              "time": 1792225800,
+              "open": 81603.82,
+              "high": 81603.82,
+              "low": 81564.03,
+              "close": 81578.84,
+              "closed": true
+            },
+            {
+              "time": 1792226100,
+              "open": 81578.85,
+              "high": 81592.4,
+              "low": 81569.03,
+              "close": 81573.99,
+              "closed": true
+            },
+            {
+              "time": 1792226400,
+              "open": 81577.48,
+              "high": 81588.57,
+              "low": 81556.63,
+              "close": 81560.89,
+              "closed": true
+            }
+          ],
+          "breakout": 1792224600
+        },
+        {
+          "id": 63,
+          "side": "resistance",
+          "price": 81637.97,
+          "evidence": [
+            1792178100,
+            1792230300
+          ],
+          "created": 1792233000,
+          "expires": 1792319400,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 64,
+          "side": "resistance",
+          "price": 81564.35,
+          "evidence": [
+            1792197000,
+            1792234800
+          ],
+          "created": 1792237500,
+          "expires": 1792323900,
+          "state": "INVALIDATED",
+          "target": 81637.97,
+          "post": [
+            {
+              "time": 1792287600,
+              "open": 81644.48,
+              "high": 81799.01,
+              "low": 81614.33,
+              "close": 81755.81,
+              "closed": true
+            },
+            {
+              "time": 1792287900,
+              "open": 81754.51,
+              "high": 81780.44,
+              "low": 81661.49,
+              "close": 81684.01,
+              "closed": true
+            },
+            {
+              "time": 1792288200,
+              "open": 81686.19,
+              "high": 81690.73,
+              "low": 81600.28,
+              "close": 81600.28,
+              "closed": true
+            },
+            {
+              "time": 1792288500,
+              "open": 81602.58,
+              "high": 81607.41,
+              "low": 81533.08,
+              "close": 81559.25,
+              "closed": true
+            }
+          ],
+          "breakout": 1792287300
+        },
+        {
+          "id": 65,
+          "side": "support",
+          "price": 81429.97,
+          "evidence": [
+            1792216800,
+            1792231200
+          ],
+          "created": 1792241100,
+          "expires": 1792327500,
+          "state": "INVALIDATED",
+          "target": 81352.18,
+          "post": [
+            {
+              "time": 1792241400,
+              "open": 81387.07,
+              "high": 81412.7,
+              "low": 81357.7,
+              "close": 81389.59,
+              "closed": true
+            },
+            {
+              "time": 1792241700,
+              "open": 81388.83,
+              "high": 81409.67,
+              "low": 81381.64,
+              "close": 81401.58,
+              "closed": true
+            },
+            {
+              "time": 1792242000,
+              "open": 81401.86,
+              "high": 81447.93,
+              "low": 81401.86,
+              "close": 81446.01,
+              "closed": true
+            }
+          ],
+          "breakout": 1792241100
+        },
+        {
+          "id": 66,
+          "side": "support",
+          "price": 81352.18,
+          "evidence": [
+            1792197900,
+            1792246500
+          ],
+          "created": 1792252800,
+          "expires": 1792339200,
+          "state": "CONTEXT_FAILED"
+        },
+        {
+          "id": 67,
+          "side": "support",
+          "price": 81352.18,
+          "evidence": [
+            1792197900,
+            1792263600
+          ],
+          "created": 1792272600,
+          "expires": 1792359000,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 68,
+          "side": "support",
+          "price": 81077.38,
+          "evidence": [
+            1792256400,
+            1792279800
+          ],
+          "created": 1792282500,
+          "expires": 1792368900,
+          "state": "DATA_GAP"
+        },
+        {
+          "id": 69,
+          "side": "resistance",
+          "price": 81525.27,
+          "evidence": [
+            1792207800,
+            1792250100
+          ],
+          "created": 1792287900,
+          "expires": 1792374300,
+          "state": "INVALIDATED",
+          "target": 81576.95,
+          "post": [
+            {
+              "time": 1792289100,
+              "open": 81575.02,
+              "high": 81597.32,
+              "low": 81543.23,
+              "close": 81545.62,
+              "closed": true
+            },
+            {
+              "time": 1792289400,
+              "open": 81545.47,
+              "high": 81584.55,
+              "low": 81478.29,
+              "close": 81557.75,
+              "closed": true
+            }
+          ],
+          "breakout": 1792288800
+        },
+        {
+          "id": 70,
+          "side": "resistance",
+          "price": 81624.06,
+          "evidence": [
+            1792230300,
+            1792270800
+          ],
+          "created": 1792287900,
+          "expires": 1792374300,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 71,
+          "side": "resistance",
+          "price": 81576.95,
+          "evidence": [
+            1792234800,
+            1792270800
+          ],
+          "created": 1792287900,
+          "expires": 1792374300,
+          "state": "CONSUMED",
+          "target": 81624.06,
+          "post": [
+            {
+              "time": 1792290300,
+              "open": 81623.26,
+              "high": 81651.29,
+              "low": 81616.52,
+              "close": 81627.71,
+              "closed": true
+            }
+          ],
+          "breakout": 1792290000,
+          "confirmation": 1792290300,
+          "extreme": 81616.52
+        },
+        {
+          "id": 72,
+          "side": "resistance",
+          "price": 81799.01,
+          "evidence": [
+            1792287000,
+            1792300500
+          ],
+          "created": 1792303200,
+          "expires": 1792389600,
+          "state": "DATA_GAP"
+        },
+        {
+          "id": 73,
+          "side": "resistance",
+          "price": 82185.79,
+          "evidence": [
+            1792315800,
+            1792319400
+          ],
+          "created": 1792322100,
+          "expires": 1792408500,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 74,
+          "side": "support",
+          "price": 80920.5,
+          "evidence": [
+            1792333800,
+            1792337400
+          ],
+          "created": 1792340100,
+          "expires": 1792426500,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 75,
+          "side": "resistance",
+          "price": 81160.41,
+          "evidence": [
+            1792340100,
+            1792346400
+          ],
+          "created": 1792349100,
+          "expires": 1792435500,
+          "state": "CONTEXT_FAILED"
+        },
+        {
+          "id": 76,
+          "side": "support",
+          "price": 80993.17,
+          "evidence": [
+            1792345500,
+            1792348200
+          ],
+          "created": 1792350900,
+          "expires": 1792437300,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 77,
+          "side": "support",
+          "price": 80920.5,
+          "evidence": [
+            1792333800,
+            1792341900
+          ],
+          "created": 1792352700,
+          "expires": 1792439100,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 78,
+          "side": "resistance",
+          "price": 81160.41,
+          "evidence": [
+            1792340100,
+            1792349100
+          ],
+          "created": 1792361700,
+          "expires": 1792448100,
+          "state": "ARMED"
+        },
+        {
+          "id": 79,
+          "side": "support",
+          "price": 81555.98,
+          "evidence": [
+            1792302300,
+            1792365300
+          ],
+          "created": 1792368000,
+          "expires": 1792454400,
+          "state": "ARMED"
+        }
+      ]
+    },
+    {
+      "status": "UNPROVEN / MODELED / MARGIN UNVERIFIED",
+      "variant": "reference",
+      "timeframes": {
+        "levels": "M15",
+        "entry": "M5",
+        "context": "H1"
+      },
+      "period": {
+        "start": 1791805200,
+        "end": 1792410000,
+        "validation_start": 1792237200,
+        "bars": 2015
+      },
+      "spread_assumption": 12.8,
+      "registered_levels": 80,
+      "skips": {
+        "COST_FAILED": 10,
+        "NO_TARGET": 29,
+        "RETEST_EXPIRED": 5,
+        "CONTEXT_FAILED": 17,
+        "INVALIDATED": 9,
+        "LEVEL_EXPIRED": 6,
+        "DATA_GAP": 2
+      },
+      "closed_trades": 0,
+      "net_pnl": 0.0,
+      "modeled_costs": 0,
+      "realized_drawdown": 0.0,
+      "ambiguous": 0,
+      "segments": {
+        "exploratory": {
+          "closed_trades": 0,
+          "net_pnl": 0,
+          "win_rate": null
+        },
+        "validation": {
+          "closed_trades": 0,
+          "net_pnl": 0,
+          "win_rate": null
+        }
+      },
+      "risk_paused": false,
+      "gaps": [
+        {
+          "after": 1792308600,
+          "before": 1792309200
+        }
+      ],
+      "uncertain_position": null,
+      "open_position": null,
+      "trades": [],
+      "levels": [
+        {
+          "id": 0,
+          "side": "resistance",
+          "price": 83908.19,
+          "evidence": [
+            1791733500,
+            1791766800
+          ],
+          "created": 1791805500,
+          "expires": 1791891900,
+          "state": "INVALIDATED",
+          "target": 83962.88,
+          "post": [
+            {
+              "time": 1791879300,
+              "open": 84063.51,
+              "high": 84068.8,
+              "low": 83851.39,
+              "close": 83883.15,
+              "closed": true
+            }
+          ],
+          "breakout": 1791879000
+        },
+        {
+          "id": 1,
+          "side": "resistance",
+          "price": 83962.88,
+          "evidence": [
+            1791736200,
+            1791766800
+          ],
+          "created": 1791805500,
+          "expires": 1791891900,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 2,
+          "side": "support",
+          "price": 83669.74,
+          "evidence": [
+            1791738000,
+            1791783000
+          ],
+          "created": 1791805500,
+          "expires": 1791891900,
+          "state": "CONTEXT_FAILED"
+        },
+        {
+          "id": 3,
+          "side": "resistance",
+          "price": 83666.7,
+          "evidence": [
+            1791747900,
+            1791751500
+          ],
+          "created": 1791805500,
+          "expires": 1791891900,
+          "state": "EXPIRED",
+          "target": 83908.19,
+          "post": [
+            {
+              "time": 1791876900,
+              "open": 83749.57,
+              "high": 83959.12,
+              "low": 83749.57,
+              "close": 83912.88,
+              "closed": true
+            },
+            {
+              "time": 1791877200,
+              "open": 83911.74,
+              "high": 83924.43,
+              "low": 83726.67,
+              "close": 83751.55,
+              "closed": true
+            },
+            {
+              "time": 1791877500,
+              "open": 83751.56,
+              "high": 83926.95,
+              "low": 83747.82,
+              "close": 83837.59,
+              "closed": true
+            },
+            {
+              "time": 1791877800,
+              "open": 83837.8,
+              "high": 83899.76,
+              "low": 83817.35,
+              "close": 83891.17,
+              "closed": true
+            },
+            {
+              "time": 1791878100,
+              "open": 83891.11,
+              "high": 83891.11,
+              "low": 83750.83,
+              "close": 83758.51,
+              "closed": true
+            },
+            {
+              "time": 1791878400,
+              "open": 83759.1,
+              "high": 83872.83,
+              "low": 83755.64,
+              "close": 83842.41,
+              "closed": true
+            },
+            {
+              "time": 1791878700,
+              "open": 83844.06,
+              "high": 83968.47,
+              "low": 83842.2,
+              "close": 83933.7,
+              "closed": true
+            }
+          ],
+          "breakout": 1791876600
+        },
+        {
+          "id": 4,
+          "side": "support",
+          "price": 83187.77,
+          "evidence": [
+            1791753300,
+            1791798300
+          ],
+          "created": 1791805500,
+          "expires": 1791891900,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 5,
+          "side": "support",
+          "price": 83355.16,
+          "evidence": [
+            1791769500,
+            1791778500
+          ],
+          "created": 1791805500,
+          "expires": 1791891900,
+          "state": "CONSUMED",
+          "target": 83187.77,
+          "post": [
+            {
+              "time": 1791806400,
+              "open": 83304.27,
+              "high": 83318.16,
+              "low": 83233.48,
+              "close": 83255.55,
+              "closed": true
+            }
+          ],
+          "breakout": 1791806100,
+          "confirmation": 1791806400,
+          "extreme": 83318.16
+        },
+        {
+          "id": 6,
+          "side": "support",
+          "price": 83187.77,
+          "evidence": [
+            1791753300,
+            1791804600
+          ],
+          "created": 1791808200,
+          "expires": 1791894600,
+          "state": "CONTEXT_FAILED"
+        },
+        {
+          "id": 7,
+          "side": "resistance",
+          "price": 83032.03,
+          "evidence": [
+            1791813600,
+            1791837900
+          ],
+          "created": 1791840600,
+          "expires": 1791927000,
+          "state": "EXPIRED",
+          "target": 83666.7,
+          "post": [
+            {
+              "time": 1791862500,
+              "open": 83323.96,
+              "high": 83503.64,
+              "low": 83140.93,
+              "close": 83152.18,
+              "closed": true
+            },
+            {
+              "time": 1791862800,
+              "open": 83152.38,
+              "high": 83204.95,
+              "low": 83095.18,
+              "close": 83117.96,
+              "closed": true
+            },
+            {
+              "time": 1791863100,
+              "open": 83119.75,
+              "high": 83276.25,
+              "low": 83083.64,
+              "close": 83262.57,
+              "closed": true
+            },
+            {
+              "time": 1791863400,
+              "open": 83259.1,
+              "high": 83290.77,
+              "low": 83181.34,
+              "close": 83240.4,
+              "closed": true
+            },
+            {
+              "time": 1791863700,
+              "open": 83243.04,
+              "high": 83243.48,
+              "low": 83173.49,
+              "close": 83233.97,
+              "closed": true
+            },
+            {
+              "time": 1791864000,
+              "open": 83224.33,
+              "high": 83313.93,
+              "low": 83202.44,
+              "close": 83309.16,
+              "closed": true
+            },
+            {
+              "time": 1791864300,
+              "open": 83309.14,
+              "high": 83311.7,
+              "low": 83209.09,
+              "close": 83220.29,
+              "closed": true
+            }
+          ],
+          "breakout": 1791862200
+        },
+        {
+          "id": 8,
+          "side": "support",
+          "price": 82378.26,
+          "evidence": [
+            1791810900,
+            1791841500
+          ],
+          "created": 1791844200,
+          "expires": 1791930600,
+          "state": "EXPIRED",
+          "target": 82306.92,
+          "post": [
+            {
+              "time": 1791846000,
+              "open": 82044.48,
+              "high": 82156.38,
+              "low": 81880.3,
+              "close": 81932.73,
+              "closed": true
+            },
+            {
+              "time": 1791846300,
+              "open": 81929.14,
+              "high": 82083.16,
+              "low": 81678.15,
+              "close": 82058.14,
+              "closed": true
+            },
+            {
+              "time": 1791846600,
+              "open": 82058.19,
+              "high": 82061.89,
+              "low": 81832.53,
+              "close": 81949.48,
+              "closed": true
+            },
+            {
+              "time": 1791846900,
+              "open": 81949.56,
+              "high": 82036.62,
+              "low": 81883.96,
+              "close": 82036.17,
+              "closed": true
+            },
+            {
+              "time": 1791847200,
+              "open": 82034.86,
+              "high": 82058.5,
+              "low": 81966.01,
+              "close": 82033.35,
+              "closed": true
+            },
+            {
+              "time": 1791847500,
+              "open": 82033.34,
+              "high": 82033.34,
+              "low": 81872.06,
+              "close": 81942.65,
+              "closed": true
+            },
+            {
+              "time": 1791847800,
+              "open": 81943.15,
+              "high": 81966.52,
+              "low": 81706.2,
+              "close": 81818.99,
+              "closed": true
+            }
+          ],
+          "breakout": 1791845700
+        },
+        {
+          "id": 9,
+          "side": "support",
+          "price": 82306.92,
+          "evidence": [
+            1791816300,
+            1791841500
+          ],
+          "created": 1791844200,
+          "expires": 1791930600,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 10,
+          "side": "resistance",
+          "price": 83032.03,
+          "evidence": [
+            1791813600,
+            1791859500
+          ],
+          "created": 1791863100,
+          "expires": 1791949500,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 11,
+          "side": "resistance",
+          "price": 83531.24,
+          "evidence": [
+            1791801900,
+            1791862200
+          ],
+          "created": 1791864900,
+          "expires": 1791951300,
+          "state": "CONSUMED",
+          "target": 83666.7,
+          "post": [
+            {
+              "time": 1791868500,
+              "open": 83615.71,
+              "high": 83616.75,
+              "low": 83502.14,
+              "close": 83589.76,
+              "closed": true
+            },
+            {
+              "time": 1791868800,
+              "open": 83589.44,
+              "high": 83820.19,
+              "low": 83556.44,
+              "close": 83651.98,
+              "closed": true
+            }
+          ],
+          "breakout": 1791868200,
+          "confirmation": 1791868800,
+          "extreme": 83502.14
+        },
+        {
+          "id": 12,
+          "side": "resistance",
+          "price": 83624.36,
+          "evidence": [
+            1791883800,
+            1791890100
+          ],
+          "created": 1791892800,
+          "expires": 1791979200,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 13,
+          "side": "support",
+          "price": 83032.34,
+          "evidence": [
+            1791890100,
+            1791896400
+          ],
+          "created": 1791899100,
+          "expires": 1791985500,
+          "state": "CONTEXT_FAILED"
+        },
+        {
+          "id": 14,
+          "side": "resistance",
+          "price": 83503.64,
+          "evidence": [
+            1791862200,
+            1791908100
+          ],
+          "created": 1791910800,
+          "expires": 1791997200,
+          "state": "CONTEXT_FAILED"
+        },
+        {
+          "id": 15,
+          "side": "support",
+          "price": 83032.34,
+          "evidence": [
+            1791890100,
+            1791910800
+          ],
+          "created": 1791914400,
+          "expires": 1792000800,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 16,
+          "side": "support",
+          "price": 82858.01,
+          "evidence": [
+            1791913500,
+            1791916200
+          ],
+          "created": 1791918900,
+          "expires": 1792005300,
+          "state": "CONTEXT_FAILED"
+        },
+        {
+          "id": 17,
+          "side": "support",
+          "price": 83032.34,
+          "evidence": [
+            1791890100,
+            1791920700
+          ],
+          "created": 1791923400,
+          "expires": 1792009800,
+          "state": "CONTEXT_FAILED"
+        },
+        {
+          "id": 18,
+          "side": "support",
+          "price": 83119.3,
+          "evidence": [
+            1791906300,
+            1791923400
+          ],
+          "created": 1791926100,
+          "expires": 1792012500,
+          "state": "CONTEXT_FAILED"
+        },
+        {
+          "id": 19,
+          "side": "resistance",
+          "price": 83383.54,
+          "evidence": [
+            1791894600,
+            1791924300
+          ],
+          "created": 1791927000,
+          "expires": 1792013400,
+          "state": "CONSUMED",
+          "target": 83503.64,
+          "post": [
+            {
+              "time": 1791928200,
+              "open": 83426.31,
+              "high": 83446.28,
+              "low": 83398.62,
+              "close": 83429.89,
+              "closed": true
+            }
+          ],
+          "breakout": 1791927900,
+          "confirmation": 1791928200,
+          "extreme": 83398.62
+        },
+        {
+          "id": 20,
+          "side": "support",
+          "price": 83262.73,
+          "evidence": [
+            1791882000,
+            1791926100
+          ],
+          "created": 1791928800,
+          "expires": 1792015200,
+          "state": "CONTEXT_FAILED"
+        },
+        {
+          "id": 21,
+          "side": "resistance",
+          "price": 83461.7,
+          "evidence": [
+            1791927900,
+            1791931500
+          ],
+          "created": 1791934200,
+          "expires": 1792020600,
+          "state": "CONTEXT_FAILED"
+        },
+        {
+          "id": 22,
+          "side": "support",
+          "price": 83078.81,
+          "evidence": [
+            1791923400,
+            1791935100
+          ],
+          "created": 1791937800,
+          "expires": 1792024200,
+          "state": "CONTEXT_FAILED"
+        },
+        {
+          "id": 23,
+          "side": "resistance",
+          "price": 83503.64,
+          "evidence": [
+            1791862200,
+            1791931500
+          ],
+          "created": 1791938700,
+          "expires": 1792025100,
+          "state": "CONSUMED",
+          "target": 83624.36,
+          "post": [
+            {
+              "time": 1791946500,
+              "open": 83561.52,
+              "high": 83629.28,
+              "low": 83520.02,
+              "close": 83568.1,
+              "closed": true
+            }
+          ],
+          "breakout": 1791946200,
+          "confirmation": 1791946500,
+          "extreme": 83520.02
+        },
+        {
+          "id": 24,
+          "side": "resistance",
+          "price": 83383.54,
+          "evidence": [
+            1791894600,
+            1791942300
+          ],
+          "created": 1791945000,
+          "expires": 1792031400,
+          "state": "CONSUMED",
+          "target": 83503.64,
+          "post": [
+            {
+              "time": 1791946200,
+              "open": 83431.82,
+              "high": 83568.99,
+              "low": 83396.64,
+              "close": 83561.94,
+              "closed": true
+            }
+          ],
+          "breakout": 1791945900,
+          "confirmation": 1791946200,
+          "extreme": 83396.64
+        },
+        {
+          "id": 25,
+          "side": "resistance",
+          "price": 83624.36,
+          "evidence": [
+            1791883800,
+            1791937800
+          ],
+          "created": 1791948600,
+          "expires": 1792035000,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 26,
+          "side": "support",
+          "price": 83542.31,
+          "evidence": [
+            1791874800,
+            1791950400
+          ],
+          "created": 1791953100,
+          "expires": 1792039500,
+          "state": "CONTEXT_FAILED"
+        },
+        {
+          "id": 27,
+          "side": "support",
+          "price": 83314.88,
+          "evidence": [
+            1791929700,
+            1791954000
+          ],
+          "created": 1791956700,
+          "expires": 1792043100,
+          "state": "EXPIRED",
+          "target": 83262.73,
+          "post": [
+            {
+              "time": 1791969900,
+              "open": 83204.95,
+              "high": 83256.1,
+              "low": 83168.18,
+              "close": 83170.99,
+              "closed": true
+            },
+            {
+              "time": 1791970200,
+              "open": 83173.36,
+              "high": 83239.06,
+              "low": 83160.47,
+              "close": 83199.83,
+              "closed": true
+            },
+            {
+              "time": 1791970500,
+              "open": 83198.57,
+              "high": 83260.08,
+              "low": 83149.43,
+              "close": 83213.55,
+              "closed": true
+            },
+            {
+              "time": 1791970800,
+              "open": 83211.14,
+              "high": 83225.33,
+              "low": 83102.56,
+              "close": 83213.8,
+              "closed": true
+            },
+            {
+              "time": 1791971100,
+              "open": 83213.1,
+              "high": 83213.95,
+              "low": 83094.89,
+              "close": 83164.99,
+              "closed": true
+            },
+            {
+              "time": 1791971400,
+              "open": 83164.97,
+              "high": 83233.85,
+              "low": 83152.33,
+              "close": 83186.38,
+              "closed": true
+            },
+            {
+              "time": 1791971700,
+              "open": 83186.37,
+              "high": 83205.3,
+              "low": 83154.44,
+              "close": 83159.65,
+              "closed": true
+            }
+          ],
+          "breakout": 1791969600
+        },
+        {
+          "id": 28,
+          "side": "support",
+          "price": 83262.73,
+          "evidence": [
+            1791882000,
+            1791957600
+          ],
+          "created": 1791960300,
+          "expires": 1792046700,
+          "state": "CONSUMED",
+          "target": 83078.81,
+          "post": [
+            {
+              "time": 1791969900,
+              "open": 83204.95,
+              "high": 83256.1,
+              "low": 83168.18,
+              "close": 83170.99,
+              "closed": true
+            }
+          ],
+          "breakout": 1791969600,
+          "confirmation": 1791969900,
+          "extreme": 83256.1
+        },
+        {
+          "id": 29,
+          "side": "resistance",
+          "price": 83528.95,
+          "evidence": [
+            1791908100,
+            1791958500
+          ],
+          "created": 1791961200,
+          "expires": 1792047600,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 30,
+          "side": "resistance",
+          "price": 83528.95,
+          "evidence": [
+            1791908100,
+            1791961200
+          ],
+          "created": 1791965700,
+          "expires": 1792052100,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 31,
+          "side": "support",
+          "price": 83226.73,
+          "evidence": [
+            1791926100,
+            1791961200
+          ],
+          "created": 1791970200,
+          "expires": 1792056600,
+          "state": "CONSUMED",
+          "target": 83078.81,
+          "post": [
+            {
+              "time": 1791971400,
+              "open": 83164.97,
+              "high": 83233.85,
+              "low": 83152.33,
+              "close": 83186.38,
+              "closed": true
+            },
+            {
+              "time": 1791971700,
+              "open": 83186.37,
+              "high": 83205.3,
+              "low": 83154.44,
+              "close": 83159.65,
+              "closed": true
+            }
+          ],
+          "breakout": 1791971100,
+          "confirmation": 1791971700,
+          "extreme": 83233.85
+        },
+        {
+          "id": 32,
+          "side": "support",
+          "price": 83226.73,
+          "evidence": [
+            1791926100,
+            1791975600
+          ],
+          "created": 1791978300,
+          "expires": 1792064700,
+          "state": "CONTEXT_FAILED"
+        },
+        {
+          "id": 33,
+          "side": "support",
+          "price": 83119.3,
+          "evidence": [
+            1791906300,
+            1791941400
+          ],
+          "created": 1791981900,
+          "expires": 1792068300,
+          "state": "EXPIRED"
+        },
+        {
+          "id": 34,
+          "side": "support",
+          "price": 83054.21,
+          "evidence": [
+            1791920700,
+            1791941400
+          ],
+          "created": 1791981900,
+          "expires": 1792068300,
+          "state": "EXPIRED"
+        },
+        {
+          "id": 35,
+          "side": "resistance",
+          "price": 83882.99,
+          "evidence": [
+            1791948600,
+            1791981000
+          ],
+          "created": 1791983700,
+          "expires": 1792070100,
+          "state": "EXPIRED"
+        },
+        {
+          "id": 36,
+          "side": "resistance",
+          "price": 81997.29,
+          "evidence": [
+            1791990900,
+            1791997200
+          ],
+          "created": 1791999900,
+          "expires": 1792086300,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 37,
+          "side": "support",
+          "price": 81404.89,
+          "evidence": [
+            1791999900,
+            1792004400
+          ],
+          "created": 1792007100,
+          "expires": 1792093500,
+          "state": "INVALIDATED",
+          "target": 81326.5,
+          "post": [
+            {
+              "time": 1792030500,
+              "open": 81343.8,
+              "high": 81703.61,
+              "low": 81336.31,
+              "close": 81690.9,
+              "closed": true
+            }
+          ],
+          "breakout": 1792030200
+        },
+        {
+          "id": 38,
+          "side": "resistance",
+          "price": 81884.06,
+          "evidence": [
+            1792008900,
+            1792013400
+          ],
+          "created": 1792016100,
+          "expires": 1792102500,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 39,
+          "side": "support",
+          "price": 81326.5,
+          "evidence": [
+            1792017900,
+            1792020600
+          ],
+          "created": 1792023300,
+          "expires": 1792109700,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 40,
+          "side": "resistance",
+          "price": 81785.83,
+          "evidence": [
+            1792005300,
+            1792026000
+          ],
+          "created": 1792028700,
+          "expires": 1792115100,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 41,
+          "side": "support",
+          "price": 80612.51,
+          "evidence": [
+            1792035900,
+            1792046700
+          ],
+          "created": 1792049400,
+          "expires": 1792135800,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 42,
+          "side": "resistance",
+          "price": 81090.74,
+          "evidence": [
+            1792063800,
+            1792066500
+          ],
+          "created": 1792069200,
+          "expires": 1792155600,
+          "state": "CONTEXT_FAILED"
+        },
+        {
+          "id": 43,
+          "side": "resistance",
+          "price": 81857.63,
+          "evidence": [
+            1792013400,
+            1792026000
+          ],
+          "created": 1792077300,
+          "expires": 1792163700,
+          "state": "INVALIDATED",
+          "target": 82360.45,
+          "post": [
+            {
+              "time": 1792122600,
+              "open": 82014.95,
+              "high": 82096.58,
+              "low": 81984.5,
+              "close": 82034.65,
+              "closed": true
+            },
+            {
+              "time": 1792122900,
+              "open": 82036.14,
+              "high": 82092.33,
+              "low": 82000.75,
+              "close": 82007.21,
+              "closed": true
+            },
+            {
+              "time": 1792123200,
+              "open": 82007.19,
+              "high": 82013.01,
+              "low": 81900.62,
+              "close": 81909.11,
+              "closed": true
+            },
+            {
+              "time": 1792123500,
+              "open": 81908.44,
+              "high": 81996.28,
+              "low": 81821.79,
+              "close": 81821.79,
+              "closed": true
+            }
+          ],
+          "breakout": 1792122300
+        },
+        {
+          "id": 44,
+          "side": "resistance",
+          "price": 82548.5,
+          "evidence": [
+            1792078200,
+            1792084500
+          ],
+          "created": 1792087200,
+          "expires": 1792173600,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 45,
+          "side": "support",
+          "price": 81856.99,
+          "evidence": [
+            1792081800,
+            1792097100
+          ],
+          "created": 1792099800,
+          "expires": 1792186200,
+          "state": "CONTEXT_FAILED"
+        },
+        {
+          "id": 46,
+          "side": "resistance",
+          "price": 82360.45,
+          "evidence": [
+            1792096200,
+            1792110600
+          ],
+          "created": 1792113300,
+          "expires": 1792199700,
+          "state": "EXPIRED",
+          "target": 82548.5,
+          "post": [
+            {
+              "time": 1792149300,
+              "open": 82560.17,
+              "high": 82616.13,
+              "low": 82425.39,
+              "close": 82611.41,
+              "closed": true
+            },
+            {
+              "time": 1792149600,
+              "open": 82613.86,
+              "high": 82796.49,
+              "low": 82570.44,
+              "close": 82701.58,
+              "closed": true
+            },
+            {
+              "time": 1792149900,
+              "open": 82738.88,
+              "high": 82839.88,
+              "low": 82698.07,
+              "close": 82715.26,
+              "closed": true
+            },
+            {
+              "time": 1792150200,
+              "open": 82722.98,
+              "high": 82774.42,
+              "low": 82616.53,
+              "close": 82659.23,
+              "closed": true
+            },
+            {
+              "time": 1792150500,
+              "open": 82658.7,
+              "high": 82671.39,
+              "low": 82586.02,
+              "close": 82589.43,
+              "closed": true
+            },
+            {
+              "time": 1792150800,
+              "open": 82589.42,
+              "high": 82672.1,
+              "low": 82574.43,
+              "close": 82591.44,
+              "closed": true
+            },
+            {
+              "time": 1792151100,
+              "open": 82591.05,
+              "high": 82642.69,
+              "low": 82538.12,
+              "close": 82565.06,
+              "closed": true
+            }
+          ],
+          "breakout": 1792149000
+        },
+        {
+          "id": 47,
+          "side": "support",
+          "price": 81856.99,
+          "evidence": [
+            1792081800,
+            1792118700
+          ],
+          "created": 1792122300,
+          "expires": 1792208700,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 48,
+          "side": "resistance",
+          "price": 82136.91,
+          "evidence": [
+            1792117800,
+            1792120500
+          ],
+          "created": 1792123200,
+          "expires": 1792209600,
+          "state": "INVALIDATED",
+          "target": 82360.45,
+          "post": [
+            {
+              "time": 1792127100,
+              "open": 82283.28,
+              "high": 82323.94,
+              "low": 82172.94,
+              "close": 82226.39,
+              "closed": true
+            },
+            {
+              "time": 1792127400,
+              "open": 82226.02,
+              "high": 82226.02,
+              "low": 82156.44,
+              "close": 82194.02,
+              "closed": true
+            },
+            {
+              "time": 1792127700,
+              "open": 82196.28,
+              "high": 82209.35,
+              "low": 82122.2,
+              "close": 82149.85,
+              "closed": true
+            },
+            {
+              "time": 1792128000,
+              "open": 82149.85,
+              "high": 82161.43,
+              "low": 82109.53,
+              "close": 82150.14,
+              "closed": true
+            },
+            {
+              "time": 1792128300,
+              "open": 82150.1,
+              "high": 82150.87,
+              "low": 82084.9,
+              "close": 82096.02,
+              "closed": true
+            }
+          ],
+          "breakout": 1792126800
+        },
+        {
+          "id": 49,
+          "side": "support",
+          "price": 81983.67,
+          "evidence": [
+            1792088100,
+            1792135800
+          ],
+          "created": 1792138500,
+          "expires": 1792224900,
+          "state": "INVALIDATED",
+          "target": 81856.99,
+          "post": [
+            {
+              "time": 1792144800,
+              "open": 81932.85,
+              "high": 81932.85,
+              "low": 81751.24,
+              "close": 81796.4,
+              "closed": true
+            },
+            {
+              "time": 1792145100,
+              "open": 81796.38,
+              "high": 81824.3,
+              "low": 81738.79,
+              "close": 81772.14,
+              "closed": true
+            },
+            {
+              "time": 1792145400,
+              "open": 81772.11,
+              "high": 81874.23,
+              "low": 81758.73,
+              "close": 81816.13,
+              "closed": true
+            },
+            {
+              "time": 1792145700,
+              "open": 81816.16,
+              "high": 81957.96,
+              "low": 81793.14,
+              "close": 81914.18,
+              "closed": true
+            },
+            {
+              "time": 1792146000,
+              "open": 81914.81,
+              "high": 81988.6,
+              "low": 81908.99,
+              "close": 81931.43,
+              "closed": true
+            },
+            {
+              "time": 1792146300,
+              "open": 81931.79,
+              "high": 81968.28,
+              "low": 81900.2,
+              "close": 81932.38,
+              "closed": true
+            },
+            {
+              "time": 1792146600,
+              "open": 81934.79,
+              "high": 82067.8,
+              "low": 81927.05,
+              "close": 82067.8,
+              "closed": true
+            }
+          ],
+          "breakout": 1792144500
+        },
+        {
+          "id": 50,
+          "side": "support",
+          "price": 82041.53,
+          "evidence": [
+            1792106100,
+            1792138500
+          ],
+          "created": 1792141200,
+          "expires": 1792227600,
+          "state": "CONTEXT_FAILED"
+        },
+        {
+          "id": 51,
+          "side": "support",
+          "price": 81880.47,
+          "evidence": [
+            1792118700,
+            1792131300
+          ],
+          "created": 1792145700,
+          "expires": 1792232100,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 52,
+          "side": "resistance",
+          "price": 82360.45,
+          "evidence": [
+            1792096200,
+            1792126800
+          ],
+          "created": 1792149300,
+          "expires": 1792235700,
+          "state": "EXPIRED"
+        },
+        {
+          "id": 53,
+          "side": "resistance",
+          "price": 82548.5,
+          "evidence": [
+            1792078200,
+            1792091700
+          ],
+          "created": 1792150200,
+          "expires": 1792236600,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 54,
+          "side": "resistance",
+          "price": 82523.05,
+          "evidence": [
+            1792091700,
+            1792102500
+          ],
+          "created": 1792151100,
+          "expires": 1792237500,
+          "state": "EXPIRED"
+        },
+        {
+          "id": 55,
+          "side": "support",
+          "price": 81567.91,
+          "evidence": [
+            1792121400,
+            1792158300
+          ],
+          "created": 1792161000,
+          "expires": 1792247400,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 56,
+          "side": "support",
+          "price": 81567.91,
+          "evidence": [
+            1792121400,
+            1792188000
+          ],
+          "created": 1792190700,
+          "expires": 1792277100,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 57,
+          "side": "resistance",
+          "price": 81693.34,
+          "evidence": [
+            1792185300,
+            1792189800
+          ],
+          "created": 1792193400,
+          "expires": 1792279800,
+          "state": "EXPIRED"
+        },
+        {
+          "id": 58,
+          "side": "support",
+          "price": 81352.18,
+          "evidence": [
+            1792197900,
+            1792200600
+          ],
+          "created": 1792203300,
+          "expires": 1792289700,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 59,
+          "side": "resistance",
+          "price": 81564.35,
+          "evidence": [
+            1792197000,
+            1792202400
+          ],
+          "created": 1792205100,
+          "expires": 1792291500,
+          "state": "CONSUMED",
+          "target": 81693.34,
+          "post": [
+            {
+              "time": 1792224000,
+              "open": 81618.3,
+              "high": 81652.18,
+              "low": 81589.15,
+              "close": 81619.02,
+              "closed": true
+            }
+          ],
+          "breakout": 1792223700,
+          "confirmation": 1792224000,
+          "extreme": 81589.15
+        },
+        {
+          "id": 60,
+          "side": "support",
+          "price": 81352.18,
+          "evidence": [
+            1792197900,
+            1792211400
+          ],
+          "created": 1792214100,
+          "expires": 1792300500,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 61,
+          "side": "support",
+          "price": 81449.12,
+          "evidence": [
+            1792184400,
+            1792221300
+          ],
+          "created": 1792224000,
+          "expires": 1792310400,
+          "state": "CONSUMED",
+          "target": 81352.18,
+          "post": [
+            {
+              "time": 1792240800,
+              "open": 81398.09,
+              "high": 81423.06,
+              "low": 81387.94,
+              "close": 81417.24,
+              "closed": true
+            },
+            {
+              "time": 1792241100,
+              "open": 81416.7,
+              "high": 81423.37,
+              "low": 81369.25,
+              "close": 81386.91,
+              "closed": true
+            }
+          ],
+          "breakout": 1792240500,
+          "confirmation": 1792241100,
+          "extreme": 81423.37
+        },
+        {
+          "id": 62,
+          "side": "resistance",
+          "price": 81564.35,
+          "evidence": [
+            1792197000,
+            1792207800
+          ],
+          "created": 1792224000,
+          "expires": 1792310400,
+          "state": "INVALIDATED",
+          "target": 81693.34,
+          "post": [
+            {
+              "time": 1792224900,
+              "open": 81614.98,
+              "high": 81636.99,
+              "low": 81611.39,
+              "close": 81622.39,
+              "closed": true
+            },
+            {
+              "time": 1792225200,
+              "open": 81623.02,
+              "high": 81628.94,
+              "low": 81603.78,
+              "close": 81611.37,
+              "closed": true
+            },
+            {
+              "time": 1792225500,
+              "open": 81610.57,
+              "high": 81632.77,
+              "low": 81598.0,
+              "close": 81603.97,
+              "closed": true
+            },
+            {
+              "time": 1792225800,
+              "open": 81603.82,
+              "high": 81603.82,
+              "low": 81564.03,
+              "close": 81578.84,
+              "closed": true
+            },
+            {
+              "time": 1792226100,
+              "open": 81578.85,
+              "high": 81592.4,
+              "low": 81569.03,
+              "close": 81573.99,
+              "closed": true
+            },
+            {
+              "time": 1792226400,
+              "open": 81577.48,
+              "high": 81588.57,
+              "low": 81556.63,
+              "close": 81560.89,
+              "closed": true
+            }
+          ],
+          "breakout": 1792224600
+        },
+        {
+          "id": 63,
+          "side": "resistance",
+          "price": 81637.97,
+          "evidence": [
+            1792178100,
+            1792230300
+          ],
+          "created": 1792233000,
+          "expires": 1792319400,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 64,
+          "side": "resistance",
+          "price": 81564.35,
+          "evidence": [
+            1792197000,
+            1792234800
+          ],
+          "created": 1792237500,
+          "expires": 1792323900,
+          "state": "INVALIDATED",
+          "target": 81637.97,
+          "post": [
+            {
+              "time": 1792287600,
+              "open": 81644.48,
+              "high": 81799.01,
+              "low": 81614.33,
+              "close": 81755.81,
+              "closed": true
+            },
+            {
+              "time": 1792287900,
+              "open": 81754.51,
+              "high": 81780.44,
+              "low": 81661.49,
+              "close": 81684.01,
+              "closed": true
+            },
+            {
+              "time": 1792288200,
+              "open": 81686.19,
+              "high": 81690.73,
+              "low": 81600.28,
+              "close": 81600.28,
+              "closed": true
+            },
+            {
+              "time": 1792288500,
+              "open": 81602.58,
+              "high": 81607.41,
+              "low": 81533.08,
+              "close": 81559.25,
+              "closed": true
+            }
+          ],
+          "breakout": 1792287300
+        },
+        {
+          "id": 65,
+          "side": "support",
+          "price": 81429.97,
+          "evidence": [
+            1792216800,
+            1792231200
+          ],
+          "created": 1792241100,
+          "expires": 1792327500,
+          "state": "INVALIDATED",
+          "target": 81352.18,
+          "post": [
+            {
+              "time": 1792241400,
+              "open": 81387.07,
+              "high": 81412.7,
+              "low": 81357.7,
+              "close": 81389.59,
+              "closed": true
+            },
+            {
+              "time": 1792241700,
+              "open": 81388.83,
+              "high": 81409.67,
+              "low": 81381.64,
+              "close": 81401.58,
+              "closed": true
+            },
+            {
+              "time": 1792242000,
+              "open": 81401.86,
+              "high": 81447.93,
+              "low": 81401.86,
+              "close": 81446.01,
+              "closed": true
+            }
+          ],
+          "breakout": 1792241100
+        },
+        {
+          "id": 66,
+          "side": "support",
+          "price": 81352.18,
+          "evidence": [
+            1792197900,
+            1792246500
+          ],
+          "created": 1792252800,
+          "expires": 1792339200,
+          "state": "CONTEXT_FAILED"
+        },
+        {
+          "id": 67,
+          "side": "support",
+          "price": 81352.18,
+          "evidence": [
+            1792197900,
+            1792263600
+          ],
+          "created": 1792272600,
+          "expires": 1792359000,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 68,
+          "side": "support",
+          "price": 81077.38,
+          "evidence": [
+            1792256400,
+            1792279800
+          ],
+          "created": 1792282500,
+          "expires": 1792368900,
+          "state": "DATA_GAP"
+        },
+        {
+          "id": 69,
+          "side": "resistance",
+          "price": 81525.27,
+          "evidence": [
+            1792207800,
+            1792250100
+          ],
+          "created": 1792287900,
+          "expires": 1792374300,
+          "state": "INVALIDATED",
+          "target": 81576.95,
+          "post": [
+            {
+              "time": 1792289100,
+              "open": 81575.02,
+              "high": 81597.32,
+              "low": 81543.23,
+              "close": 81545.62,
+              "closed": true
+            },
+            {
+              "time": 1792289400,
+              "open": 81545.47,
+              "high": 81584.55,
+              "low": 81478.29,
+              "close": 81557.75,
+              "closed": true
+            }
+          ],
+          "breakout": 1792288800
+        },
+        {
+          "id": 70,
+          "side": "resistance",
+          "price": 81624.06,
+          "evidence": [
+            1792230300,
+            1792270800
+          ],
+          "created": 1792287900,
+          "expires": 1792374300,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 71,
+          "side": "resistance",
+          "price": 81576.95,
+          "evidence": [
+            1792234800,
+            1792270800
+          ],
+          "created": 1792287900,
+          "expires": 1792374300,
+          "state": "CONSUMED",
+          "target": 81624.06,
+          "post": [
+            {
+              "time": 1792290300,
+              "open": 81623.26,
+              "high": 81651.29,
+              "low": 81616.52,
+              "close": 81627.71,
+              "closed": true
+            }
+          ],
+          "breakout": 1792290000,
+          "confirmation": 1792290300,
+          "extreme": 81616.52
+        },
+        {
+          "id": 72,
+          "side": "resistance",
+          "price": 81799.01,
+          "evidence": [
+            1792287000,
+            1792300500
+          ],
+          "created": 1792303200,
+          "expires": 1792389600,
+          "state": "DATA_GAP"
+        },
+        {
+          "id": 73,
+          "side": "resistance",
+          "price": 82185.79,
+          "evidence": [
+            1792315800,
+            1792319400
+          ],
+          "created": 1792322100,
+          "expires": 1792408500,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 74,
+          "side": "support",
+          "price": 80920.5,
+          "evidence": [
+            1792333800,
+            1792337400
+          ],
+          "created": 1792340100,
+          "expires": 1792426500,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 75,
+          "side": "resistance",
+          "price": 81160.41,
+          "evidence": [
+            1792340100,
+            1792346400
+          ],
+          "created": 1792349100,
+          "expires": 1792435500,
+          "state": "CONTEXT_FAILED"
+        },
+        {
+          "id": 76,
+          "side": "support",
+          "price": 80993.17,
+          "evidence": [
+            1792345500,
+            1792348200
+          ],
+          "created": 1792350900,
+          "expires": 1792437300,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 77,
+          "side": "support",
+          "price": 80920.5,
+          "evidence": [
+            1792333800,
+            1792341900
+          ],
+          "created": 1792352700,
+          "expires": 1792439100,
+          "state": "NO_TARGET"
+        },
+        {
+          "id": 78,
+          "side": "resistance",
+          "price": 81160.41,
+          "evidence": [
+            1792340100,
+            1792349100
+          ],
+          "created": 1792361700,
+          "expires": 1792448100,
+          "state": "ARMED"
+        },
+        {
+          "id": 79,
+          "side": "support",
+          "price": 81555.98,
+          "evidence": [
+            1792302300,
+            1792365300
+          ],
+          "created": 1792368000,
+          "expires": 1792454400,
+          "state": "ARMED"
+        }
+      ]
+    },
+    {
+      "status": "BLOCKED",
+      "reason": "No M1 history"
+    },
+    {
+      "status": "BLOCKED",
+      "reason": "No M1 history"
+    }
+  ]
+}

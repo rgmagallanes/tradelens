@@ -1,0 +1,11 @@
+.venv/
+**/node_modules/
+**/dist/
+**/__pycache__/
+.pytest_cache/
+*.sqlite3
+backend/mt5-snapshot.json
+mt5/*.log
+mt5/*.ex5
+.env
+.env.*

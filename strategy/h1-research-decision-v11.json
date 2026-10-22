@@ -1,0 +1,19 @@
+{
+  "status": "RETAIN_BASELINE_FOR_UNSEEN_VALIDATION / UNPROVEN",
+  "selected_profile": "baseline",
+  "decision": "No tested refinement improved on unchanged v10; do not add redundant EMA filter or deploy expansion filter",
+  "live_activation": false,
+  "funding_verified": false,
+  "approved_v1_integrity": true,
+  "source_sha256": "a3846f5fc2f22a156cfff52f5695c56ebdac0bec5237cabb9e3eb82be238e50e",
+  "spec_hashes": {
+    "strategy/h1-refinement-research-v11.md": "1d6e5d8d114fcb7c66c10257d9bd0426e8081a09631548d3d3f6e0ffa2639ec3",
+    "strategy/h1-channel-research-v10.md": "782cde7f1b286aa99436d4b00e75c22a86025909b3f0d31bce4ab13b475aa3cf",
+    "backend/h1_channel_research.py": "1f6aa6304789710b43e47ea4df77ccad1d791b0e4b37226ee49b68195d539216"
+  },
+  "required_next_evidence": [
+    "Historical or account-specific funding eligibility/rates",
+    "Separate unseen-period replay without parameter selection",
+    "Forward demo with real bid/ask and fill-cost recording"
+  ]
+}

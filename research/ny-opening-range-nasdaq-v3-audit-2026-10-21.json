@@ -1,0 +1,17 @@
+{
+  "status": "passed",
+  "trade_scenario_rows_checked": 426,
+  "scenarios": 8,
+  "checks": [
+    "source/spec hashes",
+    "M5 confirmation and next-M1 entry",
+    "opening range boundaries",
+    "FVG or retest evidence",
+    "confirmed reversal pivots and causal day-high/low target",
+    "independent exit scan",
+    "cost/R reconciliation",
+    "no overlap and daily cap",
+    "identical trade sets across cost scenarios",
+    "chronological split counts"
+  ]
+}

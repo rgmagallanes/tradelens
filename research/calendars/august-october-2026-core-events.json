@@ -1,0 +1,97 @@
+{
+  "status": "VERIFIED_SCHEDULE / limited event scope",
+  "checked_date": "2026-10-19",
+  "covered_start_utc": "2026-08-19T00:00:00+00:00",
+  "covered_end_utc": "2026-10-20T00:00:00+00:00",
+  "scope": [
+    "US CPI",
+    "US Employment Situation",
+    "FOMC rate decision and associated press conference"
+  ],
+  "source_urls": [
+    "https://www.bls.gov/schedule/2026/10_sched.htm",
+    "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
+    "https://get.exness.help/hc/en-us/articles/360014390760-What-is-the-default-timezone-set-for-MetaTrader",
+    "https://www.bls.gov/schedule/2026/08_sched.htm",
+    "https://www.bls.gov/schedule/2026/09_sched.htm",
+    "https://www.federalreserve.gov/newsevents/2026-september.htm"
+  ],
+  "time_alignment": "BLS Eastern times converted using America/New_York; Exness documents GMT+0, corroborated by saved MT5 zero-offset snapshot. Historical export itself is labeled broker-server, not inherently UTC.",
+  "offset_evidence": {
+    "path": "research/exness-candles-2026-10-19.json",
+    "server_utc_offset_seconds": 0
+  },
+  "events": [
+    {
+      "id": "JOBS_2026_09_04",
+      "title": "Employment Situation, August 2026",
+      "local_datetime": "2026-09-04T08:30:00",
+      "timezone": "America/New_York",
+      "source": "https://www.bls.gov/schedule/2026/09_sched.htm",
+      "minutes_before": 30,
+      "minutes_after": 30
+    },
+    {
+      "id": "CPI_2026_09_11",
+      "title": "CPI, August 2026",
+      "local_datetime": "2026-09-11T08:30:00",
+      "timezone": "America/New_York",
+      "source": "https://www.bls.gov/schedule/2026/09_sched.htm",
+      "minutes_before": 30,
+      "minutes_after": 30
+    },
+    {
+      "id": "FOMC_2026_09_16",
+      "title": "FOMC rate decision",
+      "local_datetime": "2026-09-16T14:00:00",
+      "timezone": "America/New_York",
+      "source": "https://www.federalreserve.gov/newsevents/2026-september.htm",
+      "minutes_before": 30,
+      "minutes_after": 30
+    },
+    {
+      "id": "FOMC_PRESS_2026_09_16",
+      "title": "FOMC press conference",
+      "local_datetime": "2026-09-16T14:30:00",
+      "timezone": "America/New_York",
+      "source": "https://www.federalreserve.gov/newsevents/2026-september.htm",
+      "minutes_before": 30,
+      "minutes_after": 60
+    },
+    {
+      "id": "JOBS_2026_10_02",
+      "title": "Employment Situation, September 2026",
+      "local_datetime": "2026-10-02T08:30:00",
+      "timezone": "America/New_York",
+      "source": "https://www.bls.gov/schedule/2026/10_sched.htm",
+      "minutes_before": 30,
+      "minutes_after": 30
+    },
+    {
+      "id": "US_CPI_2026_10_14",
+      "title": "Consumer Price Index, September 2026",
+      "local_datetime": "2026-10-14T08:30:00",
+      "timezone": "America/New_York",
+      "source": "https://www.bls.gov/schedule/2026/10_sched.htm",
+      "minutes_before": 30,
+      "minutes_after": 30
+    }
+  ],
+  "excluded_outside_window": [
+    {
+      "title": "August Employment Situation/CPI releases",
+      "dates": "2026-08-07/2026-08-12",
+      "source": "https://www.bls.gov/schedule/2026/08_sched.htm"
+    },
+    {
+      "title": "October FOMC decision meeting",
+      "dates": "2026-10-27/2026-10-28",
+      "source": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm"
+    }
+  ],
+  "limitations": [
+    "This is not a complete macro/crypto catalyst calendar.",
+    "PPI, import/export prices, Fed speeches, unscheduled news and exchange incidents are not in this initial fixed scope.",
+    "Calendar read today; not a fully archived point-in-time calendar database."
+  ]
+}

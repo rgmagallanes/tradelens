@@ -81,3 +81,5 @@ Hosted deployment is a separate server/ Node.js+MySQL journal release, not a por
 Hosted account toolbar and device settings are siblings above the .app stacking context. Keep them positioned with z-index above .app so the fixed ambient background cannot cover My devices, email or Sign out.
 
 Journal source preference persists across page navigation and refresh using the allowlisted tradelens.journal.source browser preference. Store only the source name, never journal data or credentials; tolerate blocked storage. Fictional demo selection remains separate.
+
+Journal month data and MT5 sync polling use TanStack Query. Key month data by source, month and fictional-demo selection; do not retain another key’s data as a placeholder. Invalidate saved journal queries after writes and imported revisions. Hosted accounts mount separate QueryScope instances keyed by user ID; cancel and clear on scope unmount. Keep financial caches in memory only. Overview/research polling remains unchanged during the initial migration.

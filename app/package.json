@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",
+    "@tanstack/react-query": "^5.104.5",
     "@vitejs/plugin-react": "5.0.4",
     "echarts": "^6.1.0",
     "lightweight-charts": "^5.2.1",

@@ -19,7 +19,9 @@ export function demoJournal(dataset:Exclude<DemoDataset,'none'>,month:string):Jo
  const trades:Trade[]=outcomes[dataset].flatMap(([d,values])=>values.map((pnl,i)=>{
   const opened=Date.parse(`${DEMO_MONTH}-${String(d).padStart(2,'0')}T${String(9+i*2).padStart(2,'0')}:05:00+08:00`)/1000;
   const side=(d+i)%2?'buy':'sell';const entry=82000+d*45+i*20;const lots=.02;
-  return {id:`demo-${dataset}-${d}-${i}`,source:'demo',symbol:'BTCUSDm',side,lots,entry,exit:cents(entry+(side==='buy'?1:-1)*(pnl+.2)/lots),opened_at:opened,closed_at:opened+900,status:'closed',pnl,strategy:i%2?'Trend pullback · Fictional':'Breakout + retest · Fictional',note:pnl<0?'Example loss: review the entry and stop placement. This is fictional demo data.':'Example trade: document the setup and whether the plan was followed. This is fictional demo data.'};
+  const variant=(d+i)%5,sign=side==='buy'?1:-1;
+  const protection={stop:{value:variant===4?null:variant===1||variant===3?0:entry-sign*150,basis:variant===4?'unknown' as const:'fictional-demo' as const,observed_at:variant===4?undefined:opened+30},target:{value:variant===4?null:variant===2||variant===3?0:entry+sign*300,basis:variant===4?'unknown' as const:'fictional-demo' as const,observed_at:variant===4?undefined:opened+30}};
+  return {protection,id:`demo-${dataset}-${d}-${i}`,source:'demo',symbol:'BTCUSDm',side,lots,entry,exit:cents(entry+(side==='buy'?1:-1)*(pnl+.2)/lots),opened_at:opened,closed_at:opened+900,status:'closed',pnl,strategy:i%2?'Trend pullback · Fictional':'Breakout + retest · Fictional',note:pnl<0?'Example loss: review the entry and stop placement. This is fictional demo data.':'Example trade: document the setup and whether the plan was followed. This is fictional demo data.'};
  }));
  const [year,m]=month.split('-').map(Number);const count=new Date(Date.UTC(year,m,0)).getUTCDate();
  const initial=1000;let balance=cents(initial+trades.filter(t=>localDay(t.closed_at!)<month+'-01').reduce((s,t)=>s+t.pnl!,0));

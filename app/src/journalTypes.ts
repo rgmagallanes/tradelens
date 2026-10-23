@@ -1,4 +1,4 @@
-export type ProtectionLevel={value:number|null;basis:'open-snapshot'|'exit-deal'|'unknown';observed_at?:number};
+export type ProtectionLevel={value:number|null;basis:'open-snapshot'|'exit-deal'|'unknown'|'fictional-demo';observed_at?:number};
 export type Trade={id:string;source:string;symbol:string;side:string;lots:number;entry:number;exit?:number;opened_at:number;closed_at?:number;status:string;pnl?:number;floating_pnl?:number;strategy:string;note:string;uncertainty?:boolean;stop?:number;target?:number;protection?:{stop?:ProtectionLevel;target?:ProtectionLevel};last_open_protection?:{stop?:ProtectionLevel;target?:ProtectionLevel}};
 export type Day={date:string;start_balance:number;end_balance:number;pnl:number;closed_count:number;open_count:number;wins:number;losses:number;trades:Trade[];note:string};
 export type JournalData={source:string;month:string;initial_balance:number;days:Day[];summary:{pnl:number;closed_count:number;wins:number;losses:number;win_rate:number|null;start_balance:number;end_balance:number};open_positions:Trade[];undated_trades:Trade[]};

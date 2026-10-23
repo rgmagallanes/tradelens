@@ -70,3 +70,21 @@ def save_note(path,source,d,note):
 
 def set_balance(path,balance):
     with connect(path) as c:c.execute('INSERT OR REPLACE INTO journal_settings VALUES(?,?)',('manual',balance))
+
+# User-authored review metadata never changes an imported execution.
+def tags(path,source,trade_id=None,mistakes=None,lessons=None):
+    if source not in SOURCES:raise ValueError('Unknown journal source')
+    with connect(path) as c:
+        c.execute('CREATE TABLE IF NOT EXISTS journal_review_tags(source TEXT,trade_id TEXT,payload TEXT,PRIMARY KEY(source,trade_id))')
+        if trade_id is not None:
+            matched=next((t for t in records(c) if t['source']==source and t['id']==trade_id),None)
+            if not matched:raise ValueError('Trade not found in this journal source')
+            if matched.get('status')!='closed':raise ValueError('Review tags are available after the trade closes')
+            def clean(values):
+                if not isinstance(values,list) or len(values)>8:raise ValueError('Use at most eight tags per category')
+                if any(not isinstance(v,str) or not 1<=len(v.strip())<=60 for v in values):raise ValueError('Tags must contain 1 to 60 characters')
+                return list(dict.fromkeys(v.strip().lower() for v in values))
+            payload=dict(mistakes=clean(mistakes),lessons=clean(lessons))
+            c.execute('INSERT OR REPLACE INTO journal_review_tags VALUES(?,?,?)',(source,trade_id,json.dumps(payload)))
+            return {'saved':True}
+        return {'tags':{row['trade_id']:json.loads(row['payload']) for row in c.execute('SELECT trade_id,payload FROM journal_review_tags WHERE source=?',(source,))}}

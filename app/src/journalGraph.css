@@ -17,3 +17,5 @@
 .jg-stage svg{user-select:none;-webkit-user-select:none}
 .jg-stage svg:focus:not(:focus-visible){outline:none}
 .jg-stage svg:focus-visible{outline:2px solid #e6c57d;outline-offset:-3px}
+
+.jg-tag-form,.jg-summary{margin-top:20px;padding-top:16px;border-top:1px solid #514459}.jg-tag-form h5,.jg-summary h5{font-size:13px;margin:0 0 10px;color:#e5d6e9}.jg-tag-form label{margin-top:12px}.jg-tag-form input{width:100%;box-sizing:border-box}.jg-tag-form button{margin-top:12px}.jg-summary dl{margin:0}.jg-summary dl div{display:flex;justify-content:space-between;gap:12px;margin:10px 0;font-size:12px}.jg-summary dt{color:#c5bed0}.jg-summary dd{margin:0;font-weight:600}.jg-inspector{max-height:640px;overflow:auto}

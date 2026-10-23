@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {buildJournalGraph} from '../src/journalConnections.ts';
+import {buildJournalGraph,connectionSummary} from '../src/journalConnections.ts';
 const trade=(id,extra={})=>({id,source:'mt5',symbol:'BTCUSDm',side:'buy',lots:.1,entry:100,opened_at:1000,closed_at:1100,status:'closed',pnl:1,strategy:'Retest',note:'Waited for close.',...extra});
 const journal=trades=>({days:[{date:'2026-10-23',trades}]});
 test('graph uses actual recorded connections, deduplicates rows and preserves trade identity',()=>{
@@ -19,3 +19,5 @@ test('empty journal and bounded latest-trade view never manufacture entries',()=
 });
 
 test('daily reflections remain recorded context, including days with no trades',()=>{const g=buildJournalGraph({days:[{date:'2026-10-22',note:'Review discipline',trades:[]},{date:'2026-10-23',note:'Wait for confirmation',trades:[trade('one')]}]});assert.equal(g.nodes.filter(n=>n.id.startsWith('reflection:')).length,2);assert.ok(g.edges.some(e=>e.from==='reflection:2026-10-23'&&e.to==='trade:one'));assert.equal(g.nodes.find(n=>n.id==='reflection:2026-10-22').detail,'Review discipline')});
+
+test('manual tags connect trades and summaries exclude open and unknown P/L',()=>{const data=journal([trade('win',{pnl:12}),trade('loss',{pnl:-5}),trade('open',{status:'open',pnl:999}),trade('unknown',{pnl:undefined})]);const tags={win:{mistakes:[],lessons:['followed plan']},loss:{mistakes:['entered early'],lessons:[]}};const g=buildJournalGraph(data,tags);assert.ok(g.edges.some(e=>e.from==='mistake:entered early'&&e.to==='trade:loss'));const lesson=g.nodes.find(n=>n.id==='lesson:followed plan');assert.equal(connectionSummary(data,lesson,tags).pnl,12);const stats=connectionSummary(data,g.nodes[0],tags);assert.equal(stats.pnl,7);assert.equal(stats.winRate,.5);assert.equal(stats.open,1);assert.equal(stats.missing,1);assert.equal(stats.trades,4)});

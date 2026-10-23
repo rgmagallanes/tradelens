@@ -240,6 +240,16 @@ def delete_journal_trade(ident:str):
 @app.post('/api/trading-journal/notes')
 def journal_note(p:JournalNote):
     research_call(lambda:journaling.save_note(DB,p.source,p.day,p.note));return {'saved':True}
+class JournalTags(BaseModel):
+    source: Literal['manual','engine','sample','mt5']
+    trade_id: str=Field(min_length=1,max_length=120)
+    mistakes: list[str]=Field(max_length=8)
+    lessons: list[str]=Field(max_length=8)
+@app.get('/api/trading-journal/tags')
+def journal_tags(source:Literal['manual','engine','sample','mt5']):return research_call(lambda:journaling.tags(DB,source))
+@app.post('/api/trading-journal/tags')
+def save_journal_tags(p:JournalTags):return research_call(lambda:journaling.tags(DB,p.source,p.trade_id,p.mistakes,p.lessons))
+
 @app.post('/api/trading-journal/balance')
 def journal_balance(p:JournalBalance):
     journaling.set_balance(DB,p.initial_balance);return {'saved':True}

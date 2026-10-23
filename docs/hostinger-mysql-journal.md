@@ -39,3 +39,6 @@ python3 server/scripts/upload-mt5.py --send --prompt-token --watch
 ```
 
 Keep the local journal importer, BTCStudioQuotes and GoldStudioQuotes running on the same demo terminal. The standalone Mac kit instead uses `python3 run.py --send --watch` and imports its own journal export each cycle. Only allowlisted chart fields are transmitted. The token is prompted once and remains in process memory. Ctrl+C stops syncing. Updates run every 10 seconds; network failures retry on the next interval, authentication/validation errors stop. Missing symbols stay unavailable, stale quotes/candles remain explicitly stale. Research, paper execution and historical trade chart review remain local. No orders are sent.
+
+## User-authored review tags
+Closed journal trade/fill nodes support mistake and lesson tags (up to eight per category). These observations never alter broker executions. Local tags use a separate SQLite table; hosted tags use reserved `review` rows in the existing tenant-scoped `tl_trades` table. No hosted schema import is required. MT5 upload upserts do not replace reviews. Fictional demo tags are read-only. Connection summaries use unique dated trades/fills across the full selected month, exclude open/unknown P/L, and disclose sample size and overlapping tags.

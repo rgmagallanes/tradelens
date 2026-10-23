@@ -91,3 +91,5 @@ Journal graph motion: subtle one-degree-per-second orbit with counter-rotated up
 Journal orbit now projects a tilted 3D Fibonacci sphere with perspective size/depth fading and four-degree-per-second yaw, instead of rotating a flat diagram. Labels stay upright. Node dragging adds graph-space offsets; reset removes offsets. Existing motion pause and accessibility behavior remains.
 
 Globe interaction update: drag anywhere (including a node) rotates yaw/tilt rather than relocating nodes; click selects details, arrow keys rotate, Reset restores orientation. Closed trade circles use positive net P/L green, negative red, zero neutral; unknown/open remain distinct.
+
+Graph reviews: users can manually assign up to8 mistake and8 lesson tags (60 characters each) to saved trades. Store separately from broker payloads, source/account scoped; never mutate execution data or infer tags. Demo editing is disabled. Tags become clickable nodes. Group summaries cover the full selected month (not only latest120 displayed trades), deduplicate trade IDs, exclude open/unknown net P/L, and disclose sample size/overlap and partial-fill semantics.

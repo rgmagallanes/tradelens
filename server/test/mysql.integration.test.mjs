@@ -39,10 +39,18 @@ test('real MySQL tenant isolation, auth, replay protection and device revocation
  assert.equal((await call('bridge?symbol=XAUUSDm',{cookie:alice.cookie})).body.connected,true);
  assert.equal((await call('bridge?symbol=XAUUSDm',{cookie:bob.cookie})).body.snapshot,undefined);
  assert.equal((await call('device/upload',{method:'POST',bearer:device.body.token,body:up})).status,409);
+ const review={source:'mt5',trade_id:'mt5-one',mistakes:['Entered early'],lessons:['Wait for close']};
+ assert.equal((await call('trading-journal/tags',{method:'POST',cookie:alice.cookie,body:review})).status,200);
+ assert.equal((await call('trading-journal/tags',{method:'POST',cookie:bob.cookie,body:review})).status,404);
+ assert.deepEqual((await call('trading-journal/tags?source=mt5',{cookie:bob.cookie})).body.tags,{});
+ assert.deepEqual((await call('trading-journal/tags?source=manual',{cookie:alice.cookie})).body.tags,{});
+ assert.deepEqual((await call('trading-journal/tags?source=mt5',{cookie:alice.cookie})).body.tags['mt5-one'].mistakes,['entered early']);
+
  assert.equal((await call('device/upload',{method:'POST',bearer:device.body.token,body:{...up,timestamp:now-9,account_hash:'b'.repeat(64)}})).status,409);
  assert.equal((await call('trading-journal/mt5-status',{cookie:bob.cookie})).body.timestamp,undefined);
  const status=(await call('trading-journal/mt5-status',{cookie:alice.cookie})).body;assert.equal(status.account_balance,500);assert.equal(status.account_hash,undefined);
  assert.equal((await call('device/upload',{method:'POST',bearer:device.body.token,body:{...up,timestamp:now-8,trades:[]}})).status,200);
+ assert.deepEqual((await call('trading-journal/tags?source=mt5',{cookie:alice.cookie})).body.tags['mt5-one'].lessons,['wait for close']);
  const date=new Date((now+28800)*1000).toISOString().slice(0,7);assert.equal((await call('trading-journal?source=mt5&month='+date,{cookie:alice.cookie})).body.summary.closed_count,1);
  assert.equal((await call('devices/'+device.body.id,{method:'DELETE',cookie:alice.cookie,body:{}})).status,200);
  assert.equal((await call('device/upload',{method:'POST',bearer:device.body.token,body:{...up,timestamp:now-7}})).status,401);

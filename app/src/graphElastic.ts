@@ -26,3 +26,9 @@ export function stepElastic(s:ElasticState,dt:number){
  if(!s.held&&(s.releasedFor>3||[...s.points.values()].every(p=>Math.hypot(p.x,p.y)<.08&&Math.hypot(p.vx,p.vy)<.15)))resetElastic(s);
  return s.active;
 }
+
+// Move spring rest positions with the new globe orientation, preserving visible
+// positions as lag offsets. Release settles toward this new orientation, not the old one.
+export function rebaseElastic(s:ElasticState,before:Map<string,{x:number;y:number}>,after:Map<string,{x:number;y:number}>,immediate=false){
+ for(const [id,p] of s.points){const a=before.get(id),b=after.get(id);if(immediate){p.x=p.y=p.vx=p.vy=0}else if(id===s.held){p.vx=p.vy=0}else if(a&&b){p.x+=a.x-b.x;p.y+=a.y-b.y}}
+}

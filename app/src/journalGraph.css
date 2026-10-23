@@ -12,3 +12,8 @@
 @keyframes jg-heart-light{0%,38%,100%{opacity:.6}12%{opacity:1}21%{opacity:.68}29%{opacity:.9}}
 @keyframes jg-heart-core{0%,38%,100%{filter:drop-shadow(0 0 9px #d3a670)}12%{filter:drop-shadow(0 0 24px #e6b477)}21%{filter:drop-shadow(0 0 12px #d3a670)}29%{filter:drop-shadow(0 0 19px #e6b477)}}
 @media(prefers-reduced-motion:reduce){.jg-motion .jg-sphere-glow,.jg-motion .jg-heart-light,.jg-motion .jg-core{animation:none}}
+
+/* Pointer interaction stays clean; keyboard navigation retains a clear focus ring. */
+.jg-stage svg{user-select:none;-webkit-user-select:none}
+.jg-stage svg:focus:not(:focus-visible){outline:none}
+.jg-stage svg:focus-visible{outline:2px solid #e6c57d;outline-offset:-3px}

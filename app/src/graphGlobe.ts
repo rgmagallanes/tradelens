@@ -12,3 +12,10 @@ export function closedTradeColor(status:string,pnl:number|undefined){
  if(status!=='closed'||pnl==null||!Number.isFinite(pnl))return '#e4af86';
  return pnl>0?'#5cdda6':pnl<0?'#f17c91':'#b9afc7';
 }
+
+// Square-root radius scaling keeps large P/L outliers from dominating the view.
+export function tradeRadius(status:string,pnl:number|undefined,monthMax:number){
+ if(status!=='closed'||pnl==null||!Number.isFinite(pnl))return 5;
+ if(pnl===0||!Number.isFinite(monthMax)||monthMax<=0)return 4;
+ return 4+10*Math.sqrt(Math.min(1,Math.abs(pnl)/monthMax));
+}

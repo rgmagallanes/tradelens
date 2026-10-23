@@ -99,3 +99,5 @@ Elastic globe interaction: dragging a node holds it under the pointer, propagate
 Flexible globe refinement: node drags change persistent globe yaw/tilt while spring offsets preserve other nodes’ current positions as delayed motion. Rest positions are rebased to the new orientation; release settles there and resumes rotation, never returns to pre-drag orientation. Reduced-motion applies the new orientation immediately without lag.
 
 Globe release momentum: drag distance sets capped yaw/tilt boost in the drag direction, decaying exponentially toward normal orbit speed. Release spin runs while spring offsets settle; horizontal orbit retains the release direction. Clicks, pointer cancellation, reset and reduced/paused motion do not inject momentum. Pause/reset clear boosts.
+
+Trade globe base radii use absolute closed net P/L relative to maximum magnitude across the selected month (independent of graph filters), square-root scaled and clamped4–14. Equal dollar gains/losses have equal base size; color conveys sign. Open/unknown P/L stays fixed5, zero4. Disclose perspective depth scaling and month-relative sizing; preserve minimum hit areas.

@@ -1,0 +1,32 @@
+TradeLens — Mac setup for a separate demo account
+
+This package contains software only. It contains no Richard trades, database, passwords or device tokens. Read-only MT5 indicator + local Python importer/uploader. No broker orders. No automatic background service is installed. Each --send is one upload.
+
+1. AirDrop this ZIP to your Mac and extract it. Keep the extracted folder together.
+2. Sign in to https://tradelens.chardee.dev using YOUR OWN TradeLens account, not Richard's. My devices → create a token for your Mac. Keep it private; do not share it in chat.
+3. Open MT5 and sign in to YOUR OWN Exness demo account. This version requires USD, hedging mode and a UTC+0 broker server. Real-money and netting accounts are not supported. Keep Algo Trading OFF.
+4. MT5 → File → Open Data Folder → MQL5 → Indicators. Create a folder named TradeLens. Copy MT5/JournalStudioTrades.ex5 into it (the .mq5 source is included for transparency; it is optional for installation). In Navigator → Indicators, right-click Refresh, expand TradeLens and attach JournalStudioTrades to one chart. Keep MT5 connected. Do not enable Algo Trading.
+5. Python 3 is needed on the Mac. Check with python3 --version in Terminal. If missing, install Python 3 from https://www.python.org/downloads/macos/ before continuing. No pip packages are needed.
+6. In Terminal, type cd followed by a space, drag the extracted TradeLens-Mac-Setup folder into Terminal and press Enter. Then run:
+
+python3 run.py
+
+This imports locally and previews counts only. Nothing is sent. If export discovery fails, use python3 run.py --export followed by the exact path to your MT5 Common/Files/studio-trades.json. The ordinary chart Data Folder and Terminal/Common/Files are different folders.
+
+7. When ready to send your own demo trade history and balance metadata to your own hosted journal, run:
+
+python3 run.py --send
+
+Paste YOUR OWN device token at the hidden prompt and press Enter. It is not saved in this package or terminal command history. Expect “Upload accepted.” Then refresh the hosted Journal and choose MT5 demo trades.
+
+8. Repeat the --send command when you want another update. Keep MT5 open; exports must be less than30seconds old. This version is manual one-shot upload, not continuous automatic sync.
+
+The local cache is created on YOUR Mac at ~/Library/Application Support/TradeLensUploader/journal.sqlite3, with private file permissions. The local and hosted journals pin the first imported account. Do not copy Richard's cache or use his device token; do not mix MT5 accounts in one journal. If an account-change error appears, stop and request help rather than deleting records.
+
+No live candle charts or AI reviews are uploaded in this release. Trade P/L is net as validated by the importer; partial closes are separate rows. Account balance is separate from the P/L ledger. Server-side device pairing is authenticated but not independent broker verification.
+
+CHART UPDATE
+Attach BTCStudioQuotes on a Bitcoin demo chart and GoldStudioQuotes on a Gold demo chart. Keep Algo Trading off.
+For continuous journal and chart uploads run: python3 run.py --send --watch
+Paste your own device token at the hidden prompt. Keep MT5 open and the Mac awake. Ctrl+C stops.
+Missing indicators leave that instrument unavailable; stale data is labeled. No orders are sent.

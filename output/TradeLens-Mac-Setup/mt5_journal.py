@@ -7,6 +7,7 @@ def connection(path):
  c.execute('CREATE TABLE IF NOT EXISTS mt5_journal_meta(id INTEGER PRIMARY KEY CHECK(id=1),payload TEXT NOT NULL)')
  c.execute('CREATE TABLE IF NOT EXISTS mt5_journal_deals(ticket TEXT PRIMARY KEY,payload TEXT NOT NULL)')
  c.execute('CREATE TABLE IF NOT EXISTS mt5_journal_trades(id TEXT PRIMARY KEY,payload TEXT NOT NULL)')
+ c.execute('CREATE TABLE IF NOT EXISTS mt5_journal_protection(position_id TEXT,observed_at REAL,payload TEXT,PRIMARY KEY(position_id,observed_at))')
  c.commit();return c
 
 def number(value,positive=False):
@@ -45,6 +46,8 @@ def validate(d,now):
   key=ident(x.get('position_id'))
   if key in positions_seen:raise ValueError('Duplicate open position')
   positions_seen.add(key);number(x.get('volume'),True);number(x.get('floating_pnl'))
+  for field in ('stop','target'):
+   if field in x and number(x[field])<0:raise ValueError('Invalid position protective level')
  return hashlib.sha256(account.encode()).hexdigest(),stamp,start
 
 def project(deals,positions,coverage_from):
@@ -73,6 +76,30 @@ def project(deals,positions,coverage_from):
  for pid in live.keys()-groups.keys():issues.append('No entry history for open position: '+pid)
  return out,issues
 
+def protection_records(c,trades,data):
+ stamp=data['timestamp'];live={p['position_id']:p for p in data['positions']};deals={d['ticket']:d for d in data['deals']}
+ for pid,p in live.items():
+  values={k:p[k] for k in ('stop','target') if k in p}
+  if not values:continue
+  previous=c.execute('SELECT payload FROM mt5_journal_protection WHERE position_id=? ORDER BY observed_at DESC LIMIT 1',(pid,)).fetchone()
+  if not previous or json.loads(previous[0])!=values:c.execute('INSERT OR REPLACE INTO mt5_journal_protection VALUES(?,?,?)',(pid,stamp,json.dumps(values)))
+ for t in trades:
+  pid=t['position_id'];cutoff=t.get('closed_at',stamp)
+  observations=[(r[0],json.loads(r[1])) for r in c.execute('SELECT observed_at,payload FROM mt5_journal_protection WHERE position_id=? AND observed_at<=? ORDER BY observed_at DESC',(pid,cutoff))]
+  last_open={};protection={}
+  for field in ('stop','target'):
+   observation=next(((at,values[field]) for at,values in observations if field in values),None)
+   if observation:last_open[field]={'value':observation[1],'basis':'open-snapshot','observed_at':observation[0]}
+   record=live.get(pid,{}) if t['status']=='open' else deals.get(t.get('deal_ticket'),{})
+   if field in record:
+    protection[field]={'value':record[field],'basis':'open-snapshot' if t['status']=='open' else 'exit-deal','observed_at':stamp if t['status']=='open' else t['closed_at']}
+   elif t['status']=='closed' and observation:protection[field]=last_open[field]
+   else:protection[field]={'value':None,'basis':'unknown'}
+   if t['status']=='open':t[field]=record.get(field) if record.get(field,0)>0 else None
+  t['protection']=protection
+  if t['status']=='closed' and last_open:t['last_open_protection']=last_open
+ return trades
+
 def sync(db_path,export_path,now=None):
  now=time.time() if now is None else now
  with connection(db_path) as c:
@@ -94,6 +121,7 @@ def sync(db_path,export_path,now=None):
    deals=[json.loads(r[0]) for r in c.execute('SELECT payload FROM mt5_journal_deals')]
    coverage=min(meta.get('coverage_from',start),start)
    trades,issues=project(deals,data['positions'],coverage)
+   protection_records(c,trades,{**data,'deals':deals})
    # Preserve previously reconciled closed exits on a later partial/incomplete snapshot.
    for t in trades:c.execute('INSERT OR REPLACE INTO mt5_journal_trades VALUES(?,?)',(t['id'],json.dumps(t)))
    active={t['id'] for t in trades if t['status']=='open'}

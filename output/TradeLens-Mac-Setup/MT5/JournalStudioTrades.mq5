@@ -17,7 +17,7 @@ void OnTimer(){
   ulong ticket=PositionGetTicket(i);if(ticket==0)return;
   ulong id=(ulong)PositionGetInteger(POSITION_IDENTIFIER);AddID(ids,id);
   if(pc++>0)positions+=",";
-  positions+=StringFormat("{\"position_id\":\"%I64u\",\"volume\":%.8f,\"floating_pnl\":%.8f}",id,PositionGetDouble(POSITION_VOLUME),PositionGetDouble(POSITION_PROFIT));
+  positions+=StringFormat("{\"position_id\":\"%I64u\",\"volume\":%.8f,\"floating_pnl\":%.8f,\"stop\":%.8f,\"target\":%.8f}",id,PositionGetDouble(POSITION_VOLUME),PositionGetDouble(POSITION_PROFIT),PositionGetDouble(POSITION_SL),PositionGetDouble(POSITION_TP));
  }
  positions+="]";
  if(!HistorySelect(from,now))return;

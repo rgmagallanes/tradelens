@@ -42,3 +42,10 @@ Keep the local journal importer, BTCStudioQuotes and GoldStudioQuotes running on
 
 ## User-authored review tags
 Closed journal trade/fill nodes support mistake and lesson tags (up to eight per category). These observations never alter broker executions. Local tags use a separate SQLite table; hosted tags use reserved `review` rows in the existing tenant-scoped `tl_trades` table. No hosted schema import is required. MT5 upload upserts do not replace reviews. Fictional demo tags are read-only. Connection summaries use unique dated trades/fills across the full selected month, exclude open/unknown P/L, and disclose sample size and overlapping tags.
+
+## Automatic MT5 TP/SL record nodes
+Rollback checkpoint before this feature: `5952032` (safe outstanding Mac setup software committed; editor swap excluded).
+
+The updated JournalStudioTrades exports POSITION_SL/POSITION_TP for current demo positions. Remove/re-add it once after installing the compiled update, keeping Algo Trading off. Current explicit zero means Not set; omitted fields remain Unknown. Local SQLite retains timestamped open-position observations when values change. Exit-fill DEAL_SL/DEAL_TP describe closing-time values; prior observations are retained separately, never presented as proof of protection from entry. Reference: https://www.mql5.com/en/docs/constants/tradingconstants/dealproperties
+
+The existing cloud upload preserves these versioned evidence fields and validates their chronology. No hosted database schema change is required. Restart any already-running uploader to load the updated importer when using the standalone Mac kit. Source-code local importer was restarted during verification. The refreshed kit is in output/TradeLens-Mac-Setup.zip. Trade nodes attach TP/SL record satellites; these are descriptive records, not a discipline score, trading recommendation or order controls.

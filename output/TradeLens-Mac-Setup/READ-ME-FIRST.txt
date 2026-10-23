@@ -30,3 +30,6 @@ Attach BTCStudioQuotes on a Bitcoin demo chart and GoldStudioQuotes on a Gold de
 For continuous journal and chart uploads run: python3 run.py --send --watch
 Paste your own device token at the hidden prompt. Keep MT5 open and the Mac awake. Ctrl+C stops.
 Missing indicators leave that instrument unavailable; stale data is labeled. No orders are sent.
+
+TP/SL RECORD UPDATE
+Reload JournalStudioTrades once after replacing its compiled file so open positions export their current Stop Loss and Take Profit. Keep Algo Trading off. The importer retains timestamped observations; exit-fill records describe levels at closing, not necessarily at entry. Missing fields stay unknown. No manual TP/SL entry or broker order is sent.

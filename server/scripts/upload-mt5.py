@@ -2,7 +2,7 @@
 """Upload validated local demo trades and chart exports. Never sends orders.
 Run with --send, optionally --watch; otherwise preview only. No credentials are printed.
 """
-import argparse,getpass,json,os,sqlite3,time,urllib.request,urllib.error
+import argparse,getpass,json,os,re,sqlite3,time,urllib.request,urllib.error
 from pathlib import Path
 from urllib.parse import urlsplit
 p=argparse.ArgumentParser();p.add_argument('--send',action='store_true');p.add_argument('--prompt-token',action='store_true',help='Read the device token privately from the terminal; never store it.');p.add_argument('--db',type=Path,default=Path(__file__).resolve().parents[2]/'backend/studio.sqlite3');p.add_argument('--watch',action='store_true',help='Upload every 10 seconds until Ctrl+C; token stays in memory.');p.add_argument('--export',type=Path,help='Import this local studio-trades.json before each upload.');p.add_argument('--files-dir',type=Path,default=Path.home()/'Library/Application Support/net.metaquotes.wine.metatrader5/drive_c/users/user/AppData/Roaming/MetaQuotes/Terminal/Common/Files');args=p.parse_args()
@@ -63,6 +63,16 @@ while True:
         print('Upload accepted.' if result.get('accepted') else 'Upload response did not confirm acceptance.',flush=True)
     except urllib.error.HTTPError as e:
         print('Upload rejected (HTTP %d).'%e.code,flush=True)
+        if e.code==422:
+            try:
+                details=json.loads(e.read(16384))
+                issues=details.get('issues',[]) if isinstance(details,dict) else []
+                for issue in issues[:12]:
+                    field=issue.get('field','');code=issue.get('code','')
+                    if re.fullmatch(r'[A-Za-z0-9_.]{1,200}',field) and re.fullmatch(r'[a-z_]{1,50}',code):
+                        print('Rejected field: '+field+' ('+code+')',flush=True)
+                if not issues:print('Server has not supplied field diagnostics. Redeploy the diagnostic update first.',flush=True)
+            except (ValueError,TypeError,AttributeError):pass
         if e.code in (401,403,422) or not args.watch:raise SystemExit(1)
     except (OSError,ValueError,sqlite3.Error,SystemExit) as e:
         print('Upload paused: local export is unavailable/stale or host unreachable. Nothing new confirmed.',flush=True)

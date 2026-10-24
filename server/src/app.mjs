@@ -1,3 +1,4 @@
+import {uploadDiagnostics} from './uploadDiagnostics.mjs';
 import {marketResponse,bridgeResponse} from './market.mjs';
 import express from 'express';
 import helmet from 'helmet';
@@ -49,5 +50,5 @@ export function createApp(pool,{origin,inviteCode,production=true,staticDir,maxU
  app.get('/api/market',async(req,res)=>{const symbol=z.enum(['BTCUSDm','XAUUSDm']).parse(req.query.symbol||'BTCUSDm'),tf=z.enum(['M5','M15','H1','H4']).parse(req.query.tf||'M5');if(req.query.source&&req.query.source!=='exness')return res.json({source:req.query.source,symbol,connected:false,state:'unsupported',candles:[],message:'Select Exness demo candles for uploaded charts.'});res.json(marketResponse(await userMarkets(req),symbol,tf));});
  app.use('/api',(req,res)=>fail(res,501,'This feature is available in the local app and has not been migrated to the hosted journal yet.'));
  if(staticDir){app.use(express.static(staticDir,{index:false}));app.get('/{*path}',(req,res)=>res.sendFile(path.join(staticDir,'index.html')))}
- app.use((err,req,res,next)=>{if(err instanceof z.ZodError)return fail(res,422,'Check required values, amounts and timestamps.');if(err.type==='entity.too.large')return fail(res,413,'Upload is too large.');if(err instanceof SyntaxError&&'body' in err)return fail(res,400,'Invalid JSON.');if(err.status)return fail(res,err.status,err.message);console.error('Request failed:',err.code||err.name);fail(res,500,'The request could not be completed. Please try again.')});return app;
+ app.use((err,req,res,next)=>{if(err instanceof z.ZodError)return res.status(422).json({detail:'Check required values, amounts and timestamps.',...(req.path==='/api/device/upload'?{issues:uploadDiagnostics(err)}:{})});if(err.type==='entity.too.large')return fail(res,413,'Upload is too large.');if(err instanceof SyntaxError&&'body' in err)return fail(res,400,'Invalid JSON.');if(err.status)return fail(res,err.status,err.message);console.error('Request failed:',err.code||err.name);fail(res,500,'The request could not be completed. Please try again.')});return app;
 }

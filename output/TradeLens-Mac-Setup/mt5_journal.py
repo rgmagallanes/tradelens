@@ -106,22 +106,24 @@ def protection_records(c,trades,data):
  for pid,p in live.items():
   values={k:p[k] for k in ('stop','target') if k in p}
   if not values:continue
-  previous=c.execute('SELECT payload FROM mt5_journal_protection WHERE position_id=? ORDER BY observed_at DESC LIMIT 1',(pid,)).fetchone()
-  if not previous or json.loads(previous[0])!=values:c.execute('INSERT OR REPLACE INTO mt5_journal_protection VALUES(?,?,?)',(pid,stamp,json.dumps(values)))
+  previous=c.execute('SELECT observed_at,payload FROM mt5_journal_protection WHERE position_id=? ORDER BY observed_at DESC LIMIT 1',(pid,)).fetchone()
+  opened=next((t.get('opened_at',0) for t in trades if t['position_id']==pid and t['status']=='open'),0)
+  if not previous or json.loads(previous[1])!=values or previous[0]<opened<=stamp:c.execute('INSERT OR REPLACE INTO mt5_journal_protection VALUES(?,?,?)',(pid,stamp,json.dumps(values)))
  for t in trades:
-  pid=t['position_id'];cutoff=t.get('closed_at',stamp)
-  observations=[(r[0],json.loads(r[1])) for r in c.execute('SELECT observed_at,payload FROM mt5_journal_protection WHERE position_id=? AND observed_at<=? ORDER BY observed_at DESC',(pid,cutoff))]
+  pid=t['position_id'];cutoff=t.get('closed_at',stamp);opened=t.get('opened_at',0)
+  observations=[(r[0],json.loads(r[1])) for r in c.execute('SELECT observed_at,payload FROM mt5_journal_protection WHERE position_id=? AND observed_at>=? AND observed_at<=? ORDER BY observed_at DESC',(pid,opened,cutoff))]
   last_open={};protection={}
   for field in ('stop','target'):
    observation=next(((at,values[field]) for at,values in observations if field in values),None)
    if observation:last_open[field]={'value':observation[1],'basis':'open-snapshot','observed_at':observation[0]}
    record=live.get(pid,{}) if t['status']=='open' else deals.get(t.get('deal_ticket'),{})
-   if field in record:
+   if field in record and (t['status']=='closed' or stamp>=opened):
     protection[field]={'value':record[field],'basis':'open-snapshot' if t['status']=='open' else 'exit-deal','observed_at':stamp if t['status']=='open' else t['closed_at']}
    elif t['status']=='closed' and observation:protection[field]=last_open[field]
    else:protection[field]={'value':None,'basis':'unknown'}
    if t['status']=='open':t[field]=record.get(field) if record.get(field,0)>0 else None
   t['protection']=protection
+  t.pop('last_open_protection',None)
   if t['status']=='closed' and last_open:t['last_open_protection']=last_open
  return trades
 

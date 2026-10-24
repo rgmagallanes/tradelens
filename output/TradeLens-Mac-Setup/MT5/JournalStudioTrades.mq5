@@ -1,14 +1,16 @@
-// Read-only demo journal exporter. No orders, credentials, DLLs or network calls.
+// Read-only demo/live journal exporter. No orders, credentials, DLLs or network calls.
 #property strict
 #property indicator_chart_window
 #property indicator_plots 0
+input bool AllowLiveJournal=false; // Explicit read-only export opt-in; never places orders.
+bool SupportedAccount(){long mode=AccountInfoInteger(ACCOUNT_TRADE_MODE);return mode==ACCOUNT_TRADE_MODE_DEMO || (AllowLiveJournal && mode==ACCOUNT_TRADE_MODE_REAL);}
 string EscapeJSON(string s){StringReplace(s,"\\","\\\\");StringReplace(s,"\"","\\\"");StringReplace(s,"\r"," ");StringReplace(s,"\n"," ");return s;}
 void AddID(ulong &ids[],ulong id){if(id==0)return;for(int i=0;i<ArraySize(ids);i++)if(ids[i]==id)return;int n=ArraySize(ids);ArrayResize(ids,n+1);ids[n]=id;}
-int OnInit(){if(AccountInfoInteger(ACCOUNT_TRADE_MODE)!=ACCOUNT_TRADE_MODE_DEMO){Print("JournalStudioTrades requires a demo account.");return INIT_FAILED;}EventSetTimer(3);return INIT_SUCCEEDED;}
+int OnInit(){if(!SupportedAccount()){Print("Use a demo account or explicitly enable AllowLiveJournal for read-only live export.");return INIT_FAILED;}EventSetTimer(3);return INIT_SUCCEEDED;}
 void OnDeinit(const int reason){EventKillTimer();}
 int OnCalculate(const int rates_total,const int prev_calculated,const int begin,const double &price[]){return rates_total;}
 void OnTimer(){
- if(AccountInfoInteger(ACCOUNT_TRADE_MODE)!=ACCOUNT_TRADE_MODE_DEMO || !TerminalInfoInteger(TERMINAL_CONNECTED))return;
+ if(!SupportedAccount() || !TerminalInfoInteger(TERMINAL_CONNECTED))return;
  datetime now=TimeTradeServer(),from=now-7*86400;long offset=(long)(TimeTradeServer()-TimeGMT());
  // Exness UTC+0 only. Round small terminal clock differences, never infer historical DST.
  offset=(long)MathRound((double)offset/3600.0)*3600;
@@ -42,7 +44,7 @@ void OnTimer(){
  }
  deals+="]";
  string account=AccountInfoString(ACCOUNT_SERVER)+"#"+StringFormat("%I64d",AccountInfoInteger(ACCOUNT_LOGIN));
- string out=StringFormat("{\"version\":1,\"timestamp\":%I64d,\"history_from\":%I64d,\"demo\":true,\"hedging\":%s,\"currency\":\"%s\",\"account_balance\":%.8f,\"server_utc_offset_seconds\":%I64d,\"account_key\":\"%s\",\"excluded_adjustments\":%d,\"deals\":%s,\"positions\":%s}",(long)TimeGMT(),(long)from-offset,hedging?"true":"false",EscapeJSON(AccountInfoString(ACCOUNT_CURRENCY)),AccountInfoDouble(ACCOUNT_BALANCE),offset,EscapeJSON(account),excluded,deals,positions);
+ string out=StringFormat("{\"version\":1,\"timestamp\":%I64d,\"history_from\":%I64d,\"demo\":%s,\"hedging\":%s,\"currency\":\"%s\",\"account_balance\":%.8f,\"server_utc_offset_seconds\":%I64d,\"account_key\":\"%s\",\"excluded_adjustments\":%d,\"deals\":%s,\"positions\":%s}",(long)TimeGMT(),(long)from-offset,AccountInfoInteger(ACCOUNT_TRADE_MODE)==ACCOUNT_TRADE_MODE_DEMO?"true":"false",hedging?"true":"false",EscapeJSON(AccountInfoString(ACCOUNT_CURRENCY)),AccountInfoDouble(ACCOUNT_BALANCE),offset,EscapeJSON(account),excluded,deals,positions);
  int f=FileOpen("studio-trades.tmp",FILE_WRITE|FILE_TXT|FILE_ANSI|FILE_COMMON);
  if(f==INVALID_HANDLE)return;
  FileWriteString(f,out);FileFlush(f);FileClose(f);

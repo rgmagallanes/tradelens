@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Upload validated local demo trades and chart exports. Never sends orders.
+"""Upload validated local demo/live trades and chart exports. Never sends orders.
 Run with --send, optionally --watch; otherwise preview only. No credentials are printed.
 """
-import argparse,getpass,json,os,re,sqlite3,time,urllib.request,urllib.error
+import argparse,getpass,json,math,os,re,sqlite3,time,urllib.request,urllib.error
 from pathlib import Path
 from urllib.parse import urlsplit
-p=argparse.ArgumentParser();p.add_argument('--send',action='store_true');p.add_argument('--prompt-token',action='store_true',help='Read the device token privately from the terminal; never store it.');p.add_argument('--db',type=Path,default=Path(__file__).resolve().parents[2]/'backend/studio.sqlite3');p.add_argument('--watch',action='store_true',help='Upload every 10 seconds until Ctrl+C; token stays in memory.');p.add_argument('--export',type=Path,help='Import this local studio-trades.json before each upload.');p.add_argument('--files-dir',type=Path,default=Path.home()/'Library/Application Support/net.metaquotes.wine.metatrader5/drive_c/users/user/AppData/Roaming/MetaQuotes/Terminal/Common/Files');args=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('--allow-live',action='store_true',help='Explicitly allow read-only upload of live-account records.');p.add_argument('--send',action='store_true');p.add_argument('--prompt-token',action='store_true',help='Read the device token privately from the terminal; never store it.');p.add_argument('--db',type=Path,default=Path(__file__).resolve().parents[2]/'backend/studio.sqlite3');p.add_argument('--watch',action='store_true',help='Upload every 10 seconds until Ctrl+C; token stays in memory.');p.add_argument('--export',type=Path,help='Import this local studio-trades.json before each upload.');p.add_argument('--files-dir',type=Path,default=Path.home()/'Library/Application Support/net.metaquotes.wine.metatrader5/drive_c/users/user/AppData/Roaming/MetaQuotes/Terminal/Common/Files');args=p.parse_args()
 def collect():
     with sqlite3.connect(args.db.resolve().as_uri()+'?mode=ro',uri=True) as c:
         row=c.execute('SELECT payload FROM mt5_journal_meta WHERE id=1').fetchone()
@@ -13,12 +13,16 @@ def collect():
         meta=json.loads(row[0]);trades=[json.loads(r[0]) for r in c.execute('SELECT payload FROM mt5_journal_trades')]
     if time.time()-meta.get('timestamp',0)>30:raise SystemExit('Local MT5 snapshot is stale; nothing uploaded.')
     if meta.get('issues'):raise SystemExit('Local importer reports reconciliation issues; nothing uploaded.')
-    if meta.get('currency')!='USD':raise SystemExit('Only validated USD demo journals are supported.')
+    if meta.get('currency')!='USD':raise SystemExit('Only validated USD journals are supported.')
+    demo=meta.get('demo',True)
+    if type(demo) is not bool:raise SystemExit('Account mode is missing or invalid.')
+    if not demo and not args.allow_live:raise SystemExit('LIVE account detected. Use --allow-live to explicitly permit read-only live journaling.')
+    print('Account mode: '+('DEMO' if demo else 'LIVE')+' · Read-only journal',flush=True)
     closed=[t for t in trades if t.get('status')=='closed'];opened=[t for t in trades if t.get('status')=='open']
-    payload={'version':1,'demo':True,'currency':'USD','account_hash':meta['account'],'timestamp':int(meta['timestamp']),'trades':closed,'open_positions':opened}
+    payload={'version':1,'demo':demo,'currency':'USD','account_hash':meta['account'],'timestamp':int(meta['timestamp']),'trades':closed,'open_positions':opened}
     if meta.get('account_balance') is not None:payload['account_balance']=meta['account_balance']
     print('Validated local export: %d closed rows, %d open positions.'%(len(closed),len(opened)))
-    payload['markets']=read_markets(args.files_dir)
+    payload['markets']=read_markets(args.files_dir) if demo else []
     print('Chart exports: %d instrument(s).'%len(payload['markets']))
     return payload
 
@@ -32,7 +36,9 @@ def read_markets(folder):
             item['candles']={tf:rows[-1000:] for tf,rows in m['candles'].items() if tf in ('M1','M5','M15','H1','H4')}
             try:
                 q=json.loads((folder/(prefix+'-studio-quotes.json')).read_text())
-                if q.get('symbol')==symbol and q.get('demo') is True:
+                # -1 means no tick change observed yet, not a fresh quote.
+                age=q.get('quote_age_seconds')
+                if q.get('symbol')==symbol and q.get('demo') is True and isinstance(age,(int,float)) and not isinstance(age,bool) and math.isfinite(age) and age>=0:
                     item['quote']={k:q[k] for k in ('version','symbol','timestamp','bid','ask','demo','terminal_connected','quote_age_seconds','tick_time_msc') if k in q}
             except (OSError,ValueError,KeyError):pass
             result.append(item)

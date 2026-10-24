@@ -1,10 +1,10 @@
-TradeLens — Mac setup for a separate demo account
+TradeLens — Mac setup for your separate MT5 account
 
 This package contains software only. It contains no Richard trades, database, passwords or device tokens. Read-only MT5 indicator + local Python importer/uploader. No broker orders. No automatic background service is installed. Each --send is one upload.
 
 1. AirDrop this ZIP to your Mac and extract it. Keep the extracted folder together.
 2. Sign in to https://tradelens.chardee.dev using YOUR OWN TradeLens account, not Richard's. My devices → create a token for your Mac. Keep it private; do not share it in chat.
-3. Open MT5 and sign in to YOUR OWN Exness demo account. This version requires USD, hedging mode and a UTC+0 broker server. Real-money and netting accounts are not supported. Keep Algo Trading OFF.
+3. Open MT5 and sign in to YOUR OWN Exness demo account. This version requires USD, hedging mode and a UTC+0 broker server. Live journaling requires the explicit opt-in steps below. Netting accounts are not supported. Keep Algo Trading OFF.
 4. MT5 → File → Open Data Folder → MQL5 → Indicators. Create a folder named TradeLens. Copy MT5/JournalStudioTrades.ex5 into it (the .mq5 source is included for transparency; it is optional for installation). In Navigator → Indicators, right-click Refresh, expand TradeLens and attach JournalStudioTrades to one chart. Keep MT5 connected. Do not enable Algo Trading.
 5. Python 3 is needed on the Mac. Check with python3 --version in Terminal. If missing, install Python 3 from https://www.python.org/downloads/macos/ before continuing. No pip packages are needed.
 6. In Terminal, type cd followed by a space, drag the extracted TradeLens-Mac-Setup folder into Terminal and press Enter. Then run:
@@ -17,7 +17,7 @@ This imports locally and previews counts only. Nothing is sent. If export discov
 
 python3 run.py --send
 
-Paste YOUR OWN device token at the hidden prompt and press Enter. It is not saved in this package or terminal command history. Expect “Upload accepted.” Then refresh the hosted Journal and choose MT5 demo trades.
+Paste YOUR OWN device token at the hidden prompt and press Enter. It is not saved in this package or terminal command history. Expect “Upload accepted.” Then refresh the hosted Journal and choose MT5 trades.
 
 8. Repeat the --send command when you want another update. Keep MT5 open; exports must be less than30seconds old. This version is manual one-shot upload, not continuous automatic sync.
 
@@ -33,3 +33,13 @@ Missing indicators leave that instrument unavailable; stale data is labeled. No 
 
 TP/SL RECORD UPDATE
 Reload JournalStudioTrades once after replacing its compiled file so open positions export their current Stop Loss and Take Profit. Keep Algo Trading off. The importer retains timestamped observations; exit-fill records describe levels at closing, not necessarily at entry. Missing fields stay unknown. No manual TP/SL entry or broker order is sent.
+
+LIVE JOURNALING (explicit opt-in; no orders or SL/TP changes)
+Supported accounts: USD, hedging, UTC+0 broker server. Netting and other currencies/offsets remain unsupported.
+Use your own TradeLens login and token. A workspace already pinned to another MT5 account or account mode will reject this upload; use a separate TradeLens workspace to keep histories separate.
+1. Replace JournalStudioTrades.mq5 and .ex5 with this bundle's versions.
+2. Remove the old indicator, attach JournalStudioTrades to ONE chart, and set Inputs > AllowLiveJournal = true. Keep Algo Trading OFF.
+3. Run: python3 run.py --send --watch --allow-live
+The live cache is separate from the demo cache. Live exports keep demo=false. LIVE is labeled in the uploader and journal sync panel.
+Only trades, current positions, balance and protective records are uploaded for live accounts. No chart feeds are included; existing quote indicators remain demo-only.
+A hosted server update is required before live uploads are accepted. Never share upload tokens in chat.

@@ -1,4 +1,4 @@
-"""Read-only MT5 demo deal ingestion. No execution APIs; account-isolated, idempotent ledger."""
+"""Read-only MT5 demo/live deal ingestion. No execution APIs; account-isolated, idempotent ledger."""
 import hashlib,json,math,sqlite3,time
 from pathlib import Path
 
@@ -19,7 +19,7 @@ def ident(value):
  return value
 
 def validate(d,now):
- if not isinstance(d,dict) or d.get('version')!=1 or d.get('demo') is not True or d.get('hedging') is not True:raise ValueError('Only demo hedging accounts are supported by this importer')
+ if not isinstance(d,dict) or d.get('version')!=1 or type(d.get('demo')) is not bool or d.get('hedging') is not True:raise ValueError('Only explicitly identified demo/live hedging accounts are supported by this importer')
  if d.get('currency')!='USD' or d.get('server_utc_offset_seconds')!=0:raise ValueError('This importer requires a USD account and UTC+0 MT5 server')
  if 'account_balance' in d:number(d['account_balance'])
  stamp=number(d.get('timestamp'));start=number(d.get('history_from'))
@@ -108,14 +108,14 @@ def sync(db_path,export_path,now=None):
   raw=Path(export_path).read_bytes()
   if len(raw)>40_000_000:raise ValueError('Trade export too large')
   data=json.loads(raw);account,stamp,start=validate(data,now)
-  if previous.get('account') and previous['account']!=account:raise ValueError('Different MT5 account detected; existing journal was not changed')
+  if previous.get('account') and (previous['account']!=account or previous.get('demo',True)!=data['demo']):raise ValueError('Different MT5 account detected; existing journal was not changed')
   digest=hashlib.sha256(raw).hexdigest()
   if previous.get('hash')==digest:return {**previous,'state':'connected','age_seconds':round(now-stamp,1)}
   with connection(db_path) as c:
    c.execute('BEGIN IMMEDIATE')
    # Recheck account after obtaining the write lock (parallel report requests are safe).
    stored=c.execute('SELECT payload FROM mt5_journal_meta WHERE id=1').fetchone();meta=json.loads(stored[0]) if stored else {}
-   if meta.get('account') and meta['account']!=account:raise ValueError('Different MT5 account detected; journal unchanged')
+   if meta.get('account') and (meta['account']!=account or meta.get('demo',True)!=data['demo']):raise ValueError('Different MT5 account detected; journal unchanged')
    if meta.get('timestamp',0)>stamp:return {**meta,'state':'connected','age_seconds':round(now-meta['timestamp'],1)}
    for d in data['deals']:c.execute('INSERT OR REPLACE INTO mt5_journal_deals VALUES(?,?)',(d['ticket'],json.dumps(d)))
    deals=[json.loads(r[0]) for r in c.execute('SELECT payload FROM mt5_journal_deals')]
@@ -127,8 +127,8 @@ def sync(db_path,export_path,now=None):
    active={t['id'] for t in trades if t['status']=='open'}
    for r in c.execute("SELECT id FROM mt5_journal_trades WHERE id LIKE 'mt5-open-%'").fetchall():
     if r[0] not in active:c.execute('DELETE FROM mt5_journal_trades WHERE id=?',(r[0],))
-   result=dict(revision=hashlib.sha256(json.dumps([[{k:v for k,v in t.items() if k!='floating_pnl'} for t in trades],issues],sort_keys=True).encode()).hexdigest(),account=account,account_label=account[:8],account_balance=data.get('account_balance'),currency=data['currency'],timestamp=stamp,coverage_from=coverage,hash=digest,deals=len(deals),open_positions=[t for t in trades if t['status']=='open'],closed_count=sum(t['status']=='closed' for t in trades),open_count=len(active),issues=issues,excluded_adjustments=int(data.get('excluded_adjustments',0)),message='Demo MT5 deal import. Closed rows are exit fills, including partial closes; entry costs allocated by volume. P/L ledger starts at zero, not account balance. Account-level charges, cash movements and floating P/L excluded.')
+   result=dict(revision=hashlib.sha256(json.dumps([[{k:v for k,v in t.items() if k!='floating_pnl'} for t in trades],issues],sort_keys=True).encode()).hexdigest(),demo=data['demo'],account=account,account_label=account[:8],account_balance=data.get('account_balance'),currency=data['currency'],timestamp=stamp,coverage_from=coverage,hash=digest,deals=len(deals),open_positions=[t for t in trades if t['status']=='open'],closed_count=sum(t['status']=='closed' for t in trades),open_count=len(active),issues=issues,excluded_adjustments=int(data.get('excluded_adjustments',0)),message=('DEMO' if data['demo'] else 'LIVE')+' read-only MT5 deal import. Closed rows are exit fills, including partial closes; entry costs allocated by volume. P/L ledger starts at zero, not account balance. Account-level charges, cash movements and floating P/L excluded.')
    c.execute('INSERT OR REPLACE INTO mt5_journal_meta VALUES(1,?)',(json.dumps(result),))
   return {**result,'state':'connected','age_seconds':round(now-stamp,1)}
- except FileNotFoundError:return {**previous,'state':'waiting','message':'Attach JournalStudioTrades in MT5 on your demo account. No trade export received yet.'}
+ except FileNotFoundError:return {**previous,'state':'waiting','message':'Attach JournalStudioTrades in MT5 on your account (live requires AllowLiveJournal). No trade export received yet.'}
  except (ValueError,TypeError,KeyError,OSError) as exc:return {**previous,'state':'unavailable','message':str(exc) if isinstance(exc,ValueError) else 'Incomplete trade export; retained the last imported journal.'}

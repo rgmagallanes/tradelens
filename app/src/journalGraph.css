@@ -23,3 +23,5 @@
 .jg-node .jg-protection-code{font-size:5px;font-weight:750;fill:#f4ecdf;stroke:none;pointer-events:none}
 
 .jg-value-clip{overflow:hidden;min-height:0!important;cursor:inherit!important}.jg-node .jg-value{font:8px ui-monospace,monospace;fill:#f1e5d6;stroke:#15131b;stroke-width:2.8px;paint-order:stroke;pointer-events:none;letter-spacing:0}
+
+.jg-node .jg-today-ring{stroke:#f1cc7a;stroke-width:1.5;stroke-dasharray:3 2;pointer-events:none}.jg-node .jg-today-label{font:600 6px ui-monospace,monospace;letter-spacing:.7px;fill:#f1cc7a;stroke:#15131b;stroke-width:2px;paint-order:stroke;pointer-events:none}

@@ -11,6 +11,7 @@ def test_gold_source_isolation(tmp_path,monkeypatch):
  assert client.get('/api/market?source=exness&symbol=XAUUSDm').json()['state']=='missing'
  assert client.get('/api/market?source=exness&symbol=OTHER').status_code==422
  now=time.time(); series={tf:[dict(time=interval,open=3000,high=3010,low=2990,close=3005,closed=True),dict(time=interval*2,open=3005,high=3015,low=3000,close=3010,closed=False)] for tf,interval in INTERVALS.items()}
+ series['D1']=[dict(time=86400,open=3000,high=3010,low=2990,close=3005,closed=True),dict(time=172800,open=3005,high=3015,low=3000,close=3010,closed=False)]
  data=dict(version=1,timestamp=now,symbol='XAUUSDm',clock='broker-server',demo=True,terminal_connected=True,candles=series)
  path=tmp_path/'xau-studio-candles.json';path.write_text(json.dumps(data))
  quote=dict(version=1,timestamp=now,symbol='XAUUSDm',bid=3010,ask=3010.5,contract_size=100,volume_min=.01,volume_step=.01,quote_age_seconds=1,terminal_connected=True,demo=True,tick_time_msc=600000)
@@ -18,6 +19,8 @@ def test_gold_source_isolation(tmp_path,monkeypatch):
  assert read_history(path)['state']=='invalid'
  assert read_history(path,expected_symbol='XAUUSDm')['state']=='valid'
  response=client.get('/api/market?source=exness&symbol=XAUUSDm').json()
+ assert response['pivot_candles']==series['D1']
+ assert response['pivot_hourly_candles']==series['H1']
  assert response['symbol']=='XAUUSDm' and response['connected'] and response['candles'][0]['open']==3000
  assert client.get('/api/market?source=exness').json()['candles']==[]
  assert client.get('/api/bridge?symbol=XAUUSDm').json()['snapshot']['contract_size']==100

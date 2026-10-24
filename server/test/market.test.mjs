@@ -16,3 +16,5 @@ test('market validation rejects duplicate instruments, invalid OHLC and mismatch
  assert.equal(markets.safeParse([{...m,candles:{M5:[{...m.candles.M5[0],high:1}]}}]).success,false);
  assert.equal(markets.safeParse([{...m,demo:false}]).success,false);
 });
+
+test('daily pivot inputs are transported independently of chart timeframe and instrument',()=>{const midnight=Math.floor(now/86400)*86400,daily=[{time:midnight-86400,open:100,high:120,low:90,close:105,closed:true},{time:midnight,open:110,high:120,low:100,close:115,closed:false}];const ms=markets.parse(['BTCUSDm','XAUUSDm'].map(symbol=>{const m=fixture(symbol);return {...m,candles:{...m.candles,D1:daily}}}));for(const symbol of ['BTCUSDm','XAUUSDm'])for(const tf of ['M5','M15','H1','H4']){const r=marketResponse(ms,symbol,tf,now);assert.deepEqual(r.pivot_candles,daily);assert.deepEqual(r.pivot_hourly_candles,ms.find(m=>m.symbol===symbol).candles.H1);}assert.deepEqual(marketResponse([],'XAUUSDm','M5',now).pivot_candles,[]);});

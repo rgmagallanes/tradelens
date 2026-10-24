@@ -124,7 +124,7 @@ def market(tf:Literal['M5','M15','H1','H4']='M5',step:int=0,source:Literal['samp
     recent_bars=bool(bars) and 0<=tick_seconds-bars[-1]['time']<{**INTERVALS,'H4':14400}[tf]*2
     fresh=fresh and recent_bars
     if fresh: archive(data,DB)
-    return dict(source='exness',connected=fresh and len(bars)>1,state='fresh' if fresh else 'stale',candles=bars,price=bars[-1]['close'] if bars else None,symbol=data['symbol'],clock='broker-server',age_seconds=history['age_seconds'],research_m1_count=len(data['candles']['M1']),message='Exness demo candles · Broker server time · Last candle forming' if fresh else 'Feed stale or disconnected. Displayed candles are last received; not entry confirmation.')
+    return dict(source='exness',connected=fresh and len(bars)>1,state='fresh' if fresh else 'stale',candles=bars,pivot_candles=data['candles'].get('D1',[]),pivot_hourly_candles=data['candles'].get('H1',[]),price=bars[-1]['close'] if bars else None,symbol=data['symbol'],clock='broker-server',age_seconds=history['age_seconds'],research_m1_count=len(data['candles']['M1']),message='Exness demo candles · Broker server time · Last candle forming' if fresh else 'Feed stale or disconnected. Displayed candles are last received; not entry confirmation.')
 
 BRIDGE_PATH = Path(os.environ.get('BTC_STUDIO_QUOTE_PATH', str(Path.home() / 'Library/Application Support/net.metaquotes.wine.metatrader5/drive_c/users/user/AppData/Roaming/MetaQuotes/Terminal/Common/Files/btc-studio-quotes.json')))
 

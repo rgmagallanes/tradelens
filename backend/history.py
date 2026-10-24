@@ -11,7 +11,7 @@ def read_history(path, now=None, max_bars=400, expected_symbol='BTCUSDm'):
         if type(stamp) not in (int,float) or not math.isfinite(stamp): raise ValueError('Invalid timestamp')
         series=data.get('candles')
         if not isinstance(series,dict): raise ValueError('Missing candles')
-        for tf,interval in {**INTERVALS,**({'H4':14400} if 'H4' in series else {})}.items():
+        for tf,interval in {**INTERVALS,**({'H4':14400} if 'H4' in series else {}),**({'D1':86400} if 'D1' in series else {})}.items():
             bars=series.get(tf)
             if not isinstance(bars,list) or len(bars)>max_bars: raise ValueError('Invalid series')
             previous=0

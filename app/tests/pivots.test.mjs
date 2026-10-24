@@ -1,6 +1,6 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {pivotLevels,dailyPivots} from '../src/pivots.ts';
+import {pivotLevels,dailyPivots,dailySessionPivots} from '../src/pivots.ts';
 const near=(a,b)=>assert.ok(Math.abs(a-b)<1e-9,`${a} != ${b}`);
 test('known OHLC yields correct five-method levels including Woodie current open',()=>{
  const m=pivotLevels({open:100,high:120,low:90,close:105},110);
@@ -27,3 +27,6 @@ test('incomplete, unconfirmed, unordered and missing-current-open cases stay exp
  assert.equal(dailyPivots([...b].reverse(),3600,'exness').levels,null);
  assert.equal(dailyPivots([],3600,'exness').levels,null);
 });
+
+test('broker daily sessions calculate gold pivots across a weekend without filling gaps',()=>{const friday=Date.parse('2026-10-16T00:00:00Z')/1000,monday=Date.parse('2026-10-19T00:00:00Z')/1000;const b=[{time:friday,open:100,high:120,low:90,close:105,closed:true},{time:monday,open:110,high:115,low:109,close:112,closed:false}];const result=dailySessionPivots(b);assert.equal(result.previousDay,friday);assert.equal(result.currentDay,monday);assert.equal(result.levels.Classic.P,105);assert.equal(result.levels.Woodie.P,107.5);b[1].high=999;b[1].close=998;assert.deepEqual(dailySessionPivots(b),result);});
+test('daily session pivots reject missing, unconfirmed and malformed broker data',()=>{const b=[{time:day,open:100,high:120,low:90,close:105,closed:true},{time:day+86400,open:110,high:120,low:90,close:105,closed:false}];assert.equal(dailySessionPivots([]).levels,null);assert.equal(dailySessionPivots(b.slice(1)).levels,null);assert.equal(dailySessionPivots([{...b[0],closed:false},b[1]]).levels,null);assert.equal(dailySessionPivots([b[0],{...b[1],closed:true}]).levels,null);assert.equal(dailySessionPivots([...b].reverse()).levels,null);assert.equal(dailySessionPivots([{...b[0],time:day+1},b[1]]).levels,null);});

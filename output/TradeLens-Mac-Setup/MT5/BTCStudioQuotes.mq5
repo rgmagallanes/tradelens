@@ -15,7 +15,7 @@ int OnCalculate(const int rates_total,const int prev_calculated,const int begin,
 
 string ExportBars(ENUM_TIMEFRAMES tf){
  MqlRates rates[];
- int count=CopyRates(ExportSymbol,tf,0,400,rates);
+ int count=CopyRates(ExportSymbol,tf,0,tf==PERIOD_D1?20:400,rates);
  string out="[";
  for(int i=0;i<count;i++){
   if(i>0) out+=",";
@@ -24,7 +24,7 @@ string ExportBars(ENUM_TIMEFRAMES tf){
  return out+"]";
 }
 void ExportHistory(bool connected,bool demo){
- string bars="{\"M1\":"+ExportBars(PERIOD_M1)+",\"M5\":"+ExportBars(PERIOD_M5)+",\"M15\":"+ExportBars(PERIOD_M15)+",\"H1\":"+ExportBars(PERIOD_H1)+",\"H4\":"+ExportBars(PERIOD_H4)+"}";
+ string bars="{\"M1\":"+ExportBars(PERIOD_M1)+",\"M5\":"+ExportBars(PERIOD_M5)+",\"M15\":"+ExportBars(PERIOD_M15)+",\"H1\":"+ExportBars(PERIOD_H1)+",\"H4\":"+ExportBars(PERIOD_H4)+",\"D1\":"+ExportBars(PERIOD_D1)+"}";
  int f=FileOpen("btc-studio-candles.json",FILE_WRITE|FILE_TXT|FILE_ANSI|FILE_COMMON|FILE_SHARE_READ);
  if(f==INVALID_HANDLE) return;
  string out=StringFormat("{\"version\":1,\"timestamp\":%I64d,\"symbol\":\"%s\",\"terminal_connected\":%s,\"demo\":%s,\"clock\":\"broker-server\",\"server_utc_offset_seconds\":%I64d,\"candles\":%s}",(long)TimeGMT(),ExportSymbol,connected?"true":"false",demo?"true":"false",(long)(TimeTradeServer()-TimeGMT()),bars);

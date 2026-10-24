@@ -27,3 +27,14 @@ export function dailyPivots(input:TechnicalBar[],interval:number,source:'sample'
  const levels=pivotLevels({open:b[0].open,high:Math.max(...b.map(x=>x.high)),low:Math.min(...b.map(x=>x.low)),close:b.at(-1)!.close},open);
  return{levels,previousDay,currentDay,reason:open===null?'Current UTC opening candle missing; Woodie unavailable.':''};
 }
+
+// Daily broker bars define complete trading sessions, including gold's weekend/session breaks.
+export function dailySessionPivots(input:TechnicalBar[]){
+ const unavailable=(reason:string)=>({levels:null,previousDay:null as number|null,currentDay:null as number|null,reason});
+ if(input.length<2)return unavailable('Waiting for broker daily candles. Reload the updated quote indicator.');
+ if(input.some((b,i)=>!Number.isInteger(b.time)||b.time%86400!==0||[b.open,b.high,b.low,b.close].some(x=>!Number.isFinite(x)||x<=0)||b.high<Math.max(b.open,b.close)||b.low>Math.min(b.open,b.close)||b.high<b.low||(i>0&&b.time<=input[i-1].time)))return unavailable('Invalid broker daily candles; pivots unavailable.');
+ const current=input.at(-1)!,previous=input.at(-2)!;
+ if(current.closed!==false||previous.closed!==true)return unavailable('Waiting for a confirmed previous daily session and current session open.');
+ const levels=pivotLevels(previous,current.open);
+ return {levels,previousDay:previous.time,currentDay:current.time,reason:'Calculated from the previous completed broker daily session. Session breaks and weekends are not filled. Woodie uses the current session open.'};
+}

@@ -43,7 +43,7 @@ def read_markets(folder):
             m=json.loads((folder/(prefix+'-studio-candles.json')).read_text())
             if m.get('symbol')!=symbol or m.get('demo') is not True or m.get('server_utc_offset_seconds')!=0:continue
             item={k:m[k] for k in ('symbol','timestamp','demo','terminal_connected','clock','server_utc_offset_seconds')}
-            item['candles']={tf:rows[-1000:] for tf,rows in m['candles'].items() if tf in ('M1','M5','M15','H1','H4')}
+            item['candles']={tf:rows[-1000:] for tf,rows in m['candles'].items() if tf in ('M1','M5','M15','H1','H4','D1')}
             try:
                 q=json.loads((folder/(prefix+'-studio-quotes.json')).read_text())
                 # -1 means no tick change observed yet, not a fresh quote.

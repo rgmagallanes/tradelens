@@ -43,3 +43,11 @@ Use your own TradeLens login and token. A workspace already pinned to another MT
 The live cache is separate from the demo cache. Live exports keep demo=false. LIVE is labeled in the uploader and journal sync panel.
 Only trades, current positions, balance and protective records are uploaded for live accounts. No chart feeds are included; existing quote indicators remain demo-only.
 A hosted server update is required before live uploads are accepted. Never share upload tokens in chat.
+
+PROVISIONAL ERRANTE RECENT MODE
+For ErranteSC-Live (also ErrantesSC-Live), USD hedging accounts reporting UTC+2/+3:
+python3 run.py --send --watch --allow-live --errante-recent
+No indicator replacement is required beyond the live-enabled JournalStudioTrades included here. Set AllowLiveJournal=true and leave Algo Trading OFF.
+A separate local live-errante-provisional cache is used. The initial import defers entire positions with entries older than seven days, even if their exit is recent. Future new positions can continue syncing. Original broker timestamps are retained in trade provenance and raw deal records. All accepted times remain PROVISIONAL because historical DST rules are unverified. Trades within two days of either US or EU potential switch dates are marked for review. This does NOT claim either calendar is the broker's actual rule.
+If the observed broker offset changes, imports stop and previously imported timestamps remain unchanged; reconciliation is required. Do not delete caches to bypass this protection.
+The hosted server update must be redeployed to preserve the provisional provenance and warnings. A workspace already pinned to another account or timezone mode rejects mixed uploads. Live chart feeds remain excluded.

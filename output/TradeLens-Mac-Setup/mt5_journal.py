@@ -1,6 +1,8 @@
 """Read-only MT5 demo/live deal ingestion. No execution APIs; account-isolated, idempotent ledger."""
 import hashlib,json,math,sqlite3,time
 from pathlib import Path
+from datetime import datetime,timezone
+import calendar
 
 def connection(path):
  c=sqlite3.connect(path,timeout=10);c.row_factory=sqlite3.Row
@@ -18,9 +20,32 @@ def ident(value):
  if not isinstance(value,str) or not value.isdigit() or len(value)>24 or int(value)<=0:raise ValueError('Invalid MT5 identifier')
  return value
 
-def validate(d,now):
+def errante_recent(d):
+ return (d.get('demo') is False and str(d.get('account_key','')).split('#')[0].lower() in ('errantesc-live','errantessc-live') and type(d.get('server_utc_offset_seconds')) is int and d['server_utc_offset_seconds'] in (7200,10800))
+
+def near_clock_change(stamp):
+ # Review windows around BOTH possible US/EU dates; no broker switch rule is assumed.
+ dt=datetime.fromtimestamp(stamp,timezone.utc)
+ for year in (dt.year-1,dt.year,dt.year+1):
+  for month,nth in ((3,2),(3,-1),(10,-1),(11,1)):
+   sundays=[week[calendar.SUNDAY] for week in calendar.monthcalendar(year,month) if week[calendar.SUNDAY]]
+   date=sundays[-1] if nth==-1 else sundays[nth-1]
+   if abs(stamp-datetime(year,month,date,tzinfo=timezone.utc).timestamp())<=2*86400:return True
+ return False
+
+def provisional_records(trades,data,since):
+ offset=data['server_utc_offset_seconds'];kept=[];deferred=set()
+ for t in trades:
+  if t['opened_at']<since:deferred.add(t['position_id']);continue
+  t['timestamp_provenance']={'basis':'provisional-current-offset','server_utc_offset_seconds':offset,'broker_opened_at':t['opened_at']+offset,'near_clock_change':near_clock_change(t['opened_at']) or near_clock_change(t.get('closed_at',data['timestamp']))}
+  if t.get('closed_at') is not None:t['timestamp_provenance']['broker_closed_at']=t['closed_at']+offset
+  kept.append(t)
+ return kept,len(deferred)
+
+def validate(d,now,allow_errante_recent=False):
  if not isinstance(d,dict) or d.get('version')!=1 or type(d.get('demo')) is not bool or d.get('hedging') is not True:raise ValueError('Only explicitly identified demo/live hedging accounts are supported by this importer')
- if d.get('currency')!='USD' or d.get('server_utc_offset_seconds')!=0:raise ValueError('This importer requires a USD account and UTC+0 MT5 server')
+ if d.get('currency')!='USD':raise ValueError('This importer requires a USD account')
+ if d.get('server_utc_offset_seconds')!=0 and not (allow_errante_recent and errante_recent(d)):raise ValueError('Non-UTC server: Errante live UTC+2/+3 requires explicit --errante-recent provisional mode')
  if 'account_balance' in d:number(d['account_balance'])
  stamp=number(d.get('timestamp'));start=number(d.get('history_from'))
  if not 0<=now-stamp<30 or start>stamp or stamp-start>8*86400:raise ValueError('Trade export is stale or its history window is invalid')
@@ -100,15 +125,17 @@ def protection_records(c,trades,data):
   if t['status']=='closed' and last_open:t['last_open_protection']=last_open
  return trades
 
-def sync(db_path,export_path,now=None):
+def sync(db_path,export_path,now=None,allow_errante_recent=False):
  now=time.time() if now is None else now
  with connection(db_path) as c:
   row=c.execute('SELECT payload FROM mt5_journal_meta WHERE id=1').fetchone();previous=json.loads(row[0]) if row else {}
  try:
   raw=Path(export_path).read_bytes()
   if len(raw)>40_000_000:raise ValueError('Trade export too large')
-  data=json.loads(raw);account,stamp,start=validate(data,now)
+  data=json.loads(raw);account,stamp,start=validate(data,now,allow_errante_recent)
   if previous.get('account') and (previous['account']!=account or previous.get('demo',True)!=data['demo']):raise ValueError('Different MT5 account detected; existing journal was not changed')
+  provisional=data['server_utc_offset_seconds']!=0
+  if previous.get('timezone_review') and previous['timezone_review']['server_utc_offset_seconds']!=data['server_utc_offset_seconds']:raise ValueError('Broker offset changed. Import paused; existing timestamps retained. Reconciliation is required before resuming.')
   digest=hashlib.sha256(raw).hexdigest()
   if previous.get('hash')==digest:return {**previous,'state':'connected','age_seconds':round(now-stamp,1)}
   with connection(db_path) as c:
@@ -116,11 +143,19 @@ def sync(db_path,export_path,now=None):
    # Recheck account after obtaining the write lock (parallel report requests are safe).
    stored=c.execute('SELECT payload FROM mt5_journal_meta WHERE id=1').fetchone();meta=json.loads(stored[0]) if stored else {}
    if meta.get('account') and (meta['account']!=account or meta.get('demo',True)!=data['demo']):raise ValueError('Different MT5 account detected; journal unchanged')
+   if meta.get('timezone_review') and meta['timezone_review']['server_utc_offset_seconds']!=data['server_utc_offset_seconds']:raise ValueError('Broker offset changed. Import paused; existing timestamps retained.')
    if meta.get('timestamp',0)>stamp:return {**meta,'state':'connected','age_seconds':round(now-meta['timestamp'],1)}
+   if provisional:
+    for d in data['deals']:d['broker_time']=d['time']+data['server_utc_offset_seconds']
    for d in data['deals']:c.execute('INSERT OR REPLACE INTO mt5_journal_deals VALUES(?,?)',(d['ticket'],json.dumps(d)))
    deals=[json.loads(r[0]) for r in c.execute('SELECT payload FROM mt5_journal_deals')]
    coverage=min(meta.get('coverage_from',start),start)
    trades,issues=project(deals,data['positions'],coverage)
+   timezone_review=None
+   if provisional:
+    since=meta.get('timezone_review',{}).get('recent_since',stamp-7*86400)
+    trades,deferred=provisional_records(trades,data,since)
+    timezone_review={'basis':'provisional-current-offset','server_utc_offset_seconds':data['server_utc_offset_seconds'],'recent_since':since,'deferred_positions':deferred}
    protection_records(c,trades,{**data,'deals':deals})
    # Preserve previously reconciled closed exits on a later partial/incomplete snapshot.
    for t in trades:c.execute('INSERT OR REPLACE INTO mt5_journal_trades VALUES(?,?)',(t['id'],json.dumps(t)))
@@ -128,6 +163,9 @@ def sync(db_path,export_path,now=None):
    for r in c.execute("SELECT id FROM mt5_journal_trades WHERE id LIKE 'mt5-open-%'").fetchall():
     if r[0] not in active:c.execute('DELETE FROM mt5_journal_trades WHERE id=?',(r[0],))
    result=dict(revision=hashlib.sha256(json.dumps([[{k:v for k,v in t.items() if k!='floating_pnl'} for t in trades],issues],sort_keys=True).encode()).hexdigest(),demo=data['demo'],account=account,account_label=account[:8],account_balance=data.get('account_balance'),currency=data['currency'],timestamp=stamp,coverage_from=coverage,hash=digest,deals=len(deals),open_positions=[t for t in trades if t['status']=='open'],closed_count=sum(t['status']=='closed' for t in trades),open_count=len(active),issues=issues,excluded_adjustments=int(data.get('excluded_adjustments',0)),message=('DEMO' if data['demo'] else 'LIVE')+' read-only MT5 deal import. Closed rows are exit fills, including partial closes; entry costs allocated by volume. P/L ledger starts at zero, not account balance. Account-level charges, cash movements and floating P/L excluded.')
+   if timezone_review:
+    result['timezone_review']=timezone_review
+    result['message']='PROVISIONAL ERRANTE TIMES: current offset applied to recent trade lifecycles; historical DST is unverified. Older positions deferred: '+str(timezone_review['deferred_positions'])+'. '+result['message']
    c.execute('INSERT OR REPLACE INTO mt5_journal_meta VALUES(1,?)',(json.dumps(result),))
   return {**result,'state':'connected','age_seconds':round(now-stamp,1)}
  except FileNotFoundError:return {**previous,'state':'waiting','message':'Attach JournalStudioTrades in MT5 on your account (live requires AllowLiveJournal). No trade export received yet.'}

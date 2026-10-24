@@ -5,7 +5,7 @@ Run with --send, optionally --watch; otherwise preview only. No credentials are 
 import argparse,getpass,json,math,os,re,sqlite3,time,urllib.request,urllib.error
 from pathlib import Path
 from urllib.parse import urlsplit
-p=argparse.ArgumentParser();p.add_argument('--allow-live',action='store_true',help='Explicitly allow read-only upload of live-account records.');p.add_argument('--send',action='store_true');p.add_argument('--prompt-token',action='store_true',help='Read the device token privately from the terminal; never store it.');p.add_argument('--db',type=Path,default=Path(__file__).resolve().parents[2]/'backend/studio.sqlite3');p.add_argument('--watch',action='store_true',help='Upload every 10 seconds until Ctrl+C; token stays in memory.');p.add_argument('--export',type=Path,help='Import this local studio-trades.json before each upload.');p.add_argument('--files-dir',type=Path,default=Path.home()/'Library/Application Support/net.metaquotes.wine.metatrader5/drive_c/users/user/AppData/Roaming/MetaQuotes/Terminal/Common/Files');args=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('--errante-recent',action='store_true',help='Explicit provisional recent Errante timezone mode.');p.add_argument('--allow-live',action='store_true',help='Explicitly allow read-only upload of live-account records.');p.add_argument('--send',action='store_true');p.add_argument('--prompt-token',action='store_true',help='Read the device token privately from the terminal; never store it.');p.add_argument('--db',type=Path,default=Path(__file__).resolve().parents[2]/'backend/studio.sqlite3');p.add_argument('--watch',action='store_true',help='Upload every 10 seconds until Ctrl+C; token stays in memory.');p.add_argument('--export',type=Path,help='Import this local studio-trades.json before each upload.');p.add_argument('--files-dir',type=Path,default=Path.home()/'Library/Application Support/net.metaquotes.wine.metatrader5/drive_c/users/user/AppData/Roaming/MetaQuotes/Terminal/Common/Files');args=p.parse_args()
 def collect():
     with sqlite3.connect(args.db.resolve().as_uri()+'?mode=ro',uri=True) as c:
         row=c.execute('SELECT payload FROM mt5_journal_meta WHERE id=1').fetchone()
@@ -20,6 +20,10 @@ def collect():
     print('Account mode: '+('DEMO' if demo else 'LIVE')+' · Read-only journal',flush=True)
     closed=[t for t in trades if t.get('status')=='closed'];opened=[t for t in trades if t.get('status')=='open']
     payload={'version':1,'demo':demo,'currency':'USD','account_hash':meta['account'],'timestamp':int(meta['timestamp']),'trades':closed,'open_positions':opened}
+    if meta.get('timezone_review'):
+        if not args.errante_recent:raise SystemExit('Provisional Errante timestamps require --errante-recent.')
+        payload['timezone_review']=meta['timezone_review']
+        print('PROVISIONAL ERRANTE TIMES · historical DST unverified · older positions deferred: '+str(meta['timezone_review']['deferred_positions']),flush=True)
     if meta.get('account_balance') is not None:payload['account_balance']=meta['account_balance']
     print('Validated local export: %d closed rows, %d open positions.'%(len(closed),len(opened)))
     payload['markets']=read_markets(args.files_dir) if demo else []
@@ -44,6 +48,7 @@ def read_markets(folder):
             result.append(item)
         except (OSError,ValueError,KeyError,TypeError):continue
     return result
+if args.errante_recent and not args.allow_live:raise SystemExit('--errante-recent requires --allow-live')
 if args.watch and not args.send:raise SystemExit('--watch requires --send. Preview never uploads.')
 if not args.send:
     collect()
@@ -61,7 +66,7 @@ while True:
             sys.path.insert(0,str(Path(__file__).resolve().parents[2]))
             try:import mt5_journal
             except ImportError:from backend import mt5_journal
-            state=mt5_journal.sync(args.db,args.export)
+            state=mt5_journal.sync(args.db,args.export,allow_errante_recent=args.errante_recent)
             if state.get('state')!='connected' or state.get('issues'):raise ValueError('Local MT5 import is not ready.')
         payload=collect()
         req=urllib.request.Request(base+'/api/device/upload',data=json.dumps(payload,allow_nan=False).encode(),headers={'Content-Type':'application/json','Authorization':'Bearer '+secret},method='POST')

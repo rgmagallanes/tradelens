@@ -8,3 +8,6 @@ CREATE TABLE IF NOT EXISTS tl_trades (user_id CHAR(36) NOT NULL,source VARCHAR(1
 CREATE TABLE IF NOT EXISTS tl_notes (user_id CHAR(36) NOT NULL,source VARCHAR(12) NOT NULL,day CHAR(10) NOT NULL,note TEXT NOT NULL,PRIMARY KEY(user_id,source,day),FOREIGN KEY(user_id) REFERENCES tl_users(id) ON DELETE CASCADE);
 CREATE TABLE IF NOT EXISTS tl_settings (user_id CHAR(36) PRIMARY KEY,initial_balance DECIMAL(18,2) NOT NULL DEFAULT 0,FOREIGN KEY(user_id) REFERENCES tl_users(id) ON DELETE CASCADE);
 CREATE TABLE IF NOT EXISTS tl_snapshots (user_id CHAR(36) PRIMARY KEY,device_id CHAR(36) NOT NULL,payload LONGTEXT NOT NULL,FOREIGN KEY(user_id) REFERENCES tl_users(id) ON DELETE CASCADE);
+
+CREATE TABLE IF NOT EXISTS tl_chart_candles (user_id CHAR(36) NOT NULL,symbol VARCHAR(30) NOT NULL,timeframe VARCHAR(4) NOT NULL,bar_time BIGINT NOT NULL,export_timestamp BIGINT NOT NULL,payload TEXT NOT NULL,PRIMARY KEY(user_id,symbol,timeframe,bar_time),FOREIGN KEY(user_id) REFERENCES tl_users(id) ON DELETE CASCADE);
+CREATE TABLE IF NOT EXISTS tl_chart_reviews (user_id CHAR(36) NOT NULL,review_key CHAR(64) NOT NULL,payload LONGTEXT NOT NULL,PRIMARY KEY(user_id,review_key),FOREIGN KEY(user_id) REFERENCES tl_users(id) ON DELETE CASCADE);

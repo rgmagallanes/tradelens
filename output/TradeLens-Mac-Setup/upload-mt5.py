@@ -6,6 +6,7 @@ import argparse,getpass,json,math,os,re,sqlite3,time,urllib.request,urllib.error
 from pathlib import Path
 from urllib.parse import urlsplit
 p=argparse.ArgumentParser();p.add_argument('--errante-recent',action='store_true',help='Explicit provisional recent Errante timezone mode.');p.add_argument('--allow-live',action='store_true',help='Explicitly allow read-only upload of live-account records.');p.add_argument('--send',action='store_true');p.add_argument('--prompt-token',action='store_true',help='Read the device token privately from the terminal; never store it.');p.add_argument('--db',type=Path,default=Path(__file__).resolve().parents[2]/'backend/studio.sqlite3');p.add_argument('--watch',action='store_true',help='Upload every 10 seconds until Ctrl+C; token stays in memory.');p.add_argument('--export',type=Path,help='Import this local studio-trades.json before each upload.');p.add_argument('--files-dir',type=Path,default=Path.home()/'Library/Application Support/net.metaquotes.wine.metatrader5/drive_c/users/user/AppData/Roaming/MetaQuotes/Terminal/Common/Files');args=p.parse_args()
+last_history_upload=0
 def collect():
     with sqlite3.connect(args.db.resolve().as_uri()+'?mode=ro',uri=True) as c:
         row=c.execute('SELECT payload FROM mt5_journal_meta WHERE id=1').fetchone()
@@ -28,6 +29,11 @@ def collect():
     print('Validated local export: %d closed rows, %d open positions.'%(len(closed),len(opened)))
     payload['markets']=read_markets(args.files_dir) if demo else []
     print('Chart exports: %d instrument(s).'%len(payload['markets']))
+    if demo and time.time()-last_history_upload>=300:
+        history=read_review_history(args.db)
+        if history:
+            payload['review_history']=history
+            print('Historical review backfill: %d closed candles.'%sum(len(batch['bars']) for batch in history),flush=True)
     return payload
 
 def read_markets(folder):
@@ -48,6 +54,25 @@ def read_markets(folder):
             result.append(item)
         except (OSError,ValueError,KeyError,TypeError):continue
     return result
+def read_review_history(db,now=None):
+    now=time.time() if now is None else now
+    batches=[]
+    try:
+        with sqlite3.connect(db.resolve().as_uri()+'?mode=ro',uri=True) as c:
+            if not c.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='broker_candles'").fetchone():return []
+            columns={r[1] for r in c.execute('PRAGMA table_info(broker_candles)')}
+            stamp_column='export_timestamp' if 'export_timestamp' in columns else '1'
+            for symbol in ('BTCUSDm','XAUUSDm'):
+                for tf,step in (('M5',300),('M15',900),('H1',3600)):
+                    rows=c.execute('SELECT broker_time,open,high,low,close,'+stamp_column+' FROM broker_candles WHERE symbol=? AND timeframe=? AND closed=1 AND broker_time>=? AND broker_time+?<=? ORDER BY broker_time DESC LIMIT 3000',(symbol,tf,int(now)-31*86400,step,int(now))).fetchall()
+                    bars=[dict(zip(('time','open','high','low','close'),row),closed=True) for row in reversed(rows) if row[0]%step==0]
+                    if bars:
+                        # Conservatively retain original archive recency; never label old candles as newly observed.
+                        captured=min((row[5] if isinstance(row[5],(int,float)) and math.isfinite(row[5]) and row[5]>0 else 1) for row in rows)
+                        batches.append(dict(symbol=symbol,timeframe=tf,timestamp=min(int(now),int(captured)),demo=True,server_utc_offset_seconds=0,bars=bars))
+    except (sqlite3.Error,OSError):return []
+    return batches
+
 if args.errante_recent and not args.allow_live:raise SystemExit('--errante-recent requires --allow-live')
 if args.watch and not args.send:raise SystemExit('--watch requires --send. Preview never uploads.')
 if not args.send:
@@ -71,6 +96,7 @@ while True:
         payload=collect()
         req=urllib.request.Request(base+'/api/device/upload',data=json.dumps(payload,allow_nan=False).encode(),headers={'Content-Type':'application/json','Authorization':'Bearer '+secret},method='POST')
         with urllib.request.urlopen(req,timeout=30) as response:result=json.load(response)
+        if result.get('accepted') and payload.get('review_history'):last_history_upload=time.time()
         print('Upload accepted.' if result.get('accepted') else 'Upload response did not confirm acceptance.',flush=True)
     except urllib.error.HTTPError as e:
         print('Upload rejected (HTTP %d).'%e.code,flush=True)

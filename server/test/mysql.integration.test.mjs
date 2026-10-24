@@ -1,3 +1,4 @@
+import {ensureChartTables} from '../src/chartReview.mjs';
 import {fixture} from './fixtures/market.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -6,9 +7,9 @@ import {createApp} from '../src/app.mjs';
 const enabled=process.env.TEST_MYSQL==='1';
 test('real MySQL tenant isolation, auth, replay protection and device revocation',{skip:!enabled},async()=>{
  if(process.env.DB_NAME!=='tradelens_qa')throw Error('Integration tests require the isolated tradelens_qa database.');
- const pool=database();await migrate(pool);
+ const pool=database();await migrate(pool);await ensureChartTables(pool);await ensureChartTables(pool);
  // Only the uniquely named disposable test database may be cleared.
- for(const table of ['tl_snapshots','tl_trades','tl_notes','tl_settings','tl_devices','tl_sessions','tl_users','tl_limits'])await pool.query('DELETE FROM '+table);
+ for(const table of ['tl_chart_reviews','tl_chart_candles','tl_snapshots','tl_trades','tl_notes','tl_settings','tl_devices','tl_sessions','tl_users','tl_limits'])await pool.query('DELETE FROM '+table);
  const origin='http://127.0.0.1',inviteCode='local-invitation-code-for-isolated-test-only';const app=createApp(pool,{origin,inviteCode,production:false});const server=app.listen(0,'127.0.0.1');await new Promise(resolve=>server.once('listening',resolve));const base='http://127.0.0.1:'+server.address().port;
  async function call(path,{method='GET',body,cookie,bearer,requestOrigin=origin}={}){const r=await fetch(base+'/api/'+path,{method,headers:{...(method!=='GET'?{'Content-Type':'application/json'}:{}),Origin:requestOrigin,...(cookie?{Cookie:cookie}:{}),...(bearer?{Authorization:'Bearer '+bearer}:{})},...(body?{body:JSON.stringify(body)}:{})});return {status:r.status,body:await r.json(),cookie:r.headers.get('set-cookie')?.split(';')[0]}}
  try{
@@ -30,7 +31,9 @@ test('real MySQL tenant isolation, auth, replay protection and device revocation
  const device=await call('devices',{method:'POST',cookie:alice.cookie,body:{label:'Test Mac'}});assert.equal(device.status,201);
  assert.equal((await call('devices',{cookie:bob.cookie})).body.devices.length,0);assert.equal((await call('devices/'+device.body.id,{method:'DELETE',cookie:bob.cookie,body:{}})).status,404);
  const now=Math.floor(Date.now()/1000),trade={id:'mt5-one',symbol:'BTCUSDm',side:'buy',lots:.1,entry:100,exit:99,opened_at:now-500,closed_at:now-300,status:'closed',pnl:-.5,strategy:'',note:''};
- const up={version:1,account_hash:'a'.repeat(64),timestamp:now-10,currency:'USD',demo:true,account_balance:500,trades:[trade],open_positions:[],markets:[fixture('BTCUSDm'),fixture('XAUUSDm')]};
+ const reviewDay=new Date((now-86400+28800)*1000).toISOString().slice(0,10),reviewStart=Date.parse(reviewDay+'T00:00:00+08:00')/1000;
+ const reviewBars=[0,300].map(delta=>({time:reviewStart+delta,open:100,high:110,low:90,close:101,closed:true}));
+ const up={review_history:[{symbol:'BTCUSDm',timeframe:'M5',timestamp:now,demo:true,server_utc_offset_seconds:0,bars:reviewBars}],version:1,account_hash:'a'.repeat(64),timestamp:now-10,currency:'USD',demo:true,account_balance:500,trades:[trade],open_positions:[],markets:[fixture('BTCUSDm'),fixture('XAUUSDm')]};
  assert.equal((await call('device/upload',{method:'POST',bearer:device.body.token,body:up})).status,200);
  for(const symbol of ['BTCUSDm','XAUUSDm'])for(const tf of ['M5','M15','H1','H4']){
  const own=await call('market?source=exness&symbol='+symbol+'&tf='+tf,{cookie:alice.cookie});assert.equal(own.status,200);assert.equal(own.body.candles.length,2);assert.equal(own.body.candles[0].tick_volume,20);
@@ -38,6 +41,16 @@ test('real MySQL tenant isolation, auth, replay protection and device revocation
  }
  assert.equal((await call('bridge?symbol=XAUUSDm',{cookie:alice.cookie})).body.connected,true);
  assert.equal((await call('bridge?symbol=XAUUSDm',{cookie:bob.cookie})).body.snapshot,undefined);
+ const chartQuery=new URLSearchParams({source:'mt5',day:reviewDay,symbol:'BTCUSDm',timeframe:'M5',trade_id:trade.id});
+ const ownReview=await call('trading-journal/chart-review?'+chartQuery,{cookie:alice.cookie});assert.equal(ownReview.status,200);assert.equal(ownReview.body.state,'available');assert.equal(ownReview.body.bars.length,2);assert.equal(ownReview.body.coverage.missing_completed_bars,286);assert.equal(ownReview.body.trades[0].id,trade.id);
+ assert.equal((await call('trading-journal/chart-review?'+chartQuery,{cookie:bob.cookie})).status,404);
+ const savedReview=await call('trading-journal/chart-review',{method:'POST',cookie:alice.cookie,body:Object.fromEntries(chartQuery)});assert.equal(savedReview.status,200);assert.equal(savedReview.body.saved,true);
+ assert.equal((await call('trading-journal/chart-review',{method:'POST',cookie:bob.cookie,body:Object.fromEntries(chartQuery)})).status,404);
+ await pool.execute('UPDATE tl_chart_candles SET payload=? WHERE user_id=? AND symbol=? AND timeframe=? AND bar_time=?',[JSON.stringify({...reviewBars[0],close:105}),alice.body.user.id,'BTCUSDm','M5',reviewStart]);
+ const frozenReview=(await call('trading-journal/chart-review?'+chartQuery,{cookie:alice.cookie})).body;assert.equal(frozenReview.bars[0].close,101);assert.equal(frozenReview.snapshot_sha256,savedReview.body.snapshot_sha256);
+ const dayQuery=new URLSearchParams({source:'mt5',day:reviewDay,symbol:'BTCUSDm',timeframe:'M5'});
+ assert.equal((await call('trading-journal/chart-review?'+dayQuery,{cookie:bob.cookie})).body.bars.length,0);
+
  assert.equal((await call('device/upload',{method:'POST',bearer:device.body.token,body:up})).status,409);
  const review={source:'mt5',trade_id:'mt5-one',mistakes:['Entered early'],lessons:['Wait for close']};
  assert.equal((await call('trading-journal/tags',{method:'POST',cookie:alice.cookie,body:review})).status,200);
@@ -49,8 +62,10 @@ test('real MySQL tenant isolation, auth, replay protection and device revocation
  assert.equal((await call('device/upload',{method:'POST',bearer:device.body.token,body:{...up,timestamp:now-9,account_hash:'b'.repeat(64)}})).status,409);
  assert.equal((await call('trading-journal/mt5-status',{cookie:bob.cookie})).body.timestamp,undefined);
  const status=(await call('trading-journal/mt5-status',{cookie:alice.cookie})).body;assert.equal(status.account_balance,500);assert.equal(status.account_hash,undefined);
- assert.equal((await call('device/upload',{method:'POST',bearer:device.body.token,body:{...up,timestamp:now-8,trades:[]}})).status,200);
+ assert.equal((await call('device/upload',{method:'POST',bearer:device.body.token,body:{...up,timestamp:now-8,trades:[],markets:[],review_history:[]}})).status,200);
  assert.deepEqual((await call('trading-journal/tags?source=mt5',{cookie:alice.cookie})).body.tags['mt5-one'].lessons,['wait for close']);
+ assert.equal((await call('trading-journal/chart-review?'+dayQuery,{cookie:alice.cookie})).body.bars.length,2);
+
  const date=new Date((now+28800)*1000).toISOString().slice(0,7);assert.equal((await call('trading-journal?source=mt5&month='+date,{cookie:alice.cookie})).body.summary.closed_count,1);
  assert.equal((await call('devices/'+device.body.id,{method:'DELETE',cookie:alice.cookie,body:{}})).status,200);
  assert.equal((await call('device/upload',{method:'POST',bearer:device.body.token,body:{...up,timestamp:now-7}})).status,401);

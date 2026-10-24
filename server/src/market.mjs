@@ -19,3 +19,6 @@ export function bridgeResponse(ms,symbol,now=Date.now()/1000){
  const fresh=Boolean(q?.terminal_connected&&age>=0&&age<30&&q.quote_age_seconds<30);
  return {source:'exness-mt5',connected:fresh,state:!q?'waiting':fresh?'fresh':'stale',snapshot:q,age_seconds:age,spread:q?q.ask-q.bid:undefined,message:fresh?'Uploaded demo quote received.':'Waiting for a fresh uploaded demo quote.'};
 }
+
+// Bounded historical backfill; current/forming bars are never accepted here.
+export const reviewHistory=z.array(z.object({symbol:z.enum(['BTCUSDm','XAUUSDm']),timeframe:z.enum(['M5','M15','H1']),timestamp:stamp.refine(t=>t<=Date.now()/1000+60),demo:z.literal(true),server_utc_offset_seconds:z.literal(0),bars:z.array(bar.refine(b=>b.closed)).max(3000)}).superRefine((batch,c)=>{const step={M5:300,M15:900,H1:3600}[batch.timeframe];if(!batch.bars.every((b,i)=>b.time%step===0&&b.time+step<=Date.now()/1000&&(!i||b.time>batch.bars[i-1].time)))c.addIssue({code:'custom',path:['bars'],message:'History must contain ordered completed aligned candles'});})).max(6).refine(batches=>new Set(batches.map(b=>b.symbol+':'+b.timeframe)).size===batches.length);

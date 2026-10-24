@@ -1,12 +1,12 @@
-# Hosted journal release 1 — preparation, not deployed
+# Hosted TradeLens journal — deployment and scope
 
 The existing Vite-only deployment cannot execute Python. This release adds a separate `server/` Node.js app using your existing MySQL/MariaDB database, and serves the frontend from the same origin. The build copies client assets into server/public so runtime stays inside the Node app directory. Local Python/SQLite behavior stays unchanged.
 
 ## Included / deliberately not migrated
 
-Included: invite-only login (default two users), server-side sessions, separate manual/MT5 journals, notes, balances, daily/weekly/monthly/quarterly UI reports, calendars and decorative farm, read-only device upload tokens and normalized demo trade uploads. Each user's records are scoped on the server. No order endpoints. MT5 USD demo normalization remains in the tested local Python importer.
+Included: invite-only login (default two users), sessions, separate user journals, notes, balances, reports, calendars, device upload tokens, explicit read-only live journaling, demo chart feeds, retained demo candle history and frozen trade/day chart-review snapshots. Each user's records and chart history are scoped on the server. No order endpoints. MT5 normalization remains in the local Python importer.
 
-Not included: hosted candle upload/live charts, paper execution/research engines, trade-plan grouping, chart review snapshots and AI postmortems. Those routes return explicit unavailability. This is not full parity with the local app. No local trades or database passwords are automatically uploaded. Uploads are manual one-shot in this release; do not describe it as automatic cloud sync.
+Not included: live-account chart feeds, paper execution/research engines, trade-plan grouping and AI postmortems. This is not full parity with the local app. Data reaches the cloud only while the separately authorized Mac uploader is running; watch mode uploads every ten seconds.
 
 ## Hostinger configuration (change only after local integration tests pass)
 
@@ -49,3 +49,9 @@ Rollback checkpoint before this feature: `5952032` (safe outstanding Mac setup s
 The updated JournalStudioTrades exports POSITION_SL/POSITION_TP for current demo positions. Remove/re-add it once after installing the compiled update, keeping Algo Trading off. Current explicit zero means Not set; omitted fields remain Unknown. Local SQLite retains timestamped open-position observations when values change. Exit-fill DEAL_SL/DEAL_TP describe closing-time values; prior observations are retained separately, never presented as proof of protection from entry. Reference: https://www.mql5.com/en/docs/constants/tradingconstants/dealproperties
 
 The existing cloud upload preserves these versioned evidence fields and validates their chronology. No hosted database schema change is required. Restart any already-running uploader to load the updated importer when using the standalone Mac kit. Source-code local importer was restarted during verification. The refreshed kit is in output/TradeLens-Mac-Setup.zip. Trade nodes attach TP/SL record satellites; these are descriptive records, not a discipline score, trading recommendation or order controls.
+
+## Hosted chart-review archive
+Redeploy the current server before restarting the updated uploader. Startup creates two additive tables automatically: tl_chart_candles and tl_chart_reviews (requires CREATE TABLE privileges on the existing database). No new database is needed. Existing journal data is retained.
+Every accepted demo upload archives completed BTCUSDm/XAUUSDm M5, M15 and H1 candles. The updated project uploader also backfills available broker_candles from its local SQLite archive on startup and at most once every five minutes after a confirmed backfill upload; bounded to 31 days and 3,000 bars per instrument/timeframe. The standalone Mac kit may have no SQLite candle archive; its current indicator exports still accumulate on the server. Missing historical candles stay missing.
+GET /api/trading-journal/chart-review and POST to the same path support the existing frontend contract. All reads, archives, trade lookups and saved snapshots are user-scoped. Snapshots are immutable, keyed by source, day, symbol, timeframe and optional trade ID, and include a SHA256 fingerprint. Source labels disclose historical reconstruction, completed-bar coverage, Manila display time, gaps and marker limitations. These are not entry-time screenshots or evidence of broker execution. Manual trades may originate from another feed; synthetic samples and live accounts never receive substituted demo charts.
+Validation: pure archive/coverage and snapshot tests, Python read-only backfill tests, typecheck/build, and the disposable MariaDB integration test verify upload/archive, tenant isolation, persistence across later uploads and frozen snapshot immutability. Browser rendering and actual production rollout must be verified separately.

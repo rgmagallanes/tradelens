@@ -1,5 +1,7 @@
-import test from 'node:test';import assert from 'node:assert/strict';import {releaseSpin,advanceSpin} from '../src/graphMomentum.ts';
+import test from 'node:test';import assert from 'node:assert/strict';import {releaseSpin,advanceSpin,freshSpin} from '../src/graphMomentum.ts';
 test('longer drag gives stronger directional spin, clicks have no boost and extremes are capped',()=>{assert.deepEqual(releaseSpin(0,0),{yaw:0,pitch:0});assert.ok(releaseSpin(50,0).yaw>releaseSpin(10,0).yaw);assert.ok(releaseSpin(-50,0).yaw<0);assert.equal(releaseSpin(10000,100).yaw,72);assert.equal(releaseSpin(0,100).pitch,1.1)});
 test('release speed eases monotonically and integration is frame-rate independent',()=>{const start=releaseSpin(50,.3),a=advanceSpin(start,1);assert.ok(a.yaw>0&&a.yaw<start.yaw);let spin=start,yaw=0,pitch=0;for(let i=0;i<100;i++){const next=advanceSpin(spin,.01);yaw+=next.deltaYaw;pitch+=next.deltaPitch;spin=next}assert.ok(Math.abs(yaw-a.deltaYaw)<1e-8);assert.ok(Math.abs(pitch-a.deltaPitch)<1e-8);assert.ok(advanceSpin(start,10).yaw<.001)});
 
 test('stored positive and negative drag displacements keep their direction across globe wrap',()=>{const positiveDrag=370-350,negativeDrag=-10-10;assert.equal(releaseSpin(positiveDrag,0).yaw,24);assert.equal(releaseSpin(negativeDrag,0).yaw,-24)});
+
+test('flick adds capped momentum and a stationary hold forgets velocity',()=>{const slow=releaseSpin(20,0),fast=releaseSpin(20,0,{yaw:100,pitch:0});assert.ok(fast.yaw>slow.yaw);assert.equal(releaseSpin(100,0,{yaw:1000,pitch:0}).yaw,72);const rested=releaseSpin(20,0,freshSpin({yaw:100,pitch:0},1));assert.ok(Math.abs(rested.yaw-slow.yaw)<.001);assert.ok(releaseSpin(-20,0,{yaw:-100,pitch:0}).yaw<slow.yaw*-1)});

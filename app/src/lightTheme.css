@@ -1,0 +1,67 @@
+
+.tl-header-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.theme-toggle{font-size:12px;white-space:nowrap}
+:root[data-theme=light]{color-scheme:light;--ambient-canvas:#f4f6fa;--ambient-surface:#ffffff;--ambient-line:#dce1ea;color:#202a3b;background:#f4f6fa}
+[data-theme=light] .app::before{background:radial-gradient(ellipse at 90% 0%,#ede8f740,transparent 65%),#f4f6fa}
+[data-theme=light] .app{color:#202a3b}
+[data-theme=light] .app .tl-header,[data-theme=light] .app .tl-header-meta,[data-theme=light] .app .shell>nav{background:#fff;border-color:#dce1ea}
+[data-theme=light] .app :is(h1,h2,h3,h4,strong){color:inherit}
+[data-theme=light] .app :is(p,small,label,.muted,.td-chart-legend,.td-metric-heading,.td-sync-strip span,.td-sync-strip small,.td-range-controls>span,.td-insights li,.td-type-row,.tl-breadcrumb,.tl-feed-status,.tl-order-guard){color:#58667a}
+[data-theme=light] .app :is(button,input,select,textarea){background:#fff;color:#344156;border-color:#cfd7e3;color-scheme:light}
+[data-theme=light] .app button:hover{background:#edf1f7}
+[data-theme=light] .app button.primary{background:#e6b653;color:#292211}
+[data-theme=light] .app :is(.td-panel,.td-metric,.panel,.j-card,.j-report,.j-sourcebar,.farm-dashboard,.td-sync-strip,.panel-loading,.td-performance-total,.td-performance-rate){background:#fff;border-color:#dce1ea;color:#202a3b;--td-border:#dce1ea}
+[data-theme=light] .app .td-metric-trigger{background:transparent;color:inherit}
+[data-theme=light] .app :is(.positive,.profit,.green){color:#087c53!important}
+[data-theme=light] .app :is(.negative,.loss,.red){color:#c03650!important}
+[data-theme=light] .app :is(.td-metric-icon,.td-icon-heading>svg,.td-inspect-hint,.tl-brand h1 span){color:#936517}
+[data-theme=light] .app .shell>nav>button{color:#58667a}
+[data-theme=light] .app .shell>nav>button.active{background:#f7edda;color:#79510e}
+[data-theme=light] .app .shell>nav .menu-toggle{background:transparent;color:#58667a}
+[data-theme=light] .app .nav-tools{border-color:#e5e9f0}
+[data-theme=light] .app :is(.td-segment,.timeframes){background:#f3f5f9;border-color:#d5dce5}
+[data-theme=light] .app :is(button[aria-pressed=true],.timeframes .selected){background:#f8efd9;color:#79510e;border-color:#b39250}
+[data-theme=light] .app :is(.td-profit-chart,.td-performance-rate,.td-donut-layout) text{fill:#526076}
+[data-theme=light] .app .td-profit-chart line{stroke:#dce1ea}
+[data-theme=light] .app .td-profit-chart .td-tooltip-value{fill:#fff}
+[data-theme=light] .app .td-profit-chart g[transform] text{fill:#edf0f6}
+[data-theme=light] .app .td-performance-rate .td-ring-value{fill:#202a3b}
+[data-theme=light] .app :is(th,td,.td-comparison,.td-position,.td-floating){border-color:#e1e6ee}
+[data-theme=light] .app .trading-journal{color:#202a3b;--j-bg:#fff;--j-line:#dce1ea;--j-green:#087c53;--j-red:#c03650}
+[data-theme=light] .app :is(.j-day,.j-history-day,.j-notes,.j-trade,.j-dialog){background:#f7f9fc;color:#202a3b;border-color:#dce1ea}
+[data-theme=light] .app :is(.notice,.j-demo-notice){background:#f3edfa;color:#62497e;border-color:#dccce9}
+[data-theme=light] .app .alert{background:#fff0f1;color:#9e263c;border-color:#edc5cc}
+/* Immersive scenes retain their authored palette and readable overlays. */
+[data-theme=light] .app :is(.jg-stage,.farm-stage,.farm-barn-results,.farm-level){color:#e9edf4}
+[data-theme=light] .app :is(.jg-stage,.farm-stage,.farm-barn-results,.farm-level) :is(small,span,p){color:#c1ccd8}
+[data-theme=light] .app :is(.farm-day-sign,.farm-level) strong{color:#e8cd8d}
+[data-theme=light] .app .panel-loading-metrics i{background:#e7ecf3}
+[data-theme=light] .app .panel-loading-chart{background:#eef2f7}
+@media(max-width:560px){.theme-toggle span{display:none}.theme-toggle{padding:9px}}
+
+/* Calendar surfaces and its portaled day preview share the light palette. */
+[data-theme=light] .app .j-calendar .j-day{background:#fff;border-color:#d6dde7;color:#344156}
+[data-theme=light] .app .j-calendar .j-day.profit{background:#eaf7f0;border-color:#aad6bd}
+[data-theme=light] .app .j-calendar .j-day.loss{background:#fff0f2;border-color:#e5b4bd}
+[data-theme=light] .app .j-calendar .j-day.no-trades{background:#f5f7fa;color:#657286}
+[data-theme=light] .app .j-calendar .j-day>span{color:#344156}
+[data-theme=light] .app .j-calendar .j-day small{color:#5c6b7d}
+[data-theme=light] .app .j-calendar .j-day:hover{filter:none;box-shadow:inset 0 0 0 1px #899bb2}
+[data-theme=light] .app .j-calendar .j-day.is-selected{outline:2px solid #92681b;outline-offset:1px}
+[data-theme=light] .app .j-calendar .j-day.has-open-positions{border-color:#7798b9}
+[data-theme=light] .app .j-calendar-floating{border-top-color:#c4d2df}
+[data-theme=light] .app :is(.j-weekdays,.j-legend){color:#58667a}
+[data-theme=light] .app .j-week-total{background:#edf2f8;border-color:#ccd7e5;color:#344156}
+[data-theme=light] .app .j-week-total>span,[data-theme=light] .app .j-week-total small{color:#526076}
+[data-theme=light] .app .j-month-total{background:#e6edf6;border-top-color:#879bb6}
+[data-theme=light] .app .j-month-total>span{color:#27364b}
+[data-theme=light] .app .j-daybalances{color:#344156}
+[data-theme=light] .app .j-daybalances>div{color:#526076}
+[data-theme=light] .app .j-daybalances strong{color:#27364b}
+[data-theme=light] .app .j-calendar-scroll{scrollbar-color:#a5b3c5 #f4f6fa}
+[data-theme=light] .j-day-preview{background:#fff;border-color:#cbd6e3;color:#27364b;box-shadow:0 12px 32px #26374d26;--j-green:#087c53;--j-red:#c03650}
+[data-theme=light] .j-day-preview :is(p,small,span,th,td){color:#526076}
+[data-theme=light] .j-day-preview .profit{color:#087c53!important}
+[data-theme=light] .j-day-preview .loss{color:#c03650!important}
+[data-theme=light] .j-day-preview .neutral{color:#526076}
+[data-theme=light] .j-day-preview :is(.j-preview-pnl,.j-preview-floating,.j-preview-balances,.j-preview-trades,.j-preview-hint){border-color:#dce3ed}
+[data-theme=light] .j-day-preview .j-preview-balances b{color:#27364b}

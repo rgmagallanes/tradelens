@@ -1,0 +1,3 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {rangeMonths,weekStart,monthEnd} from '../src/dashboardRange.ts';
+test('ranges include year boundaries and reject invalid or excessive spans',()=>{assert.deepEqual(rangeMonths('2025-12-29','2026-01-04'),['2025-12','2026-01']);assert.deepEqual(rangeMonths('2026-02-30','2026-03-01'),[]);assert.deepEqual(rangeMonths('2026-03-01','2026-02-01'),[]);assert.deepEqual(rangeMonths('2025-01-01','2026-01-01'),[])});
+test('Monday week starts and month ends handle calendar boundaries',()=>{assert.equal(weekStart('2026-11-01'),'2026-10-26');assert.equal(monthEnd('2024-02'),'2024-02-29')});

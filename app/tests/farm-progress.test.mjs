@@ -1,0 +1,8 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {farmWeek,FARM_FACILITIES} from '../src/farmProgress.ts';
+const days=[{date:'2026-10-19',pnl:100.12,closed_count:1},{date:'2026-10-20',pnl:-50.01,closed_count:1},{date:'2026-10-26',pnl:20,closed_count:1}];
+test('Monday weeks exclude later checkpoints and preserve cents',()=>{const w=farmWeek(days,'2026-10-20');assert.equal(w.start,'2026-10-19');assert.equal(w.end,'2026-10-25');assert.equal(w.pnl,50.11);assert.equal(w.trades,2);assert.equal(farmWeek(days,'2026-10-26').pnl,20)});
+test('losses retain illustrative growth and boundary coverage is explicit',()=>{assert.equal(farmWeek(days,'2026-10-19').progress,farmWeek(days,'2026-10-20').progress);assert.equal(farmWeek(days.slice(1),'2026-10-20').partial,true);assert.equal(farmWeek([],'2026-10-20').progress,0)});
+
+test('crop beds unlock at $500 steps, retain earned plots, and cap at ten',()=>{const row=pnl=>({date:'2026-10-19',pnl,closed_count:1});assert.equal(farmWeek([row(-50)],'2026-10-19').beds,2);assert.equal(farmWeek([row(499.99)],'2026-10-19').beds,2);assert.equal(farmWeek([row(500)],'2026-10-19').beds,3);assert.equal(farmWeek([row(100000)],'2026-10-19').beds,10);assert.equal(farmWeek([row(500),{date:'2026-10-20',pnl:-600,closed_count:1}],'2026-10-20').beds,3)});
+
+test('facility milestones unlock in order from earned profit',()=>{const earned=farmWeek([{date:'2026-10-19',pnl:2500,closed_count:1}],'2026-10-19').earned;assert.deepEqual(FARM_FACILITIES.filter(f=>earned>=f.threshold).map(f=>f.name),['Greenhouse','Chicken coop']);assert.equal(FARM_FACILITIES.filter(f=>0>=f.threshold).length,0)});

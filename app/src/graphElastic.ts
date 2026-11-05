@@ -1,8 +1,8 @@
 export type ElasticPoint={x:number;y:number;vx:number;vy:number};
-export type ElasticState={points:Map<string,ElasticPoint>;adjacency:Map<string,string[]>;parents:Map<string,string>;depth:Map<string,number>;held:string|null;active:boolean;releasedFor:number};
-export function createElastic(ids:string[],edges:{from:string;to:string}[]):ElasticState{
+export type ElasticState={points:Map<string,ElasticPoint>;adjacency:Map<string,string[]>;parents:Map<string,string>;depth:Map<string,number>;satellites:Map<string,string>;held:string|null;active:boolean;releasedFor:number};
+export function createElastic(ids:string[],edges:{from:string;to:string}[],satellites:Map<string,string>=new Map()):ElasticState{
  const adjacency=new Map(ids.map(id=>[id,[] as string[]]));for(const e of edges){adjacency.get(e.from)?.push(e.to);adjacency.get(e.to)?.push(e.from)}
- return {points:new Map(ids.map(id=>[id,{x:0,y:0,vx:0,vy:0}])),adjacency,parents:new Map(),depth:new Map(),held:null,active:false,releasedFor:0};
+ return {points:new Map(ids.map(id=>[id,{x:0,y:0,vx:0,vy:0}])),adjacency,satellites,parents:new Map(),depth:new Map(),held:null,active:false,releasedFor:0};
 }
 export function grabElastic(s:ElasticState,id:string){
  if(!s.points.has(id))return;s.held=id;s.active=true;s.releasedFor=0;s.parents.clear();s.depth=new Map([[id,0]]);const queue=[id];
@@ -18,8 +18,9 @@ export function stepElastic(s:ElasticState,dt:number){
   // Snapshot each step so influence travels outward, rather than through iteration order.
   const prior=new Map([...s.points].map(([id,p])=>[id,{x:p.x,y:p.y}]));
   for(const [id,p] of s.points){if(id===s.held)continue;const parent=prior.get(s.parents.get(id)||''),held=prior.get(s.held||''),depth=s.depth.get(id)||5;
-   const target=s.held?(parent?{x:parent.x*.7,y:parent.y*.7}:{x:(held?.x||0)*.035,y:(held?.y||0)*.035}):{x:0,y:0};
-   const frequency=s.held?13/(1+Math.min(depth,6)*.22):11,stiffness=frequency*frequency,damping=frequency*1.5;
+   const owner=prior.get(s.satellites.get(id)||'');
+   const target=owner?{x:owner.x,y:owner.y}:s.held?(parent?{x:parent.x*.7,y:parent.y*.7}:{x:(held?.x||0)*.035,y:(held?.y||0)*.035}):{x:0,y:0};
+   const frequency=owner?24:s.held?13/(1+Math.min(depth,6)*.22):11,stiffness=frequency*frequency,damping=frequency*1.95;
    p.vx+=(stiffness*(target.x-p.x)-damping*p.vx)*h;p.vy+=(stiffness*(target.y-p.y)-damping*p.vy)*h;p.x+=p.vx*h;p.y+=p.vy*h;
   }
  }

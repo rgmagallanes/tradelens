@@ -1,0 +1,39 @@
+/* Navigation hierarchy: quiet utility, clear destinations, consistent rail. */
+@media(min-width:851px){
+ .app .shell>nav{width:178px;padding:12px 10px;gap:5px}
+ .app .shell>nav .nav-tools{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:40px;margin:0 0 12px;padding:0 4px 10px;border-bottom:1px solid #ffffff09}
+ .nav-section-label{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#8f95a6}
+ .app .shell>nav .menu-toggle{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;min-height:32px;flex:0 0 32px;padding:0;margin:0;background:transparent;border:0;border-radius:7px;color:#929aac;box-shadow:none}
+ .app .shell>nav .menu-toggle:hover{background:#ffffff08;color:#e9edf4}
+ .app .shell>nav>button{position:relative;min-height:44px;padding:11px 12px;border:0;border-radius:8px;gap:11px;font-size:13px;font-weight:500;color:#aeb5c6;background:transparent;white-space:nowrap;transition:background-color 160ms ease,color 160ms ease}
+ .app .shell>nav>button svg{width:19px;height:19px;stroke-width:1.7}
+ .app .shell>nav>button:hover{background:#ffffff05;color:#edf0f6}
+ .app .shell>nav>button.active{background:#d9b35f12;color:#eed18e;border:0;box-shadow:none}
+ .app .shell>nav>button.active::before{content:'';position:absolute;left:0;top:13px;bottom:13px;width:2px;border-radius:3px;background:#dfbb68}
+ .app .shell>nav .navbottom{padding:20px 8px 8px;font-size:9px;line-height:1.8;color:#757e91}
+ .app .shell.menu-collapsed>nav{width:68px;padding:12px 10px}
+ .app .shell.menu-collapsed>nav .nav-tools{justify-content:center;padding-inline:0}
+ .app .shell.menu-collapsed>nav .nav-section-label{display:none}
+ .app .shell.menu-collapsed>nav>button{justify-content:center;padding:11px 0}
+}
+@media(max-width:850px){.app .shell>nav .nav-tools{display:none}}
+@media(prefers-reduced-motion:reduce){.app .shell>nav>button{transition:none}}
+
+@media(min-width:851px){
+ .app .shell>nav{overflow:hidden;transition:width 240ms cubic-bezier(.4,0,.2,1)}
+ .app .shell>nav>button{justify-content:flex-start;padding-left:14px;padding-right:10px;overflow:hidden}
+ .app .shell>nav>button svg{flex:0 0 19px}
+ .app .shell>nav .nav-label{display:block;opacity:1;white-space:nowrap;transition:opacity 110ms ease 130ms}
+ .app .shell.menu-collapsed>nav>button{justify-content:flex-start;padding-left:14px;padding-right:10px}
+ .app .shell.menu-collapsed>nav .nav-label{display:block;opacity:0;pointer-events:none;transition:opacity 80ms ease}
+ .app .shell>nav .nav-tools{position:relative;justify-content:flex-start;height:43px;padding-left:4px;padding-right:36px}
+ .app .shell>nav .menu-toggle{position:absolute;right:0;top:0}
+ .app .shell>nav .nav-section-label{display:block;white-space:nowrap;opacity:1;transition:opacity 110ms ease 130ms}
+ .app .shell.menu-collapsed>nav .nav-tools{justify-content:flex-start;padding-left:4px;padding-right:36px}
+ .app .shell.menu-collapsed>nav .nav-section-label{display:block;opacity:0;transition:opacity 80ms ease}
+ .app .shell>nav .navbottom{min-width:156px;opacity:1;transition:opacity 110ms ease 130ms}
+ .app .shell.menu-collapsed>nav .navbottom{display:block;opacity:0;pointer-events:none;transition:opacity 80ms ease}
+}
+@media(prefers-reduced-motion:reduce){
+ .app .shell>nav,.app .shell>nav .nav-label,.app .shell>nav .nav-section-label,.app .shell>nav .navbottom{transition:none!important}
+}

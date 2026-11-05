@@ -321,3 +321,16 @@ def new_journal_idea(p:IdeaRequest):
 @app.post('/api/trading-journal/ideas/link')
 def link_journal_idea(p:IdeaLink):
     research_call(lambda:trade_ideas.assign(DB,p.source,p.trade_id,p.idea_id));return {'saved':True}
+
+@app.get('/api/news')
+def market_news():
+    from .news import news
+    return news()
+
+from .process_reviews import ProcessReview, records as process_records
+@app.get('/api/trading-journal/process-reviews')
+def get_process_reviews(source:Literal['manual','engine','sample','mt5']):
+    return process_records(DB,source)
+@app.post('/api/trading-journal/process-reviews')
+def save_process_review(p:ProcessReview):
+    return process_records(DB,p.source,p)

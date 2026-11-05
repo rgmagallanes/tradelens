@@ -1,0 +1,53 @@
+/* Opacity-only entrances preserve fixed chart overlays and pointer coordinates.
+   Runs on mount, not query refresh. No delayed visibility or per-scroll observers. */
+@keyframes panel-arrive{from{opacity:.05}to{opacity:1}}
+@keyframes loading-breathe{0%,100%{opacity:.45}50%{opacity:.8}}
+.app main :where(.td-panel,.td-metrics,.j-card,.farm-dashboard,.panel){animation:panel-arrive 750ms cubic-bezier(.22,1,.36,1)}
+.panel-loading{min-height:440px;padding:24px;border:1px solid var(--ambient-line,#34303f);border-radius:16px;background:var(--ambient-surface,#11111c);color:#b9b7c8}
+.panel-loading p{margin:0 0 24px;font-size:14px}.panel-loading-shapes{animation:loading-breathe 1.8s ease-in-out infinite}
+.panel-loading-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.panel-loading-metrics i{display:block;height:92px;border-radius:10px;background:#ffffff08}
+.panel-loading-chart{height:230px;margin-top:20px;border-radius:10px;background:linear-gradient(180deg,#ffffff07,#ffffff02);border-bottom:1px solid #ffffff0a}
+.panel-loading-compact{min-height:300px}.panel-loading-compact .panel-loading-chart{height:130px}
+@media(max-width:600px){.panel-loading{padding:16px}.panel-loading-metrics{gap:8px}.panel-loading-metrics i{height:70px}}
+@media(prefers-reduced-motion:reduce){.app main :where(.td-panel,.td-metrics,.j-card,.farm-dashboard,.panel),.panel-loading-shapes{animation:none}}
+
+/* A short stagger makes dashboard rows arrive in a readable sequence. */
+@keyframes dashboard-panel-arrive{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:no-preference){
+ .app main .td-panel{animation:dashboard-panel-arrive 750ms cubic-bezier(.22,1,.36,1) backwards}
+ .app main .td-panel:nth-child(2){animation-delay:var(--panel-delay,0ms)}
+ .app main .td-panel:nth-child(3){animation-delay:var(--panel-delay,0ms)}
+ .app main .td-panel:nth-child(4){animation-delay:var(--panel-delay,0ms)}
+}
+
+/* Match the dashboard entrance in the market workspace and journal. */
+@media(prefers-reduced-motion:no-preference){
+ .app main .workspace .panel,
+ .app main .trading-journal :where(.j-card,.j-sourcebar,.j-report,.farm-dashboard){
+  animation:dashboard-panel-arrive 750ms cubic-bezier(.22,1,.36,1) backwards;
+ }
+ .app main .workspace .panel:nth-child(2),
+ .app main .trading-journal .j-card:nth-child(2){animation-delay:var(--panel-delay,0ms)}
+ .app main .workspace .panel:nth-child(3),
+ .app main .trading-journal .j-card:nth-child(3){animation-delay:var(--panel-delay,0ms)}
+ .app main .workspace .panel:nth-child(n+4),
+ .app main .trading-journal .j-card:nth-child(n+4){animation-delay:var(--panel-delay,0ms)}
+ /* Nested cards enter with their parent rather than doubling the movement. */
+ .app main .trading-journal .j-card .j-card{animation:none}
+ /* A transformed ancestor must never constrain a fullscreen chart/dialog. */
+ .app main :is(.panel,.j-card,.j-report,.farm-dashboard):is(.chart-fullscreen,:has(.chart-fullscreen),:has([aria-modal="true"])){animation:none}
+}
+
+@media(prefers-reduced-motion:no-preference){
+ .app main :is(.td-panel,.td-metrics,.workspace .panel,.trading-journal .j-card,.trading-journal .j-sourcebar,.trading-journal .j-report,.farm-dashboard){animation-delay:var(--panel-delay,0ms);animation-fill-mode:backwards}
+}
+
+/* Headline cards enter separately; the container stays still. */
+.app main .td-metrics{animation:none}
+@keyframes metric-card-arrive{
+ from{opacity:0;transform:translateY(34px) scale(.97)}
+ to{opacity:1;transform:none}
+}
+@media(prefers-reduced-motion:no-preference){
+ .app main .td-metric{animation:metric-card-arrive 900ms cubic-bezier(.22,1,.36,1) backwards;animation-delay:var(--panel-delay,0ms)}
+}

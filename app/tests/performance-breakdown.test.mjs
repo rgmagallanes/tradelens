@@ -1,0 +1,4 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {performanceBreakdown} from '../src/performanceGroups.ts';
+const trade=(pnl,side='buy',opened='2026-10-26T22:00:00Z')=>({status:'closed',pnl,side,symbol:'XAUUSDm',opened_at:Date.parse(opened)/1000});
+test('groups reconcile cents and count break-even fills',()=>{const rows=performanceBreakdown([trade(10.12),trade(-2.01),trade(0),{...trade(100),status:'open'}],'side');assert.deepEqual(rows,[{label:'Buy',count:3,wins:1,losses:1,flat:1,cents:811}])});
+test('Manila entry buckets handle midnight and six-hour boundaries',()=>{const rows=performanceBreakdown([trade(1,'buy','2026-10-26T16:00:00Z'),trade(2),'bad'].filter(t=>typeof t!=='string'),'time');assert.deepEqual(rows.map(r=>r.label),['00:00–05:59','06:00–11:59']);assert.equal(rows.reduce((sum,r)=>sum+r.cents,0),300)});

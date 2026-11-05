@@ -109,3 +109,11 @@ Atmosphere shooting star: one1.25-second warm diagonal streak per22-second windo
 MT5 TP/SL graph records: each displayed MT5 trade/fill has two smaller TP/SL satellites. Filled indicates a positive broker price, hollow means confirmed zero/not set, dashed means unknown. Use only explicit provenance, never infer discipline. Open-position evidence is timestamped; stale/open records say Last reported. Exit-deal fields describe closing-time levels, not entry-time protection; retain earlier open observations separately and exclude observations after a partial close. Non-MT5 sources do not claim these broker nodes. No manual entry or execution APIs.
 
 Demo and globe value labels: fictional datasets contain explicit TP/SL examples (both set, one set, neither set, unknown), labeled fictional and never uploaded. Numeric P/L/price labels have a display-only two-row rolling digit effect during drag, settling to exact recorded text on release. Sign/format punctuation stay fixed; Unknown/Not set never roll. Details and stored values stay exact throughout, labels are marked decorative, Values toggle can hide them, and reduced/paused motion shows static exact text.
+
+Performance dashboard: add Dashboard before Overview, preserving existing workspaces. Use monthly selected-source closed P/L, win rate, profit factor and dollar closed-ledger drawdown, plus instrument/direction comparisons and recent closes. Keep all-account MT5 running positions independent of the month/source filters and clearly timestamp retained stale values. No fictional metrics or account-equity claims; retain cached panels during background polling.
+
+Default landing page: Dashboard on initial load and refresh, for both local and hosted accounts after login.
+
+Journal physics refinement: combine capped drag-distance momentum with recent pointer velocity; decay flick velocity when held still. Use near-critical spring damping and stronger owner-following TP/SL satellite springs. Keep reduced-motion, cancellation and visibility suspension intact.
+
+Farm refinement: bounded drag/keyboard orbit, zoom and Reset view; click barn or accessible Barn results button for exact monthly and checkpoint closed results. Peaceful default; loss-triggered fire is explicit opt-in and never a trade-quality assessment. Preserve paused/reduced-motion and hidden/offscreen lifecycle.
